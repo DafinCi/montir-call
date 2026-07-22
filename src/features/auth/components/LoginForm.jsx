@@ -1,32 +1,31 @@
 import Link from "next/link";
-import { Mail, Lock } from "lucide-react";
+import { Mail } from "lucide-react";
+
 import { Button, Input } from "@/components/ui";
 import PasswordInput from "./PasswordInput";
 
 export default function LoginForm() {
   return (
-    <div className="w-full max-w-md p-20px">
+    <div className="w-full max-w-md">
+
       <h1 className="text-5xl font-bold text-slate-900">
         Welcome Back
       </h1>
 
       <p className="mt-2 text-slate-500">
-        kendaraanmu kenapa lagi?
-        Welcome
-      </h1>
-
-      <p className="mt-2 text-slate-500">
-        Yuk mulai permudah hidupmu!
+        Kendaraanmu kenapa lagi?
       </p>
 
       <form className="mt-10 space-y-6">
+
+        {/* Email */}
         <div>
 
           <label className="text-sm font-medium">
             Email
           </label>
 
-          <div className="mt-2 flex items-center rounded-sm border bg-white px-4">
+          <div className="mt-2 flex items-center rounded-md border bg-white px-4">
 
             <Mail
               size={18}
@@ -36,19 +35,25 @@ export default function LoginForm() {
             <Input
               type="email"
               placeholder="email@example.com"
-              className="w-full bg-transparent p-3 outline-none border-none hover:none"
+              className="border-none shadow-none focus-visible:ring-0"
             />
+
           </div>
+
         </div>
 
-        <div>
-          <PasswordInput />
-        </div>
+        {/* Password */}
+        <PasswordInput />
 
+        {/* Remember */}
         <div className="flex items-center justify-between text-sm">
+
           <label className="flex items-center gap-2">
+
             <input type="checkbox" />
+
             Remember me
+
           </label>
 
           <Link
@@ -57,25 +62,43 @@ export default function LoginForm() {
           >
             Forgot Password?
           </Link>
+
         </div>
 
-        <Button variant="secondary" size="sm">
+        {/* Login */}
+        <Button
+          className="w-full"
+          type="submit"
+        >
           Login
         </Button>
+
       </form>
 
+      {/* Divider */}
+
       <div className="my-8 flex items-center">
+
         <div className="h-px flex-1 bg-slate-200" />
 
         <span className="px-4 text-sm text-slate-400">
           OR
         </span>
+
         <div className="h-px flex-1 bg-slate-200" />
+
       </div>
 
-      <Button variant="secondary" size="sm" href="">
-      <Button variant="secondary" size="sm" href="@/app/register/page.js">
-        Register
+      {/* Register */}
+
+      <Button
+        variant="outline"
+        className="w-full"
+        asChild
+      >
+        <Link href="/register">
+          Create New Account
+        </Link>
       </Button>
 
     </div>
