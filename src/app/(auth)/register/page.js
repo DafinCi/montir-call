@@ -1,0 +1,11 @@
+import RegisterView from "@/features/register/views/RegisterView";
+import  registerMechanic from "@/features/auth/services/auth.action"
+
+export const metadata = {
+  title: "Login | MontirGo",
+  description: "Login ke dashboard MontirGo",
+};
+
+export default function RegisterPage() {
+  return <RegisterView />;
+}
