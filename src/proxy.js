@@ -1,7 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
-export async function middleware(request) {
+// Mengubah 'middleware' menjadi 'proxy'
+export async function proxy(request) {
   // 1. Inisialisasi response awal Next.js
   let supabaseResponse = NextResponse.next({
     request: {
@@ -9,7 +10,7 @@ export async function middleware(request) {
     },
   });
 
-  // 2. Setup Supabase Client khusus untuk Middleware
+  // 2. Setup Supabase Client khusus untuk Proxy
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -36,7 +37,7 @@ export async function middleware(request) {
     },
   );
 
-  // 3. getUser() adalah fungsi ajaibnya — akan me-refresh JWT secara otomatis jika hampir kedaluwarsa
+  // 3. Refresh JWT session secara otomatis
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -52,7 +53,7 @@ export async function middleware(request) {
     return NextResponse.redirect(url);
   }
 
-  // Kasus B: Sudah login tapi mencoba buka halaman /login atau root (/) -> arahkan ke /dashboard
+  // Kasus B: Sudah login tapi mencoba buka /login, /register, atau / -> arahkan ke /dashboard
   if (
     user &&
     (pathname === "/login" || pathname === "/register" || pathname === "/")
@@ -65,7 +66,7 @@ export async function middleware(request) {
   return supabaseResponse;
 }
 
-// 5. Config Matcher: Eksekusi middleware di semua route KECUALI aset statis (gambar, css, dll)
+// 5. Config Matcher tetap sama
 export const config = {
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
