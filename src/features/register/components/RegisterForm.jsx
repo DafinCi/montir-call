@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Mail, Lock } from "lucide-react";
 import { Button, Input } from "@/components/ui";
-import PasswordInput from "./PasswordInput";
+import PasswordInput from "@/features/auth/components/PasswordInput";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   return (
     <div className="w-full max-w-md p-20px">
       <h1 className="text-5xl font-bold text-slate-900">
@@ -68,7 +68,7 @@ export default function LoginForm() {
         <div className="h-px flex-1 bg-slate-200" />
       </div>
 
-      <Button variant="secondary" size="sm" href="@/app/register/page.js">
+      <Button variant="secondary" size="sm" href="">
         Register
       </Button>
 

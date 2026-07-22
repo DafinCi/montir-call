@@ -2,12 +2,12 @@ import { Wrench, MapPinned } from "lucide-react";
 
 export default function AuthIllustration() {
   return (
-    <section className="hidden lg:flex flex-col justify-between bg-secondary text-white p-16">
+    <section className="hidden lg:flex flex-col justify-center bg-secondary text-white p-16">
       <div>
     
         <div className="flex items-center gap-3">
             
-          <div className="rounded-xl bg-white/20 p-3">
+          <div className="rounded-sm bg-white/20 p-3">
             <Wrench size={28} />
           </div>
 
@@ -18,18 +18,13 @@ export default function AuthIllustration() {
       </div>
 
       <div>
-        <h2 className="text-5xl font-bold leading-tight">
+        <h2 className="text-5xl font-bold leading-tight mt-[20px]">
           Bantu pelanggan
           <br />
           lebih cepat
           <br />
           dengan lokasi realtime.
         </h2>
-      </div>
-
-      <div className="flex items-center gap-2 text-blue-100">
-        <MapPinned />
-        <span>Realtime Location Tracking</span>
       </div>
     </section>
   );

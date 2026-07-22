@@ -17,13 +17,13 @@ export default function PasswordInput({
         {label}
       </label>
 
-      <div className="flex items-center rounded-xl border border-slate-300 bg-white px-4 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition">
+      <div className="flex items-center rounded-sm border border-slate-300 bg-white px-4  focus-within:ring-blue-100 transition">
         <Lock
           size={18}
           className="mr-3 text-slate-400"
         />
 
-        <Input
+        <Input placeholder="******" className="border-none"
           type={showPassword ? "text" : "password"}
           {...props}
         />
@@ -31,7 +31,7 @@ export default function PasswordInput({
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="text-slate-400 hover:text-slate-700 transition"
+          className="text-slate-400  transition"
         >
           {showPassword ? (
             <EyeOff size={18} />
