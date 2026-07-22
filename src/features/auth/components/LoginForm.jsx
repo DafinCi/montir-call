@@ -12,6 +12,11 @@ export default function LoginForm() {
 
       <p className="mt-2 text-slate-500">
         kendaraanmu kenapa lagi?
+        Welcome
+      </h1>
+
+      <p className="mt-2 text-slate-500">
+        Yuk mulai permudah hidupmu!
       </p>
 
       <form className="mt-10 space-y-6">
@@ -69,6 +74,7 @@ export default function LoginForm() {
       </div>
 
       <Button variant="secondary" size="sm" href="">
+      <Button variant="secondary" size="sm" href="@/app/register/page.js">
         Register
       </Button>
 
