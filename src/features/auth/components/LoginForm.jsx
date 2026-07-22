@@ -7,6 +7,11 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md p-20px">
       <h1 className="text-5xl font-bold text-slate-900">
+        Welcome Back
+      </h1>
+
+      <p className="mt-2 text-slate-500">
+        kendaraanmu kenapa lagi?
         Welcome
       </h1>
 
@@ -68,6 +73,7 @@ export default function LoginForm() {
         <div className="h-px flex-1 bg-slate-200" />
       </div>
 
+      <Button variant="secondary" size="sm" href="">
       <Button variant="secondary" size="sm" href="@/app/register/page.js">
         Register
       </Button>
