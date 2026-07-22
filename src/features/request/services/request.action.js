@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
  * Jika montir lain sudah mengambil request ini milidetik sebelumnya, query akan mengembalikan 0 row.
  */
 export async function acceptRequest(requestId) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // Ambil ID montir yang sedang terautentikasi
   const {
@@ -58,7 +58,7 @@ export async function acceptRequest(requestId) {
  * Transisi status pekerjaan: ACCEPTED -> ON_THE_WAY -> ARRIVED -> COMPLETED (atau CANCELLED)
  */
 export async function updateRequestStatus(requestId, newStatus) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -104,7 +104,7 @@ export async function updateRequestStatus(requestId, newStatus) {
  * Di-panggil periodik atau saat pergerakan GPS untuk memperbarui lokasi montir di database
  */
 export async function updateMechanicLocation(lat, lng) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

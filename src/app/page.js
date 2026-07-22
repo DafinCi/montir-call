@@ -1,32 +1,74 @@
-import { createClient } from "@/lib/supabase/server";
+import {
+  registerMechanic,
+  loginMechanic,
+} from "@/features/auth/services/auth.action";
 
-export default async function Home() {
-  const supabase = createClient();
-
-  // Test koneksi dengan mengambil data (jika ada) atau sekadar test ping
-  const { data, error } = await supabase.from("mechanics").select("*").limit(1);
-
+export default function TestPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-50">
-      <div className="bg-white p-8 rounded-xl shadow-md text-center max-w-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">
-          Smart Mechanic Setup
-        </h1>
+    <div className="p-8 max-w-md mx-auto space-y-6">
+      <h1 className="text-xl font-bold">1. Test Auth</h1>
 
-        {error ? (
-          <div className="text-red-500 bg-red-50 p-4 rounded-lg">
-            <p className="font-semibold">Koneksi Supabase Gagal ❌</p>
-            <p className="text-sm mt-2">{error.message}</p>
-          </div>
-        ) : (
-          <div className="text-green-600 bg-green-50 p-4 rounded-lg">
-            <p className="font-semibold">Koneksi Supabase Berhasil! ✅</p>
-            <p className="text-sm mt-2 text-gray-600">
-              Database siap digunakan pakai JS.
-            </p>
-          </div>
-        )}
-      </div>
-    </main>
+      {/* Form Register */}
+      <form
+        action={registerMechanic}
+        className="flex flex-col gap-2 border p-4 rounded"
+      >
+        <h2 className="font-semibold">Register</h2>
+        <input
+          name="name"
+          placeholder="Nama Montir"
+          defaultValue="Budi Montir"
+          className="border p-1"
+        />
+        <input
+          name="phone"
+          placeholder="No HP"
+          defaultValue="08123456789"
+          className="border p-1"
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          defaultValue="budi@montir.com"
+          className="border p-1"
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          defaultValue="password123"
+          className="border p-1"
+        />
+        <button type="submit" className="bg-green-600 text-white p-1 rounded">
+          Register
+        </button>
+      </form>
+
+      {/* Form Login */}
+      <form
+        action={loginMechanic}
+        className="flex flex-col gap-2 border p-4 rounded"
+      >
+        <h2 className="font-semibold">Login</h2>
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          defaultValue="budi@montir.com"
+          className="border p-1"
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          defaultValue="password123"
+          className="border p-1"
+        />
+        <button type="submit" className="bg-blue-600 text-white p-1 rounded">
+          Login & Go to Dashboard
+        </button>
+      </form>
+    </div>
   );
 }

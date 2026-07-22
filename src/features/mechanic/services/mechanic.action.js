@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
  * 1. TOGGLE AVAILABILITY STATUS (AVAILABLE <-> OFFLINE)
  */
 export async function toggleMechanicStatus(newStatus) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -35,7 +35,7 @@ export async function toggleMechanicStatus(newStatus) {
  * 2. GET MECHANIC PROFILE & STATS
  */
 export async function getMechanicProfile() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -71,7 +71,7 @@ export async function getMechanicProfile() {
  * 3. GET ACTIVE REQUEST (Pekerjaan yang sedang berjalan)
  */
 export async function getActiveRequest() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -94,7 +94,7 @@ export async function getActiveRequest() {
  * 4. GET SERVICE HISTORY (Riwayat Pekerjaan)
  */
 export async function getRequestHistory() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -117,7 +117,7 @@ export async function getRequestHistory() {
  * 5. GET NOTIFICATIONS & MARK AS READ
  */
 export async function getNotifications() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -137,7 +137,7 @@ export async function getNotifications() {
 }
 
 export async function markNotificationAsRead(notificationId) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from("notifications")
