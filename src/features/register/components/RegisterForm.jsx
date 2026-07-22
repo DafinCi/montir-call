@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Lock, User,Phone } from "lucide-react";
+import { Mail, Lock, User } from "lucide-react";
 import { Button, Input } from "@/components/ui";
 import PasswordInput from "@/features/auth/components/PasswordInput";
 
@@ -15,7 +15,7 @@ export default function RegisterForm() {
         Yuk mulai permudah hidupmu!
       </p>
 
-      <form className="mt-10 space-y-5">
+      <form className="mt-5 space-y-5">
 
         {/* Full Name */}
         <div>
@@ -29,23 +29,6 @@ export default function RegisterForm() {
             <Input
               type="text"
               placeholder="John Doe"
-              className="border-none shadow-none focus-visible:ring-0"
-            />
-          </div>
-        </div>
-
-        {/* Phone */}
-        <div>
-          <label className="text-sm font-medium">
-            Phone Number
-          </label>
-
-          <div className="mt-2 flex items-center rounded-md border bg-white px-4">
-            <Phone size={18} className="text-slate-400" />
-
-            <Input
-              type="tel"
-              placeholder="+62 812 3456 7890"
               className="border-none shadow-none focus-visible:ring-0"
             />
           </div>
@@ -107,36 +90,6 @@ export default function RegisterForm() {
           Register
         </Button>
       </form>
-
-      {/* Divider */}
-      <div className="my-8 flex items-center">
-        <div className="h-px flex-1 bg-slate-200" />
-
-        <span className="px-4 text-sm text-slate-400">
-          OR
-        </span>
-
-        <div className="h-px flex-1 bg-slate-200" />
-      </div>
-
-      {/* Google */}
-      <Button
-        variant="outline"
-        className="w-full"
-      >
-        Continue with Google
-      </Button>
-
-      {/* Login */}
-      <p className="mt-8 text-center text-sm text-slate-500">
-        Sudah punya akun?{" "}
-        <Link
-          href="/login"
-          className="font-semibold text-blue-600 hover:underline"
-        >
-          Login
-        </Link>
-      </p>
     </div>
   );
 }
