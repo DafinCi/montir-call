@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
  * dan dimasukkan ke tabel `public.mechanics`.
  */
 export async function registerMechanic(formData) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const email = formData.get("email");
   const password = formData.get("password");
@@ -40,7 +40,7 @@ export async function registerMechanic(formData) {
  * @supabase/ssr akan otomatis mengurus set-cookie JWT session di browser.
  */
 export async function loginMechanic(formData) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const email = formData.get("email");
   const password = formData.get("password");
@@ -65,7 +65,7 @@ export async function loginMechanic(formData) {
  * Logout Montir
  */
 export async function logoutMechanic() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   await supabase.auth.signOut();
 
