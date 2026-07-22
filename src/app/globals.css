@@ -4,6 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+body {
+  font-family: var(--font-arimo), Arial, sans-serif;
+}
+
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
@@ -55,9 +60,9 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(20.195% 0.05691 147.505);
   
-  --primary: oklch(72.234% 0.24116 142.927);
+  --primary: oklch(98.511% 0.00011 271.152);
   --primary-foreground: oklch(90.032% 0.20113 142.976);
-  --secondary: oklch(44.544% 0.1511 142.379);
+  --secondary: oklch(61.81% 0.20707 142.513);
   --secondary-foreground: oklch(26.533% 0.08515 143.773);
 
   --muted: oklch(0.97 0 0);

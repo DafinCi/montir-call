@@ -6,7 +6,7 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md">
       <h1 className="text-3xl font-bold text-slate-900">
-        Welcome Back 👋
+        Welcome Back
       </h1>
 
       <p className="mt-2 text-slate-500">
@@ -30,7 +30,7 @@ export default function LoginForm() {
             <Input
               type="email"
               placeholder="email@example.com"
-              className="w-full bg-transparent p-3 outline-none"
+              className="w-full bg-transparent p-3 outline-none border-none hover-none"
             />
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function LoginForm() {
             <Input
               type="password"
               placeholder="********"
-              className="w-full bg-transparent p-3 outline-none"
+              className="w-full bg-transparent p-3 outline-none border-none hover-none"
             />
           </div>
         </div>

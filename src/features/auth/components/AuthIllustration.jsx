@@ -2,7 +2,7 @@ import { Wrench, MapPinned } from "lucide-react";
 
 export default function AuthIllustration() {
   return (
-    <section className="hidden lg:flex flex-col justify-between bg-blue-600 text-white p-16">
+    <section className="hidden lg:flex flex-col justify-between bg-secondary text-white p-16">
       <div>
     
         <div className="flex items-center gap-3">
@@ -25,11 +25,6 @@ export default function AuthIllustration() {
           <br />
           dengan lokasi realtime.
         </h2>
-
-        <p className="mt-6 text-blue-100">
-          Terima order, navigasi ke lokasi pelanggan,
-          dan kelola pekerjaan dalam satu dashboard.
-        </p>
       </div>
 
       <div className="flex items-center gap-2 text-blue-100">

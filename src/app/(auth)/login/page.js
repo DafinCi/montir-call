@@ -1,4 +1,5 @@
-import LoginView from "@/features/login/views/LoginView";
+import LoginView from "@/features/auth/LoginView";
+import  registerMechanic from "@/features/auth/services/auth.action"
 
 export const metadata = {
   title: "Login | MontirGo",
