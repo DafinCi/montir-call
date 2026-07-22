@@ -9,7 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@tailwindcss/vite": "^4.3.3",
+=======
+    "@supabase/ssr": "^0.12.3",
+    "@supabase/supabase-js": "^2.110.7",
+>>>>>>> 138f18133c84e83867adaa93d5fd09d2d6da6ca3
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.25.0",
