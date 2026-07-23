@@ -46,22 +46,22 @@ export async function proxy(request) {
 
   // 4. Aturan Proteksi Route
 
-  // Kasus A: Belum login tapi mencoba masuk ke /dashboard -> tendang ke /login
-  if (!user && pathname.startsWith("/dashboard")) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
+  // // Kasus A: Belum login tapi mencoba masuk ke /dashboard -> tendang ke /login
+  // if (!user && pathname.startsWith("/dashboard")) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = "/login";
+  //   return NextResponse.redirect(url);
+  // }
 
-  // Kasus B: Sudah login tapi mencoba buka /login, /register, atau / -> arahkan ke /dashboard
-  if (
-    user &&
-    (pathname === "/login" || pathname === "/register" || pathname === "/")
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
-  }
+  // // Kasus B: Sudah login tapi mencoba buka /login, /register, atau / -> arahkan ke /dashboard
+  // if (
+  //   user &&
+  //   (pathname === "/login" || pathname === "/register" || pathname === "/")
+  // ) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = "/dashboard";
+  //   return NextResponse.redirect(url);
+  // }
 
   return supabaseResponse;
 }
