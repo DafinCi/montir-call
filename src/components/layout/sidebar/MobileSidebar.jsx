@@ -23,37 +23,34 @@ export default function MobileSidebar() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="md:hidden size-9 rounded-sm hover:bg-accent hover:text-primary-foreground"
         >
-          <Menu className="size-5" />
+          <Menu className="size-5 text-foreground" />
         </Button>
       </SheetTrigger>
 
       <SheetContent
         side="left"
-        className="flex w-72 flex-col p-0"
+        className="flex w-72 flex-col p-0 bg-card text-card-foreground border-r border-border/80"
       >
         {/* Header */}
-        <SheetHeader className="border-b border-border p-4">
+        <SheetHeader className="border-b border-border/60 p-4">
           <SheetTitle asChild>
             <Link
               href="/dashboard"
               className="flex items-center gap-3"
             >
-              <div className="flex size-10 items-center justify-center rounded-sm bg-primary">
-                <Wrench
-                  className="text-primary-foreground"
-                  size={20}
-                />
+              <div className="flex size-9 items-center justify-center rounded-sm bg-secondary text-secondary-foreground shadow-xs">
+                <Wrench size={18} />
               </div>
 
-              <div>
-                <h2 className="font-semibold text-foreground">
-                  MontirGo
+              <div className="flex flex-col leading-none text-left">
+                <h2 className="text-base font-bold text-foreground tracking-tight">
+                  Montir<span className="text-secondary-foreground">Go</span>
                 </h2>
 
-                <p className="text-xs text-muted-foreground">
-                  Mechanic Dashboard
+                <p className="text-[11px] text-muted-foreground font-medium mt-0.5">
+                  Mechanic Suite
                 </p>
               </div>
             </Link>
@@ -61,14 +58,20 @@ export default function MobileSidebar() {
         </SheetHeader>
 
         {/* Menu */}
-        <nav className="flex-1 space-y-2 overflow-y-auto p-3">
-          {menus.map((menu) => (
-            <SidebarItem
-              key={menu.href}
-              {...menu}
-            />
-          ))}
-        </nav>
+        <div className="flex-1 overflow-y-auto p-3 space-y-4">
+          <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+            Navigasi Utama
+          </p>
+
+          <nav className="space-y-1.5">
+            {menus.map((menu) => (
+              <SidebarItem
+                key={menu.href}
+                {...menu}
+              />
+            ))}
+          </nav>
+        </div>
 
         {/* Footer */}
         <SidebarFooter

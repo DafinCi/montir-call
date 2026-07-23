@@ -1,19 +1,40 @@
-export const FinancialSummary = ({ summary }) => (
-  <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-    <h3 class="text-base font-bold text-slate-800 mb-4">Ringkasan Pendapatan</h3>
-    <div class="space-y-3">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-50">
-        <span class="text-sm text-slate-500">Hari ini</span>
-        <span class="text-sm font-semibold text-slate-700">Rp {summary.daily.toLocaleString('id-ID')}</span>
+"use client";
+
+import React from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
+const DEFAULT_SUMMARY = {
+  daily: 425000,
+  weekly: 3135000,
+  monthly: 12500000,
+};
+
+export const FinancialSummary = ({ summary = DEFAULT_SUMMARY }) => (
+  <Card className="shadow-xs flex flex-col justify-between">
+    <CardHeader className="pb-2">
+      <CardTitle className="text-base font-semibold text-primary-foreground">
+        Ringkasan Pendapatan
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-4 pt-2">
+      <div className="flex justify-between items-center pb-2.5 border-b border-border/60">
+        <span className="text-xs text-muted-foreground font-medium">Hari ini</span>
+        <span className="text-sm font-bold text-secondary">
+          Rp {summary.daily?.toLocaleString("id-ID") ?? "0"}
+        </span>
       </div>
-      <div class="flex justify-between items-center pb-2 border-b border-slate-50">
-        <span class="text-sm text-slate-500">Minggu ini</span>
-        <span class="text-sm font-semibold text-slate-700">Rp {summary.weekly.toLocaleString('id-ID')}</span>
+      <div className="flex justify-between items-center pb-2.5 border-b border-border/60">
+        <span className="text-xs text-muted-foreground font-medium">Minggu ini</span>
+        <span className="text-sm font-bold text-secondary">
+          Rp {summary.weekly?.toLocaleString("id-ID") ?? "0"}
+        </span>
       </div>
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-slate-500">Bulan ini</span>
-        <span class="text-sm font-semibold text-emerald-600">Rp {summary.monthly.toLocaleString('id-ID')}</span>
+      <div className="flex justify-between items-center">
+        <span className="text-xs text-muted-foreground font-medium">Bulan ini</span>
+        <span className="text-sm font-bold text-secondary">
+          Rp {summary.monthly?.toLocaleString("id-ID") ?? "0"}
+        </span>
       </div>
-    </div>
-  </div>
+    </CardContent>
+  </Card>
 );

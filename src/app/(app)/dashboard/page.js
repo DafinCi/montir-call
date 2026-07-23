@@ -1,5 +1,5 @@
 // src/app/(app)/dashboard/page.js
-import DashboardView from "@/features/dashboard/views/DashboardView";
+import DashboardView from "@/features/dashboard/views/DashView";
 
 export const metadata = {
   title: "Dashboard - Service Montir",
