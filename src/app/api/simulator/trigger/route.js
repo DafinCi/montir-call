@@ -1,9 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { generateAIPreAssessment } from "@/features/ai/services/ai.service";
 
 export async function POST(request) {
   try {
-    // Buat Admin Client khusus API Simulator (Bypass RLS)
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -29,7 +29,12 @@ export async function POST(request) {
     let lat = body.lat || -6.2;
     let lng = body.lng || 106.816;
 
-    // 1. Insert Customer Dummy
+    const aiAssessment = await generateAIPreAssessment(
+      problemDescription,
+      vehicleType,
+    );
+
+    // 2. Insert Customer Dummy
     const { data: customer } = await supabase
       .from("customers")
       .insert({
@@ -39,10 +44,10 @@ export async function POST(request) {
       .select()
       .single();
 
-    // 2. Format PostGIS Point
+    // 3. Format PostGIS Point (Lng Lat)
     const pointWKT = `POINT(${lng} ${lat})`;
 
-    // 3. Insert Service Request
+    // 4. Insert Service Request + Simpan AI Analysis (JSONB)
     const { data: serviceRequest, error: requestErr } = await supabase
       .from("service_requests")
       .insert({
@@ -54,6 +59,7 @@ export async function POST(request) {
         problem_description: problemDescription,
         customer_location: pointWKT,
         status: "PENDING",
+        ai_analysis: aiAssessment.data,
       })
       .select()
       .single();
@@ -65,24 +71,32 @@ export async function POST(request) {
       );
     }
 
-    // 4. Insert Notifikasi
+    // 5. Insert Notifikasi ke Montir (Dilengkapi Info AI)
     if (targetMechanicId) {
+      const aiData = aiAssessment.data;
+      const urgencyBadge =
+        aiData?.urgency === "HIGH" || aiData?.urgency === "CRITICAL"
+          ? "🚨"
+          : "⚡";
+
       await supabase.from("notifications").insert({
         mechanic_id: targetMechanicId,
         request_id: serviceRequest.id,
         type: "REQUEST_CREATED",
-        title: "Bantuan Darurat Masuk!",
-        message: `${customerName} (${vehicleType}): "${problemDescription}"`,
+        title: `${urgencyBadge} Order Masuk [Urgency: ${aiData?.urgency || "MEDIUM"}]`,
+        message: `${customerName} (${vehicleType}): "${aiData?.job_summary || problemDescription}"`,
         is_read: false,
       });
     }
 
     return NextResponse.json({
       success: true,
-      message: "Simulasi Service Request berhasil ditrigger!",
+      message:
+        "Simulasi Service Request + AI Pre-Assessment berhasil ditrigger!",
       data: serviceRequest,
     });
   } catch (error) {
+    console.error("❌ Error Simulator Trigger:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 },
