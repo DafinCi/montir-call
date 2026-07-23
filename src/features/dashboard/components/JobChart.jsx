@@ -1,0 +1,24 @@
+export const JobChart = ({ data }) => {
+  const maxVal = Math.max(...data.map((d) => d.completed));
+
+  return (
+    <div class="bg-primary p-5 rounded-2xl border border-slate-100 shadow-sm">
+      <h3 class="text-base font-bold text-muted-foreground mb-4">Servis Selesai (Minggu Ini)</h3>
+      <div class="flex items-end justify-between gap-2 h-44 pt-4">
+        {data.map((item, idx) => {
+          const heightPercent = (item.completed / maxVal) * 100;
+          return (
+            <div key={idx} class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+              <span class="text-xs text-primary-foreground">{item.completed}</span>
+              <div
+                style={{ height: `${heightPercent}%` }}
+                class="w-full bg-indigo-500 hover:bg-indigo-600 rounded-t-md transition-all duration-300"
+              ></div>
+              <span class="text-xs font-medium text-slate-500">{item.day}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

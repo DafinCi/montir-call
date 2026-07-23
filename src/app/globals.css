@@ -8,7 +8,6 @@ body {
   font-family: var(--font-arimo), Arial, sans-serif;
 }
 
-
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
@@ -61,12 +60,13 @@ body {
   --popover-foreground: oklch(20.195% 0.05691 147.505);
   
   --primary: oklch(98.511% 0.00011 271.152);
-  --primary-foreground: oklch(90.032% 0.20113 142.976);
+  --primary-foreground: oklch(15.11% 0.04943 140.768);
   --secondary: oklch(61.81% 0.20707 142.513);
   --secondary-foreground: oklch(26.533% 0.08515 143.773);
 
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted: oklch(0% 0 0);
+  --muted-foreground: oklch(0.439 0 0);
+
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
