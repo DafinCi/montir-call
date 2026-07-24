@@ -1,52 +1,66 @@
 "use client";
 
 import React from "react";
-import { DollarSign, CheckCircle2, Clock, Star, TrendingUp } from "lucide-react";
+import { DollarSign, CheckCircle2, Clock, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-export default function DashStats({ activeCount = 2 }) {
-  const stats = [
+export default function DashStats({ stats = {} }) {
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    }).format(number || 0);
+  };
+
+  const statItems = [
     {
       title: "Pendapatan Hari Ini",
-      value: "Rp 425.000",
-      subtext: "+18% dari kemarin",
-      trend: true,
+      value: formatRupiah(stats.todayRevenue),
+      subtext: "Total estimasi hari ini",
       icon: DollarSign,
-      color: "text-secondary",
-      bgColor: "bg-secondary/10",
+      color: "text-emerald-600 dark:text-emerald-400",
+      bgColor: "bg-emerald-500/10",
     },
     {
       title: "Pekerjaan Selesai",
-      value: "6 Servis",
-      subtext: "Target harian: 8 Servis",
+      value: `${stats.totalJobsToday || 0} Servis`,
+      subtext: "Total servis sukses hari ini",
       icon: CheckCircle2,
-      color: "text-secondary",
-      bgColor: "bg-secondary/10",
+      color: "text-blue-600 dark:text-blue-400",
+      bgColor: "bg-blue-500/10",
     },
     {
       title: "Panggilan Aktif",
-      value: `${activeCount} Pesanan`,
+      value: `${stats.activeJobsCount || 0} Pesanan`,
       subtext: "Butuh penanganan segera",
       icon: Clock,
-      color: "text-secondary",
-      bgColor: "bg-secondary/10",
+      color: "text-amber-600 dark:text-amber-400",
+      bgColor: "bg-amber-500/10",
     },
     {
       title: "Rating Montir",
-      value: "4.9 / 5.0",
-      subtext: "Dari 128 ulasan pelanggan",
+      value: stats.rating
+        ? `${Number(stats.rating).toFixed(1)} / 5.0`
+        : "Belum Ada",
+      subtext: stats.totalReviews
+        ? `Dari ${stats.totalReviews} ulasan`
+        : "Berdasarkan evaluasi customer",
       icon: Star,
-      color: "text-secondary",
-      bgColor: "bg-secondary/10",
+      color: "text-purple-600 dark:text-purple-400",
+      bgColor: "bg-purple-500/10",
     },
   ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat, idx) => {
+      {statItems.map((stat, idx) => {
         const Icon = stat.icon;
         return (
-          <Card key={idx} className="transition-all hover:border-border/80 hover:shadow-xs">
+          <Card
+            key={idx}
+            className="transition-all hover:border-border/80 shadow-xs"
+          >
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-muted-foreground">
@@ -57,15 +71,12 @@ export default function DashStats({ activeCount = 2 }) {
                 </div>
               </div>
 
-              <div className="mt-3">
-                <div className="text-2xl font-bold tracking-tight text-primary-foreground">
+              <div className="mt-3 space-y-1">
+                <div className="text-2xl font-bold tracking-tight text-foreground">
                   {stat.value}
                 </div>
-                <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
-                  {stat.trend && <TrendingUp className="size-3 text-secondary" />}
-                  <span className={stat.trend ? "text-secondary font-medium" : ""}>
-                    {stat.subtext}
-                  </span>
+                <div className="text-xs text-muted-foreground">
+                  {stat.subtext}
                 </div>
               </div>
             </CardContent>
