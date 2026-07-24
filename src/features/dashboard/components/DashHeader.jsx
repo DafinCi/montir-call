@@ -26,21 +26,21 @@ export default function DashHeader({
       return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
     if (isOnline)
       return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
-    return "bg-muted text-muted-foreground border-border";
+    return "bg-muted-foreground/20 text-muted border-border";
   };
 
   const getStatusDotStyle = () => {
     if (isBusy) return "bg-amber-500 animate-pulse";
     if (isOnline) return "bg-emerald-500 animate-pulse";
-    return "bg-muted-foreground";
+    return "bg-destructive";
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-10 pl-4">
       {/* Greeting & Subtitle */}
       <div className="space-y-1">
         <div className="flex items-center gap-2.5">
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-muted">
             Selamat Datang, {mechanicName}!
           </h1>
           <span
@@ -61,7 +61,7 @@ export default function DashHeader({
           variant={isOnline ? "destructive" : "default"}
           size="sm"
           disabled={isToggling || isBusy}
-          className="gap-2 font-medium shadow-xs"
+          className="gap-2 font-medium shadow-xs bg-foreground"
           onClick={onToggleOnline}
         >
           {isToggling ? (
@@ -83,11 +83,11 @@ export default function DashHeader({
             title="Refresh Data"
             disabled={isRefreshing}
             onClick={onRefresh}
-            className="group text-muted-foreground hover:text-foreground transition-colors size-9"
+            className="group text-muted-foreground hover:text-muted transition-colors size-9"
           >
             <RefreshCw
-              className={`size-3.5 ${
-                isRefreshing ? "animate-spin text-primary" : ""
+              className={`size-3.5 transition-transform duration-500 ease-in-out ${
+                isRefreshing ? "animate-spin text-primary" : "group-hover:rotate-180"
               }`}
             />
           </Button>

@@ -54,7 +54,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
             return (
               <div
                 key={job.id}
-                className="p-4 rounded-xl border bg-card hover:bg-muted/30 transition-colors space-y-3"
+                className="p-4 rounded-sm border bg-card hover:bg-muted/30 transition-colors space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">

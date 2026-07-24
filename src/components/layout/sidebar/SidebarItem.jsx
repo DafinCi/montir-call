@@ -28,7 +28,7 @@ export default function SidebarItem({
       className={cn(
         "group relative flex h-10 items-center rounded-sm px-3 text-sm font-medium transition-all duration-200 outline-none",
         active
-          ? "bg-secondary text-secondary-foreground shadow-xs font-semibold"
+          ? "bg-secondary text-primary shadow-xs font-semibold"
           : "text-primary hover:bg-accent/80 hover:text-primary-foreground",
         collapsed && "justify-center px-0"
       )}
@@ -43,7 +43,7 @@ export default function SidebarItem({
         className={cn(
           "size-4.5 shrink-0 transition-transform duration-200 group-hover:scale-105",
           active
-            ? "text-secondary-foreground"
+            ? "text-primary"
             : "text-primary group-hover:text-primary-foreground"
         )}
       />
@@ -60,7 +60,7 @@ export default function SidebarItem({
                 "ml-2 h-5 min-w-5 justify-center rounded-full px-1.5 text-[10px] font-bold border border-border/50 ",
                 active
                   ? "bg-primary text-primary-foreground"
-                  : "bg-muted-foreground text-muted"
+                  : "bg-secondary text-muted"
               )}
             >
               {badge}

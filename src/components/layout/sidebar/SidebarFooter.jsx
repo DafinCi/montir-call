@@ -46,7 +46,7 @@ export default function SidebarFooter({
               w-full
               h-12
               p-2
-              rounded-xl
+              rounded-sm
               /* Mencegah background berubah jadi putih saat di-hover atau saat menu terbuka */
               hover:bg-white/10
               data-[state=open]:bg-white/10
@@ -102,7 +102,7 @@ export default function SidebarFooter({
         <DropdownMenuContent
           side="top"
           align="start"
-          className="w-56 rounded-xl p-1.5 shadow-lg bg-popover text-popover-foreground border-border"
+          className="w-56 rounded-sm p-1.5 shadow-lg bg-popover text-popover-foreground border-border"
         >
           {/* Header Ringkas di Dropdown */}
           <DropdownMenuLabel className="font-normal p-2">

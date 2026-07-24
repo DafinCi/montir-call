@@ -19,25 +19,25 @@ export default function QuickAction() {
     {
       label: "Servis Manual",
       icon: Wrench,
-      color: "text-blue-500",
+      color: "text-secondary",
       onClick: () => router.push("/dashboard/services/new"),
     },
     {
       label: "Tarik Saldo",
       icon: Wallet,
-      color: "text-emerald-500",
+      color: "text-secondary",
       onClick: () => router.push("/dashboard/finance/withdraw"),
     },
     {
       label: "Performa",
       icon: TrendingUp,
-      color: "text-purple-500",
+      color: "text-secondary",
       onClick: () => router.push("/dashboard/analytics"),
     },
     {
       label: "Bantuan",
       icon: HelpCircle,
-      color: "text-amber-500",
+      color: "text-secondary",
       onClick: () => router.push("/dashboard/support"),
     },
   ];
@@ -45,7 +45,7 @@ export default function QuickAction() {
   return (
     <Card className="shadow-xs">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base font-semibold text-foreground">
+        <CardTitle className="text-base font-semibold text-muted">
           Aksi Cepat
         </CardTitle>
         <CardDescription className="text-xs">

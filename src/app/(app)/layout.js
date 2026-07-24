@@ -25,7 +25,7 @@ export default async function AppLayout({ children }) {
         <AppNavbar />
 
         {/* Main */}
-        <main className="flex-1 overflow-y-auto md:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto">
           {children}
         </main>
 
