@@ -60,7 +60,7 @@ export default function SidebarItem({
                 "ml-2 h-5 min-w-5 justify-center rounded-full px-1.5 text-[10px] font-bold border border-border/50 ",
                 active
                   ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-primary-foreground"
+                  : "bg-muted-foreground text-muted"
               )}
             >
               {badge}
