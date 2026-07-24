@@ -1,24 +1,56 @@
-// QuickAction.jsx
 "use client";
 
 import React from "react";
-import { Wrench, DollarSign, AlertCircle, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Wrench, Wallet, HelpCircle, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
 export default function QuickAction() {
+  const router = useRouter();
+
   const actions = [
-    { label: "Servis Manual", icon: Wrench, color: "text-secondary" },
-    { label: "Tarik Saldo", icon: DollarSign, color: "text-secondary" },
-    { label: "Bantuan", icon: AlertCircle, color: "text-secondary" },
-    { label: "Performa", icon: Star, color: "text-secondary" },
+    {
+      label: "Servis Manual",
+      icon: Wrench,
+      color: "text-blue-500",
+      onClick: () => router.push("/dashboard/services/new"),
+    },
+    {
+      label: "Tarik Saldo",
+      icon: Wallet,
+      color: "text-emerald-500",
+      onClick: () => router.push("/dashboard/finance/withdraw"),
+    },
+    {
+      label: "Performa",
+      icon: TrendingUp,
+      color: "text-purple-500",
+      onClick: () => router.push("/dashboard/analytics"),
+    },
+    {
+      label: "Bantuan",
+      icon: HelpCircle,
+      color: "text-amber-500",
+      onClick: () => router.push("/dashboard/support"),
+    },
   ];
 
   return (
     <Card className="shadow-xs">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base font-semibold">Aksi Cepat</CardTitle>
-        <CardDescription className="text-xs">Pintasan operasi harian</CardDescription>
+        <CardTitle className="text-base font-semibold text-foreground">
+          Aksi Cepat
+        </CardTitle>
+        <CardDescription className="text-xs">
+          Pintasan navigasi harian
+        </CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-2">
         {actions.map((act, i) => {
@@ -27,7 +59,8 @@ export default function QuickAction() {
             <Button
               key={i}
               variant="outline"
-              className="h-auto flex-col py-3 px-2 gap-1.5 text-xs font-medium hover:border-primary/30"
+              onClick={act.onClick}
+              className="h-auto flex-col py-3 px-2 gap-1.5 text-xs font-medium hover:border-primary/40 hover:bg-muted/50 transition-all"
             >
               <Icon className={`size-4 ${act.color}`} />
               {act.label}
