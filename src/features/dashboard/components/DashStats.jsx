@@ -19,24 +19,24 @@ export default function DashStats({ stats = {} }) {
       value: formatRupiah(stats.todayRevenue),
       subtext: "Total estimasi hari ini",
       icon: DollarSign,
-      color: "text-emerald-600 dark:text-emerald-400",
-      bgColor: "bg-emerald-500/10",
+      color: "text-secondary",
+      bgColor: "bg-secondary/10",
     },
     {
       title: "Pekerjaan Selesai",
       value: `${stats.totalJobsToday || 0} Servis`,
       subtext: "Total servis sukses hari ini",
       icon: CheckCircle2,
-      color: "text-blue-600 dark:text-blue-400",
-      bgColor: "bg-blue-500/10",
+      color: "text-secondary",
+      bgColor: "bg-secondary/10",
     },
     {
       title: "Panggilan Aktif",
       value: `${stats.activeJobsCount || 0} Pesanan`,
       subtext: "Butuh penanganan segera",
       icon: Clock,
-      color: "text-amber-600 dark:text-amber-400",
-      bgColor: "bg-amber-500/10",
+      color: "text-secondary",
+      bgColor: "bg-secondary/10",
     },
     {
       title: "Rating Montir",
@@ -47,8 +47,8 @@ export default function DashStats({ stats = {} }) {
         ? `Dari ${stats.totalReviews} ulasan`
         : "Berdasarkan evaluasi customer",
       icon: Star,
-      color: "text-purple-600 dark:text-purple-400",
-      bgColor: "bg-purple-500/10",
+      color: "text-secondary",
+      bgColor: "bg-secondary/10",
     },
   ];
 
@@ -61,7 +61,7 @@ export default function DashStats({ stats = {} }) {
             key={idx}
             className="transition-all hover:border-border/80 shadow-xs"
           >
-            <CardContent className="p-5">
+            <CardContent className="px-5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-muted-foreground">
                   {stat.title}
@@ -72,7 +72,7 @@ export default function DashStats({ stats = {} }) {
               </div>
 
               <div className="mt-3 space-y-1">
-                <div className="text-2xl font-bold tracking-tight text-foreground">
+                <div className="text-2xl font-bold tracking-tight text-muted">
                   {stat.value}
                 </div>
                 <div className="text-xs text-muted-foreground">

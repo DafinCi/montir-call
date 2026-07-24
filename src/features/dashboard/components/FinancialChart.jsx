@@ -10,7 +10,7 @@ export const FinancialChart = ({ data = [] }) => {
   return (
     <Card className="shadow-xs shrink-0">
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-semibold text-foreground">
+        <CardTitle className="text-base font-semibold text-muted">
           Grafik Pendapatan 7 Hari Terakhir
         </CardTitle>
       </CardHeader>

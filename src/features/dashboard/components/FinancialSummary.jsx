@@ -16,7 +16,7 @@ export const FinancialSummary = ({
   return (
     <Card className="shadow-xs flex flex-col justify-between h-full">
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-semibold text-foreground">
+        <CardTitle className="text-base font-semibold text-muted">
           Ringkasan Pendapatan
         </CardTitle>
       </CardHeader>

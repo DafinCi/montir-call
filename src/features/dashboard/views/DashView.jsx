@@ -27,7 +27,7 @@ export default function DashboardView() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 md:p-14 lg:p-8 max-w-7xl mx-auto space-y-6">
       {/* HEADER */}
       <DashHeader
         mechanicName={data?.mechanicName}
