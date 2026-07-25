@@ -1,9 +1,8 @@
-import RegisterView from "@/features/register/views/RegisterView";
-import  registerMechanic from "@/features/auth/services/auth.action"
+import RegisterView from "@/features/auth/views/RegisterView";
 
 export const metadata = {
-  title: "Login | MontirGo",
-  description: "Login ke dashboard MontirGo",
+  title: "Pendaftaran Mitra | MontirGo",
+  description: "Daftar sebagai mitra MontirGo",
 };
 
 export default function RegisterPage() {

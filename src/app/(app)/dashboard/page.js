@@ -1,8 +1,8 @@
-// src/app/(app)/dashboard/page.js
 import DashboardView from "@/features/dashboard/views/DashView";
 
 export const metadata = {
-  title: "Dashboard - Service Montir",
+  title: "Dashboard Montir | MontirGo",
+  description: "Kelola pesanan servis dan status keaktifan montir.",
 };
 
 export default function DashboardPage() {

@@ -11,7 +11,7 @@ export async function generateAIPreAssessment(problemDescription, vehicleInfo) {
 Kamu adalah Sistem Asisten Montir Darurat (AI Pre-Assessment) untuk layanan perbaikan kendaraan di jalan.
 Tugasmu adalah menganalisis keluhan customer dan memberikan rekomendasi terstruktur untuk membantu montir mengambil keputusan sebelum menerima pekerjaan.
 
-Kamu WAJIB mengembalikan output dalam format JSON MURNI yang valid (tanpa markdown backticks, tanpa kata 'json') sesuai skema berikut:
+Kamu WAJIB mengembalikan output dalam format JSON MURNI yang valid (tanpa markdown backticks, tanpa kata 'json') sesuai skema berikut dan gunakan bahasa indonesia:
 {
   "job_summary": "string (Ringkasan masalah customer dalam 1 kalimat pendek)",
   "estimated_issue": "string (Perkiraan sumber masalah/kerusakan teknis utama)",

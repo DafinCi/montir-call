@@ -2,42 +2,37 @@
 
 import { useState } from "react";
 import { Eye, EyeOff, Lock } from "lucide-react";
-import { Button, Input } from "@/components/ui";
+import { Input } from "@/components/ui/input";
 
 export default function PasswordInput({
   label = "Password",
   placeholder = "Masukkan password",
+  name = "password",
   ...props
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-slate-700">
-        {label}
-      </label>
+    <div className="space-y-1.5">
+      <label className="text-xs font-semibold text-foreground">{label}</label>
 
-      <div className="flex items-center rounded-sm border border-slate-300 bg-white px-4  focus-within:ring-blue-100 transition">
-        <Lock
-          size={18}
-          className="mr-3 text-slate-400"
-        />
+      <div className="flex items-center rounded-lg border bg-background px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
+        <Lock size={16} className="mr-2.5 text-muted-foreground shrink-0" />
 
-        <Input placeholder="******" className="border-none"
+        <Input
+          name={name}
+          placeholder={placeholder}
           type={showPassword ? "text" : "password"}
+          className="border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-10 text-sm"
           {...props}
         />
 
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="text-slate-400  transition"
+          className="text-muted-foreground hover:text-foreground transition-colors p-1"
         >
-          {showPassword ? (
-            <EyeOff size={18} />
-          ) : (
-            <Eye size={18} />
-          )}
+          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
         </button>
       </div>
     </div>
