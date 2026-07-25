@@ -4,23 +4,92 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 /**
- * 1. ACCEPT REQUEST (Anti Race Condition)
- * Menggunakan kriteria `status = 'PENDING'` secara langsung dalam query UPDATE.
- * Jika montir lain sudah mengambil request ini milidetik sebelumnya, query akan mengembalikan 0 row.
+ * Helper untuk format waktu relatif (misal: "5 menit lalu")
+ */
+function formatRelativeTime(dateString) {
+  if (!dateString) return "Baru saja";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+
+  if (diffInMinutes < 1) return "Baru saja";
+  if (diffInMinutes < 60) return `${diffInMinutes} menit lalu`;
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) return `${diffInHours} jam lalu`;
+  return date.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
+}
+
+/**
+ * 1. GET PENDING REQUESTS
+ * Mengambil semua pesanan masuk yang belum diambil montir lain (status = 'PENDING')
+ */
+export async function getPendingRequests() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "Unauthorized", data: [] };
+  }
+
+  const { data, error } = await supabase
+    .from("service_requests")
+    .select("*")
+    .eq("status", "PENDING")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching pending requests:", error);
+    return { success: false, error: error.message, data: [] };
+  }
+
+  // Format data DB agar sesuai dengan kebutuhan UI Component
+  const formattedData = (data || []).map((item) => ({
+    id: item.id,
+    customerName: item.customer_name || item.user_name || "Pelanggan",
+    createdAt: formatRelativeTime(item.created_at),
+    priority: item.priority || (item.is_emergency ? "emergency" : "scheduled"),
+    vehicleModel:
+      item.vehicle_model || item.vehicle_type || "Kendaraan Pelanggan",
+    licensePlate: item.license_plate || item.vehicle_plate || "-",
+    problemDescription:
+      item.problem_description ||
+      item.description ||
+      "Tidak ada rincian keluhan.",
+    symptoms: Array.isArray(item.symptoms)
+      ? item.symptoms
+      : typeof item.symptoms === "string"
+        ? JSON.parse(item.symptoms || "[]")
+        : [],
+    locationTitle: item.location_title || item.place_name || "Lokasi Pelanggan",
+    locationAddress:
+      item.location_address || item.address || "Alamat lokasi tidak tersedia",
+    distanceKm: item.distance_km ? String(item.distance_km) : "2.5",
+    estimatedTime: item.estimated_time || "10 min",
+    customerNote: item.customer_note || item.notes || "",
+  }));
+
+  return { success: true, data: formattedData };
+}
+
+/**
+ * 2. ACCEPT REQUEST (Anti Race Condition)
  */
 export async function acceptRequest(requestId) {
   const supabase = await createClient();
 
-  // Ambil ID montir yang sedang terautentikasi
   const {
     data: { user },
     error: authErr,
   } = await supabase.auth.getUser();
+
   if (authErr || !user) {
     return { success: false, error: "Anda harus login terlebih dahulu." };
   }
 
-  // A. Atomic Update Query ke Database
+  // Atomic Update Query
   const { data: request, error: updateErr } = await supabase
     .from("service_requests")
     .update({
@@ -28,11 +97,10 @@ export async function acceptRequest(requestId) {
       assigned_mechanic_id: user.id,
     })
     .eq("id", requestId)
-    .eq("status", "PENDING") // CRITICAL: Mencegah Race Condition!
+    .eq("status", "PENDING") // Mencegah Race Condition!
     .select()
     .single();
 
-  // B. Jika data gagal di-update / status sudah bukan PENDING lagi
   if (updateErr || !request) {
     return {
       success: false,
@@ -41,10 +109,11 @@ export async function acceptRequest(requestId) {
     };
   }
 
-  // C. Otomatis ubah status montir menjadi 'BUSY'
+  // Ubah status montir menjadi BUSY
   await supabase.from("mechanics").update({ status: "BUSY" }).eq("id", user.id);
 
   revalidatePath("/dashboard");
+  revalidatePath("/request");
 
   return {
     success: true,
@@ -54,8 +123,7 @@ export async function acceptRequest(requestId) {
 }
 
 /**
- * 2. UPDATE REQUEST STATUS
- * Transisi status pekerjaan: ACCEPTED -> ON_THE_WAY -> ARRIVED -> COMPLETED (atau CANCELLED)
+ * 3. UPDATE REQUEST STATUS
  */
 export async function updateRequestStatus(requestId, newStatus) {
   const supabase = await createClient();
@@ -64,6 +132,7 @@ export async function updateRequestStatus(requestId, newStatus) {
     data: { user },
     error: authErr,
   } = await supabase.auth.getUser();
+
   if (authErr || !user) {
     return { success: false, error: "Sesi anda telah berakhir." };
   }
@@ -73,7 +142,6 @@ export async function updateRequestStatus(requestId, newStatus) {
     return { success: false, error: "Status pekerjaan tidak valid." };
   }
 
-  // Update status pekerjaan (pastikan hanya montir yang di-assign yang bisa update)
   const { data: request, error } = await supabase
     .from("service_requests")
     .update({ status: newStatus })
@@ -86,7 +154,6 @@ export async function updateRequestStatus(requestId, newStatus) {
     return { success: false, error: "Gagal memperbarui status pekerjaan." };
   }
 
-  // Jika pekerjaan SELESAI atau BATAL, kembalikan status montir menjadi AVAILABLE
   if (newStatus === "COMPLETED" || newStatus === "CANCELLED") {
     await supabase
       .from("mechanics")
@@ -95,13 +162,13 @@ export async function updateRequestStatus(requestId, newStatus) {
   }
 
   revalidatePath("/dashboard");
+  revalidatePath("/request");
 
   return { success: true, data: request };
 }
 
 /**
- * 3. UPDATE MECHANIC LOCATION
- * Di-panggil periodik atau saat pergerakan GPS untuk memperbarui lokasi montir di database
+ * 4. UPDATE MECHANIC LOCATION
  */
 export async function updateMechanicLocation(lat, lng) {
   const supabase = await createClient();
@@ -109,9 +176,10 @@ export async function updateMechanicLocation(lat, lng) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
   if (!user) return { success: false, error: "Unauthorized" };
 
-  const pointWKT = `POINT(${lng} ${lat})`; // Format PostGIS: Lng Lat
+  const pointWKT = `POINT(${lng} ${lat})`;
 
   const { error } = await supabase
     .from("mechanics")
@@ -122,28 +190,3 @@ export async function updateMechanicLocation(lat, lng) {
 
   return { success: true };
 }
-
-/**
- * // Contoh tombol Accept di komponen Frontend UI
-import { acceptRequest } from '@/features/requests/services/request.action'
-
-export function AcceptButton({ requestId }) {
-  const handleAccept = async () => {
-    const response = await acceptRequest(requestId)
-    
-    if (!response.success) {
-      alert(response.error) // Muncul peringatan jika keduluan montir lain
-      return
-    }
-
-    alert('Berhasil menerima order!')
-    // Redirect atau buka tab Navigasi/Maps
-  }
-
-  return (
-    <button onClick={handleAccept} className="bg-blue-600 text-white p-2 rounded">
-      Terima Bantuan
-    </button>
-  )
-}
- */
