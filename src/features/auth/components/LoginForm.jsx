@@ -32,11 +32,11 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-sm space-y-6">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        <h1 className="text-3xl tracking-tight text-muted font-ubuntu font-bold">
           Portal Montir
         </h1>
         <p className="text-xs text-muted-foreground">
-          Masuk ke dashboard mitra MontirGo untuk menerima panggilan perbaikan.
+          Yuk cek Jasa apa yang kamu bisa jual hari ini.
         </p>
       </div>
 
@@ -50,10 +50,10 @@ export default function LoginForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-foreground">
+          <label className="text-xs font-semibold text-muted-foreground">
             Email Mitra
           </label>
-          <div className="flex items-center rounded-lg border bg-background px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
+          <div className="flex items-center rounded-lg border bg-chart-1/20 px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
             <Mail size={16} className="mr-2.5 text-muted-foreground shrink-0" />
             <Input
               name="email"
@@ -89,12 +89,12 @@ export default function LoginForm() {
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-border" />
         </div>
-        <span className="relative bg-background px-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+        <span className="relative px-2 text-[10px] uppercase tracking-wider text-muted-foreground">
           Belum jadi mitra?
         </span>
       </div>
 
-      <Button variant="outline" className="w-full text-xs" asChild>
+      <Button className="w-full text-semibold" asChild>
         <Link href="/register">Daftar Sebagai Mitra Montir</Link>
       </Button>
     </div>
