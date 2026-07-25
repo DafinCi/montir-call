@@ -1,17 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import {
-  Bell,
-  LogOut,
-  Settings,
-  User,
-} from "lucide-react";
-
 import MobileSidebar from "../sidebar/MobileSidebar";
-
 
 const pageTitles = {
   "/dashboard": "Dashboard",
@@ -21,17 +12,10 @@ const pageTitles = {
   "/profile": "Profile",
 };
 
-export default function AppNavbar({
-  user = {
-    name: "Dafin",
-    email: "dafin@email.com",
-    avatar: "",
-  },
-}) {
+export default function AppNavbar({ user, pendingCount = 0 }) {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
 
-  // Format tanggal asli sesuai waktu lokal saat ini (Bahasa Indonesia)
   useEffect(() => {
     const formatted = new Intl.DateTimeFormat("id-ID", {
       weekday: "long",
@@ -48,27 +32,20 @@ export default function AppNavbar({
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-40 flex h-25 items-center justify-between border-b border-border bg-primary-foreground px-4 md:px-6">
-
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-border bg-primary-foreground px-4 md:px-6">
       {/* Left */}
       <div className="flex items-center gap-3">
-        <MobileSidebar />
+        <MobileSidebar user={user} pendingCount={pendingCount} />
 
         <div>
-          <h1 className="text-3xl font-bold text-primary">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary">
             {title}
           </h1>
 
-          {/* TANGGAL ASLI DINAMIS */}
-          <p className="hidden text-sm text-secondary md:block capitalize">
+          <p className="hidden text-xs text-muted-foreground md:block capitalize mt-0.5">
             {currentDate || "-"}
           </p>
         </div>
-      </div>
-
-      {/* Right */}
-      <div className="flex items-center gap-2">
-
       </div>
     </header>
   );

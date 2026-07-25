@@ -3,32 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Wrench } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-
 import SidebarItem from "./SidebarItem";
 import SidebarFooter from "./SidebarFooter";
-import { menus } from "../menu";
+import { getMenus } from "../menu";
 
-export default function AppSidebar() {
+export default function AppSidebar({ user, pendingCount = 0 }) {
   const [collapsed, setCollapsed] = useState(false);
+  const menus = getMenus(pendingCount);
 
   return (
     <aside
       className={`
-        hidden
-        md:flex
-        sticky
-        top-0
-        shrink-0
-        h-screen
-        flex-col
-        bg-primary-foreground
-        text-card-foreground
-        transition-all
-        duration-300
-        ease-in-out
-        z-30
+        hidden md:flex sticky top-0 shrink-0 h-screen flex-col
+        bg-primary-foreground text-card-foreground transition-all
+        duration-300 ease-in-out z-30
         ${collapsed ? "w-17" : "w-64"}
       `}
     >
@@ -61,7 +50,7 @@ export default function AppSidebar() {
           onClick={() => setCollapsed(!collapsed)}
           title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
-        {collapsed ? (
+          {collapsed ? (
             <ArrowRight
               size={18}
               className="transition-transform duration-200 group-hover:translate-x-2"
@@ -73,7 +62,7 @@ export default function AppSidebar() {
             />
           )}
         </Button>
-        </div>
+      </div>
 
       {/* Menu Area */}
       <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
@@ -85,25 +74,13 @@ export default function AppSidebar() {
 
         <nav className="space-y-1.5 text-primary">
           {menus.map((menu) => (
-            <SidebarItem
-              key={menu.href}
-              {...menu}
-              collapsed={collapsed}
-            />
+            <SidebarItem key={menu.href} {...menu} collapsed={collapsed} />
           ))}
         </nav>
       </div>
 
       {/* Footer Profile */}
-      <SidebarFooter
-        collapsed={collapsed}
-        user={{
-          name: "Dafin",
-          email: "dafin@gmail.com",
-          avatar: "",
-          online: true,
-        }}
-      />
+      <SidebarFooter collapsed={collapsed} user={user} />
     </aside>
   );
 }

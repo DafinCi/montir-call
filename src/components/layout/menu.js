@@ -1,12 +1,6 @@
-import {
-  LayoutDashboard,
-  CarFront,
-  MapPinned,
-  Bell,
-  User,
-} from "lucide-react";
+import { LayoutDashboard, CarFront, MapPinned, Bell, User } from "lucide-react";
 
-export const menus = [
+export const getMenus = (pendingCount = 0) => [
   {
     title: "Dashboard",
     href: "/dashboard",
@@ -16,7 +10,7 @@ export const menus = [
     title: "Job Request",
     href: "/request",
     icon: CarFront,
-    badge: 2,
+    badge: pendingCount, // Angka dinamis dari database
   },
   {
     title: "Tracking",
@@ -27,7 +21,6 @@ export const menus = [
     title: "Notification",
     href: "/notification",
     icon: Bell,
-    badge: 5,
   },
   {
     title: "Profile",
