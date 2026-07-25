@@ -23,34 +23,34 @@ export default function DashHeader({
 
   const getStatusBadgeStyle = () => {
     if (isBusy)
-      return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
+      return "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30";
     if (isOnline)
-      return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
-    return "bg-muted-foreground/20 text-muted border-border";
+      return "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30";
+    return "bg-slate-500/10 text-slate-700 dark:text-slate-400 border-slate-500/30";
   };
 
   const getStatusDotStyle = () => {
     if (isBusy) return "bg-amber-500 animate-pulse";
     if (isOnline) return "bg-emerald-500 animate-pulse";
-    return "bg-destructive";
+    return "bg-slate-400";
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-10 pl-4">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2">
       {/* Greeting & Subtitle */}
       <div className="space-y-1">
-        <div className="flex items-center gap-2.5">
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-muted">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
             Selamat Datang, {mechanicName}!
           </h1>
           <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusBadgeStyle()}`}
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadgeStyle()}`}
           >
-            <span className={`size-1.5 rounded-full ${getStatusDotStyle()}`} />
+            <span className={`size-2 rounded-full ${getStatusDotStyle()}`} />
             {getStatusText()}
           </span>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Pantau panggilan darurat dan statistik perbaikan kendaraanmu hari ini.
         </p>
       </div>
@@ -61,13 +61,13 @@ export default function DashHeader({
           variant={isOnline ? "destructive" : "default"}
           size="sm"
           disabled={isToggling || isBusy}
-          className="gap-2 font-medium shadow-xs bg-foreground"
+          className="gap-2 font-semibold shadow-xs"
           onClick={onToggleOnline}
         >
           {isToggling ? (
-            <Loader2 className="size-3.5 animate-spin" />
+            <Loader2 className="size-4 animate-spin" />
           ) : (
-            <Power className="size-3.5" />
+            <Power className="size-4" />
           )}
           {isBusy
             ? "Sedang Melayani"
@@ -83,11 +83,13 @@ export default function DashHeader({
             title="Refresh Data"
             disabled={isRefreshing}
             onClick={onRefresh}
-            className="group text-muted-foreground hover:text-muted transition-colors size-9"
+            className="size-9 border-border text-foreground hover:bg-accent"
           >
             <RefreshCw
-              className={`size-3.5 transition-transform duration-500 ease-in-out ${
-                isRefreshing ? "animate-spin text-primary" : "group-hover:rotate-180"
+              className={`size-4 transition-transform duration-500 ease-in-out ${
+                isRefreshing
+                  ? "animate-spin text-secondary"
+                  : "hover:rotate-180"
               }`}
             />
           </Button>

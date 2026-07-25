@@ -27,7 +27,7 @@ export const useDashboard = () => {
     loadDashboard();
   }, [loadDashboard]);
 
-  // Toggle Availability
+  // Toggle Availability Status
   const handleToggleOnline = async () => {
     if (!data || isToggling) return;
     const nextStatus =
@@ -35,18 +35,24 @@ export const useDashboard = () => {
 
     setIsToggling(true);
     const res = await toggleMechanicStatus(nextStatus);
-    if (res.success) {
-      setData((prev) => ({ ...prev, mechanicStatus: res.data.status }));
+
+    if (res.success && res.data) {
+      setData((prev) => ({
+        ...prev,
+        mechanicStatus: res.data.status,
+      }));
+    } else {
+      console.error("❌ Gagal toggle status montir:", res.error);
     }
     setIsToggling(false);
   };
 
-  // Update Status Pekerjaan (ON_THE_WAY -> ARRIVED -> COMPLETED)
+  // Update Status Pekerjaan
   const handleUpdateJobStatus = async (requestId, newStatus) => {
     setIsUpdatingJob(true);
     const res = await updateRequestStatus(requestId, newStatus);
     if (res.success) {
-      await loadDashboard(); // Refresh data dashboard
+      await loadDashboard();
     }
     setIsUpdatingJob(false);
   };
