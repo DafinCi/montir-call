@@ -3,9 +3,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-/**
- * 1. TOGGLE AVAILABILITY STATUS (AVAILABLE <-> OFFLINE)
- */
 export async function toggleMechanicStatus(newStatus) {
   const supabase = await createClient();
 
@@ -18,14 +15,27 @@ export async function toggleMechanicStatus(newStatus) {
     return { success: false, error: "Status tidak valid." };
   }
 
+  // Gunakan UPSERT agar jika baris belum ada, otomatis terbuat
   const { data, error } = await supabase
     .from("mechanics")
-    .update({ status: newStatus })
-    .eq("id", user.id)
+    .upsert(
+      {
+        id: user.id,
+        status: newStatus,
+        name:
+          user.user_metadata?.name || user.user_metadata?.full_name || "Montir",
+        phone: user.user_metadata?.phone || "",
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "id" },
+    )
     .select()
     .single();
 
-  if (error) return { success: false, error: error.message };
+  if (error) {
+    console.error("❌ Error toggleMechanicStatus:", error);
+    return { success: false, error: error.message };
+  }
 
   revalidatePath("/dashboard");
   return { success: true, data };

@@ -14,12 +14,37 @@ export async function fetchDashboardData() {
   }
 
   try {
-    // 1. Profil Montir
-    const { data: mechanic } = await supabase
+    // 1. Ambil Profil Montir
+    let { data: mechanic } = await supabase
       .from("mechanics")
-      .select("*")
+      .select("id, name, status, rating")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
+
+    // SELF-HEALING: Jika baris montir tidak ditemukan di tabel mechanics, buat otomatis dari user metadata
+    if (!mechanic) {
+      const fallbackName =
+        user.user_metadata?.name ||
+        user.user_metadata?.full_name ||
+        user.email?.split("@")[0] ||
+        "Montir";
+      const fallbackPhone = user.user_metadata?.phone || "";
+
+      const { data: newMechanic, error: createErr } = await supabase
+        .from("mechanics")
+        .upsert({
+          id: user.id,
+          name: fallbackName,
+          phone: fallbackPhone,
+          status: "OFFLINE",
+        })
+        .select("id, name, status, rating")
+        .single();
+
+      if (!createErr) {
+        mechanic = newMechanic;
+      }
+    }
 
     // 2. Pekerjaan Aktif (ACCEPTED, ON_THE_WAY, ARRIVED)
     const { data: activeJobs } = await supabase
@@ -29,7 +54,7 @@ export async function fetchDashboardData() {
       .in("status", ["ACCEPTED", "ON_THE_WAY", "ARRIVED"])
       .order("created_at", { ascending: false });
 
-    // 3. Waktu Penanda (Hari Ini, Minggu Ini, Bulan Ini)
+    // 3. Waktu Penanda
     const now = new Date();
     const startOfDay = new Date(
       now.getFullYear(),
@@ -47,16 +72,15 @@ export async function fetchDashboardData() {
       1,
     ).toISOString();
 
-    // 4. Ambil Pekerjaan Selesai (COMPLETED)
+    // 4. Pekerjaan Selesai
     const { data: completedJobs } = await supabase
       .from("service_requests")
-      .select("id, total_fee, created_at")
+      .select("id, created_at")
       .eq("assigned_mechanic_id", user.id)
       .eq("status", "COMPLETED");
 
     const jobs = completedJobs || [];
 
-    // Kalkulasi Ringkasan Keuangan
     const todayRevenue = jobs
       .filter((j) => new Date(j.created_at) >= new Date(startOfDay))
       .reduce((acc, curr) => acc + Number(curr.total_fee || 0), 0);
@@ -73,7 +97,7 @@ export async function fetchDashboardData() {
       (j) => new Date(j.created_at) >= new Date(startOfDay),
     ).length;
 
-    // 5. Olah Data Grafik 7 Hari Terakhir
+    // 5. Grafik Keuangan
     const daysLabel = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
     const financialChart = Array.from({ length: 7 }).map((_, i) => {
       const d = new Date();
@@ -102,7 +126,7 @@ export async function fetchDashboardData() {
       };
     });
 
-    // 6. Aktivitas / Notifikasi Terakhir
+    // 6. Notifikasi
     const { data: recentActivities } = await supabase
       .from("notifications")
       .select("*")
@@ -113,7 +137,7 @@ export async function fetchDashboardData() {
     return {
       success: true,
       data: {
-        mechanicName: mechanic?.full_name || "Montir",
+        mechanicName: mechanic?.name || "Montir",
         mechanicStatus: mechanic?.status || "OFFLINE",
         activeJobs: activeJobs || [],
         stats: {
@@ -121,7 +145,7 @@ export async function fetchDashboardData() {
           totalJobsToday,
           activeJobsCount: activeJobs?.length || 0,
           rating: mechanic?.rating || 5.0,
-          totalReviews: mechanic?.total_reviews || 0,
+          totalReviews: 0,
         },
         financialSummary: {
           daily: todayRevenue,
