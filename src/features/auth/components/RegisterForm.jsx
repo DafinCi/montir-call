@@ -44,10 +44,10 @@ export default function RegisterForm() {
   if (isSuccess) {
     return (
       <div className="w-full max-w-sm text-center space-y-4 py-8">
-        <CheckCircle2 className="size-12 text-emerald-500 mx-auto animate-bounce" />
+        <CheckCircle2 className="size-12 text-secondary mx-auto animate-bounce" />
         <h2 className="text-xl font-bold">Pendaftaran Berhasil!</h2>
         <p className="text-xs text-muted-foreground">
-          Akun mitra Anda telah dibuat. Mengalihkan Anda ke halaman login...
+          Akun mitra Anda sudah Ready. Berpindah ke halaman login...
         </p>
       </div>
     );
@@ -56,11 +56,11 @@ export default function RegisterForm() {
   return (
     <div className="w-full max-w-sm space-y-6">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        <h1 className="text-3xl font-bold tracking-tight text-muted font-ubuntu">
           Daftar Mitra Montir
         </h1>
         <p className="text-xs text-muted-foreground">
-          Bergabung bersama MontirGo dan dapatkan order servis darurat.
+          Mulai permudah Hidupmu mulai dari sini.
         </p>
       </div>
 
@@ -74,15 +74,15 @@ export default function RegisterForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Nama Lengkap */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-foreground">
+          <label className="text-xs font-semibold text-muted-foreground">
             Nama Lengkap
           </label>
-          <div className="flex items-center rounded-lg border bg-background px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
+          <div className="flex items-center rounded-lg border bg-chart-1/20 px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
             <User size={16} className="mr-2.5 text-muted-foreground shrink-0" />
             <Input
               name="name"
               required
-              placeholder="Budi Santoso"
+              placeholder="Nama Lengkap"
               className="border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-10 text-sm"
             />
           </div>
@@ -90,10 +90,10 @@ export default function RegisterForm() {
 
         {/* No WhatsApp / HP */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-foreground">
+          <label className="text-xs font-semibold text-muted-foreground">
             Nomor WhatsApp
           </label>
-          <div className="flex items-center rounded-lg border bg-background px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
+          <div className="flex items-center rounded-lg border bg-chart-1/20 px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
             <Phone
               size={16}
               className="mr-2.5 text-muted-foreground shrink-0"
@@ -110,8 +110,8 @@ export default function RegisterForm() {
 
         {/* Email */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-foreground">Email</label>
-          <div className="flex items-center rounded-lg border bg-background px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
+          <label className="text-xs font-semibold text-muted-foreground">Email</label>
+          <div className="flex items-center rounded-lg border bg-chart-1/20 px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
             <Mail size={16} className="mr-2.5 text-muted-foreground shrink-0" />
             <Input
               name="email"
@@ -147,7 +147,7 @@ export default function RegisterForm() {
         Sudah punya akun?{" "}
         <Link
           href="/login"
-          className="text-primary font-semibold hover:underline"
+          className="text-sky-400 font-semibold hover:underline"
         >
           Masuk di sini
         </Link>

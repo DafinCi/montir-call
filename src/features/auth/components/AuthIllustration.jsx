@@ -11,7 +11,7 @@ export default function AuthIllustration() {
             <Wrench size={28} />
           </div>
 
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold font-ubuntu">
             MontirGo
           </h1>
         </div>
