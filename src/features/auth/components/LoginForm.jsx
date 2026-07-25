@@ -1,88 +1,101 @@
-import Link from "next/link";
-import { Mail } from "lucide-react";
+"use client";
 
-import { Button, Input } from "@/components/ui";
+import { useState, useTransition } from "react";
+import Link from "next/link";
+import { Mail, Loader2, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import PasswordInput from "./PasswordInput";
+import { loginMechanic } from "../services/auth.action";
 
 export default function LoginForm() {
+  const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    const formData = new FormData(e.currentTarget);
+
+    startTransition(async () => {
+      // Jika berhasil, Server Action akan otomatis melakukan redirect("/dashboard")
+      const res = await loginMechanic(formData);
+
+      // Jika res ada (artinya return object error), tampilkan pesan kesalahan
+      if (res?.error) {
+        setErrorMessage(res.error);
+      }
+    });
+  };
+
   return (
-    <div className="w-full max-w-md">
-      <h1 className="text-5xl font-bold text-slate-900">
-        Welcome Back
-      </h1>
+    <div className="w-full max-w-sm space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Portal Montir
+        </h1>
+        <p className="text-xs text-muted-foreground">
+          Masuk ke dashboard mitra MontirGo untuk menerima panggilan perbaikan.
+        </p>
+      </div>
 
-      <p className="mt-2 text-slate-500">
-        Kendaraanmu kenapa lagi?
-      </p>
-      <form className="mt-10 space-y-6">
+      {errorMessage && (
+        <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-xs text-destructive font-medium">
+          <AlertCircle size={16} className="shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
 
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email */}
-        <div>
-          <label className="text-sm font-medium">
-            Email
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-foreground">
+            Email Mitra
           </label>
-
-          <div className="mt-2 flex items-center rounded-md border bg-white px-4">
-            <Mail
-              size={18}
-              className="text-slate-400"
-            />
-
+          <div className="flex items-center rounded-lg border bg-background px-3 focus-within:ring-2 focus-within:ring-primary transition-all">
+            <Mail size={16} className="mr-2.5 text-muted-foreground shrink-0" />
             <Input
+              name="email"
               type="email"
-              placeholder="email@example.com"
-              className="border-none shadow-none focus-visible:ring-0"
+              required
+              placeholder="montir@montirgo.com"
+              className="border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-10 text-sm"
             />
           </div>
         </div>
 
         {/* Password */}
-        <PasswordInput />
+        <PasswordInput name="password" required />
 
-        {/* Remember */}
-        <div className="flex items-center text-sm justify-end">
-          <Link
-            href="/forgot-password"
-            className="text-blue-600 hover:underline"
-          >
-            Forgot Password?
-          </Link>
-
-        </div>
-
-        {/* Login */}
+        {/* Submit */}
         <Button
-          className="w-full"
           type="submit"
-          variant="secondary"
+          disabled={isPending}
+          className="w-full font-semibold shadow-xs"
         >
-          Login
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 size-4 animate-spin" />
+              Memproses...
+            </>
+          ) : (
+            "Masuk Dashboard"
+          )}
         </Button>
-
       </form>
 
-      {/* Divider */}
-
-      <div className="my-8 flex items-center">
-        <div className="h-px flex-1 bg-slate-200" />
-        
-        <span className="px-4 text-sm text-slate-400">
-          OR
+      <div className="relative flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-border" />
+        </div>
+        <span className="relative bg-background px-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+          Belum jadi mitra?
         </span>
-
-        <div className="h-px flex-1 bg-slate-200" />
       </div>
 
-      {/* Register */}
-
-      <Button
-        variant="secondary"
-        className="w-full"
-        asChild
-      >
-        <Link href="/register">
-          Create New Account
-        </Link>
+      <Button variant="outline" className="w-full text-xs" asChild>
+        <Link href="/register">Daftar Sebagai Mitra Montir</Link>
       </Button>
     </div>
   );

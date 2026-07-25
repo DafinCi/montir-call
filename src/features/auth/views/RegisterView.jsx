@@ -1,8 +1,8 @@
-import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
 import AuthIllustration from "../components/AuthIllustration";
 import { Card } from "@/components/ui/card";
 
-export default function LoginView() {
+export default function RegisterView() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/40 p-4 lg:p-8">
       <Card className="w-full max-w-5xl overflow-hidden rounded-3xl shadow-xl lg:grid lg:grid-cols-2 p-0 gap-0 border-border">
@@ -13,7 +13,7 @@ export default function LoginView() {
 
         {/* Right Section */}
         <section className="bg-card flex items-center justify-center p-8 sm:p-12">
-          <LoginForm />
+          <RegisterForm />
         </section>
       </Card>
     </main>
