@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 
 export default function RegisterView() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-primary/60 p-4 lg:p-8">
+    <main className="flex min-h-screen items-center justify-center bg-background p-4 lg:p-8">
       <Card className="w-full max-w-5xl overflow-hidden rounded-3xl shadow-xl lg:grid lg:grid-cols-2 p-0 gap-0 border-border">
         {/* Left Section */}
         <section className="hidden lg:block bg-secondary border-r border-border">

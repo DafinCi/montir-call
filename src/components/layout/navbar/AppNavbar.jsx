@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import MobileSidebar from "../sidebar/MobileSidebar";
+import MobileSidebar from "../sidebar/BottomNav";
 
 const pageTitles = {
   "/dashboard": "Dashboard",
@@ -38,11 +38,11 @@ export default function AppNavbar({ user, pendingCount = 0 }) {
         <MobileSidebar user={user} pendingCount={pendingCount} />
 
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-primary">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary font-ubuntu">
             {title}
           </h1>
 
-          <p className="hidden text-xs text-muted-foreground md:block capitalize mt-0.5">
+          <p className="text-xs text-secondary capitalize mt-0.5">
             {currentDate || "-"}
           </p>
         </div>

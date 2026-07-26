@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import { createSimulatedRequest } from "../services/simulator.action";
 import {
@@ -128,7 +129,7 @@ export default function CustomerSimulator() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md py-6 rounded-xl border-none"
+            className="w-full  text-white font-semibold shadow-md py-6 rounded-xl border-none"
           >
             {isSubmitting ? (
               <Loader2 className="size-5 animate-spin text-white" />
@@ -232,9 +233,12 @@ export default function CustomerSimulator() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+    <motion.div 
+    drag
+    dragMomentum={false}
+    className="fixed bottom-6 right-6 z-[100] flex items-end gap-4 items-end">
       {isOpen && (
-        <div className="w-[340px] h-[640px] bg-white border-[6px] border-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col mb-4 relative ring-1 ring-black/10">
+        <div className="w-[340px] h-[640px] bg-white border-[6px] border-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col relative ring-1 ring-black/10">
           {/* Top Notch (Aesthetic HP) */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-slate-900 rounded-b-3xl z-10"></div>
 
@@ -252,7 +256,7 @@ export default function CustomerSimulator() {
       <Button
         onClick={() => setIsOpen(!isOpen)}
         size="icon"
-        className={`size-16 rounded-full shadow-2xl transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 ${isOpen ? "bg-slate-800 hover:bg-slate-900" : "bg-blue-600 hover:bg-blue-700"}`}
+        className={`size-16 rounded-full shadow-2xl transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 ${isOpen ? "bg-slate-800 hover:bg-slate-900" : ""}`}
       >
         {isOpen ? (
           <X className="size-7 text-white" />
@@ -260,6 +264,6 @@ export default function CustomerSimulator() {
           <Smartphone className="size-7 text-white" />
         )}
       </Button>
-    </div>
+    </motion.div>
   );
 }
