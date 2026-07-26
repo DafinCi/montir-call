@@ -9,6 +9,10 @@ import {
   Calendar,
   ShieldAlert,
   Loader2,
+  Bot,
+  Sparkles,
+  Timer,
+  CarFront,
 } from "lucide-react";
 import {
   Sheet,
@@ -30,6 +34,9 @@ export default function JobDetailSheet({
 }) {
   if (!job) return null;
 
+  // Cek apakah data AI Analysis tersedia (handle format snake_case dari DB atau camelCase dari mapper)
+  const aiData = job.ai_analysis || job.aiAnalysis;
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-0 flex flex-col justify-between">
@@ -41,9 +48,10 @@ export default function JobDetailSheet({
                 ID Panggilan: #
                 {typeof job.id === "string" ? job.id.slice(0, 8) : job.id}
               </span>
-              {job.priority === "emergency" ? (
-                <Badge variant="destructive" className="gap-1">
-                  <AlertTriangle className="size-3" /> Panggilan Darurat
+              {job.priority === "emergency" ||
+              aiData?.urgency === "CRITICAL" ? (
+                <Badge variant="destructive" className="gap-1 animate-pulse">
+                  <AlertTriangle className="size-3" /> Darurat
                 </Badge>
               ) : (
                 <Badge
@@ -55,36 +63,103 @@ export default function JobDetailSheet({
               )}
             </div>
             <SheetTitle className="text-xl font-bold">
-              {job.customerName}
+              {job.customerName || job.customer_name}
             </SheetTitle>
             <SheetDescription className="text-xs flex items-center gap-2">
-              <Calendar className="size-3.5" /> Diterima {job.createdAt}
+              <Calendar className="size-3.5" /> Diterima{" "}
+              {job.createdAt || "Baru saja"}
             </SheetDescription>
           </SheetHeader>
 
           <Separator />
 
-          {/* Location Box */}
+          {/* AI Pre-Assessment Box (Hanya Tampil Jika AI Berhasil Menganalisis) */}
+          {aiData && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                  <Bot className="size-4" /> AI Pre-Assessment
+                </h4>
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-mono text-blue-600 border-blue-200 bg-blue-50"
+                >
+                  <Sparkles className="size-3 mr-1" />{" "}
+                  {Math.round(aiData.confidence * 100)}% Match
+                </Badge>
+              </div>
+
+              <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-900 shadow-sm space-y-3">
+                {/* Diagnosa AI */}
+                <div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">
+                    Perkiraan Kerusakan
+                  </p>
+                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">
+                    {aiData.estimated_issue}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-blue-100 dark:border-blue-900">
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <Timer className="size-3" /> Durasi
+                    </p>
+                    <p className="text-xs font-medium">
+                      {aiData.estimated_duration_minutes} Menit
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <CarFront className="size-3" /> Kondisi
+                    </p>
+                    <p className="text-xs font-medium">
+                      {aiData.driveable ? "Bisa Didorong/Jalan" : "Mogok Total"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Persiapan Tools */}
+                {aiData.recommended_tools?.length > 0 && (
+                  <div className="pt-2">
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1.5">
+                      Rekomendasi Alat
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {aiData.recommended_tools.map((tool, idx) => (
+                        <Badge
+                          key={idx}
+                          variant="secondary"
+                          className="text-[10px] bg-white dark:bg-slate-800"
+                        >
+                          {tool}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Safety Warning */}
+                {aiData.safety_warning && (
+                  <div className="mt-2 p-2 rounded-lg bg-amber-100/50 border border-amber-200 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2">
+                    <ShieldAlert className="size-3.5 shrink-0 mt-0.5 text-amber-600" />
+                    <span>{aiData.safety_warning}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Diagnostic Note (Keluhan Asli) */}
           <div className="space-y-2">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Lokasi Perbaikan
+              Keluhan Asli Pelanggan
             </h4>
-            <div className="p-3.5 rounded-xl border bg-muted/20 space-y-2">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="size-4 text-secondary mt-0.5 shrink-0" />
-                <div className="text-xs space-y-0.5">
-                  <p className="font-semibold text-card-foreground">
-                    {job.locationTitle}
-                  </p>
-                  <p className="text-muted-foreground">{job.locationAddress}</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between text-xs pt-2 border-t border-border/50 text-muted-foreground">
-                <span>Jarak estimasi:</span>
-                <span className="font-semibold text-card-foreground">
-                  {job.distanceKm} KM ({job.estimatedTime})
-                </span>
-              </div>
+            <div className="p-3.5 rounded-xl border bg-card text-xs space-y-2">
+              <p className="text-card-foreground leading-relaxed italic">
+                &rdquo;{job.problemDescription || job.problem_description}
+                &rdquo;
+              </p>
             </div>
           </div>
 
@@ -99,7 +174,7 @@ export default function JobDetailSheet({
                   Tipe Kendaraan
                 </span>
                 <span className="font-semibold text-card-foreground">
-                  {job.vehicleModel}
+                  {job.vehicleModel || job.vehicle_model}
                 </span>
               </div>
               <div className="p-3 rounded-lg border bg-card">
@@ -107,46 +182,11 @@ export default function JobDetailSheet({
                   Plat Nomor
                 </span>
                 <span className="font-mono font-semibold text-card-foreground">
-                  {job.licensePlate}
+                  {job.licensePlate || "-"}
                 </span>
               </div>
             </div>
           </div>
-
-          {/* Diagnostic Note */}
-          <div className="space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Keluhan Utama / Diagnosa
-            </h4>
-            <div className="p-3.5 rounded-xl border bg-card text-xs space-y-2">
-              <p className="text-card-foreground leading-relaxed">
-                &rdquo;{job.problemDescription}&rdquo;
-              </p>
-              {job.symptoms && job.symptoms.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 pt-2 border-t">
-                  {job.symptoms.map((symptom, idx) => (
-                    <Badge
-                      key={idx}
-                      variant="outline"
-                      className="text-[10px] bg-muted/30"
-                    >
-                      <Wrench className="size-2.5 mr-1" /> {symptom}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Customer Note */}
-          {job.customerNote && (
-            <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2">
-              <ShieldAlert className="size-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>
-                <strong>Catatan Pelanggan:</strong> {job.customerNote}
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Action Footer */}

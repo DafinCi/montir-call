@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AppSidebar from "@/components/layout/sidebar/AppSidebar";
 import AppNavbar from "@/components/layout/navbar/AppNavbar";
+import CustomerSimulator from "@/features/simulator/components/CustomerSimulator";
 
 export default async function AppLayout({ children }) {
   const supabase = await createClient();
@@ -49,6 +50,8 @@ export default async function AppLayout({ children }) {
         {/* Dynamic Page Content */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
       </div>
+
+      <CustomerSimulator />
     </div>
   );
 }
