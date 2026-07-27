@@ -30,7 +30,7 @@ export default function PasswordInput({
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="text-muted-foreground hover:text-foreground transition-colors p-1"
+          className="text-muted-foreground transition-colors p-1"
         >
           {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
         </button>

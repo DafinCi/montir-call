@@ -1,4 +1,4 @@
-import { LayoutDashboard, CarFront, MapPinned, Bell, User } from "lucide-react";
+import { LayoutDashboard, CarFront, MapPinned, Bell, User, CreditCard } from "lucide-react";
 
 export const getMenus = (pendingCount = 0) => [
   {
@@ -11,16 +11,6 @@ export const getMenus = (pendingCount = 0) => [
     href: "/request",
     icon: CarFront,
     badge: pendingCount, // Angka dinamis dari database
-  },
-  {
-    title: "Tracking",
-    href: "/tracking",
-    icon: MapPinned,
-  },
-  {
-    title: "Notification",
-    href: "/notification",
-    icon: Bell,
   },
   {
     title: "Profile",

@@ -108,7 +108,7 @@ export default function RequestsView() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/60 pb-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-card-foreground flex items-center gap-2">
-            <Wrench className="size-5 text-secondary" /> Permintaan Masuk
+            <Wrench className="size-10 text-secondary" /> Permintaan Masuk
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
             Daftar panggilan servis darurat dan perbaikan terjadwal di sekitar

@@ -33,7 +33,7 @@ export default function AppSidebar({ user, pendingCount = 0 }) {
 
           {!collapsed && (
             <div className="flex flex-col leading-none">
-              <span className="font-bold tracking-tight text-primary text-2xl">
+              <span className="font-bold font-ubuntu tracking-tight text-primary text-2xl">
                 Montir<span className="text-secondary">Go</span>
               </span>
               <span className="text-[11px] text-primary mt-0.5 font-medium">

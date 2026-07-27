@@ -94,7 +94,7 @@ export default function LoginForm() {
         </span>
       </div>
 
-      <Button className="w-full text-semibold" asChild>
+      <Button className="w-full text-semibold text-primary" asChild>
         <Link href="/register">Daftar Sebagai Mitra Montir</Link>
       </Button>
     </div>
