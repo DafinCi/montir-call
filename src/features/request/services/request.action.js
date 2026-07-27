@@ -58,6 +58,7 @@ export async function getPendingRequests() {
       item.problem_description ||
       item.description ||
       "Tidak ada rincian keluhan.",
+    aiAnalysis: item.ai_analysis || null,
     symptoms: Array.isArray(item.symptoms)
       ? item.symptoms
       : typeof item.symptoms === "string"

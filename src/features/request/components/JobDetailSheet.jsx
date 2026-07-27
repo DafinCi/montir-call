@@ -62,7 +62,7 @@ export default function JobDetailSheet({
                 </Badge>
               )}
             </div>
-            <SheetTitle className="text-xl font-bold">
+            <SheetTitle className="text-xl font-bold text-primary-foreground">
               {job.customerName || job.customer_name}
             </SheetTitle>
             <SheetDescription className="text-xs flex items-center gap-2">
@@ -84,7 +84,6 @@ export default function JobDetailSheet({
                   variant="outline"
                   className="text-[10px] font-mono text-blue-600 border-blue-200 bg-blue-50"
                 >
-                  <Sparkles className="size-3 mr-1" />{" "}
                   {Math.round(aiData.confidence * 100)}% Match
                 </Badge>
               </div>
