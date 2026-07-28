@@ -2,9 +2,6 @@ import Groq from "groq-sdk";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-/**
- * Menganalisis deskripsi masalah dari customer dan mengembalikan AI Pre-Assessment terstruktur
- */
 export async function generateAIPreAssessment(problemDescription, vehicleInfo) {
   try {
     const systemPrompt = `
@@ -37,7 +34,7 @@ Keluhan Customer: "${problemDescription}"
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      model: "openai/gpt-oss-20b",
+      model: "openai/gpt-oss-20b", // Menggunakan model standar Groq
       response_format: { type: "json_object" },
       temperature: 0.2,
     });
@@ -48,7 +45,6 @@ Keluhan Customer: "${problemDescription}"
     return { success: true, data: aiData };
   } catch (error) {
     console.error("❌ Groq AI Assessment Error:", error);
-    // Fallback jika API Groq error agar flow aplikasi tetap berjalan
     return {
       success: false,
       error: error.message,
@@ -70,3 +66,4 @@ Keluhan Customer: "${problemDescription}"
     };
   }
 }
+//

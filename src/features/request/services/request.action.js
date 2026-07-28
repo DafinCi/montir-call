@@ -124,9 +124,13 @@ export async function acceptRequest(requestId) {
 }
 
 /**
- * 3. UPDATE REQUEST STATUS
+ * 3. UPDATE REQUEST STATUS & PAYMENT
  */
-export async function updateRequestStatus(requestId, newStatus) {
+export async function updateRequestStatus(
+  requestId,
+  newStatus,
+  additionalData = {},
+) {
   const supabase = await createClient();
 
   const {
@@ -143,15 +147,37 @@ export async function updateRequestStatus(requestId, newStatus) {
     return { success: false, error: "Status pekerjaan tidak valid." };
   }
 
+  // Siapkan payload update
+  const updatePayload = { status: newStatus };
+
+  // Jika status COMPLETED, ekstrak & bersihkan nominal biaya secara fleksibel
+  if (newStatus === "COMPLETED") {
+    // Ambil nilai baik dari totalFee maupun total_fee
+    const rawFee = additionalData?.totalFee ?? additionalData?.total_fee;
+
+    if (rawFee !== undefined && rawFee !== null && rawFee !== "") {
+      // Bersihkan string dari titik/karakter non-angka (contoh: "150.000" -> 150000)
+      const numericFee =
+        typeof rawFee === "string"
+          ? Number(rawFee.replace(/[^0-9]/g, ""))
+          : Number(rawFee);
+
+      if (!isNaN(numericFee) && numericFee > 0) {
+        updatePayload.total_fee = numericFee;
+      }
+    }
+  }
+
   const { data: request, error } = await supabase
     .from("service_requests")
-    .update({ status: newStatus })
+    .update(updatePayload)
     .eq("id", requestId)
     .eq("assigned_mechanic_id", user.id)
     .select()
     .single();
 
   if (error || !request) {
+    console.error("❌ Error update status service_request:", error?.message);
     return { success: false, error: "Gagal memperbarui status pekerjaan." };
   }
 
@@ -167,7 +193,6 @@ export async function updateRequestStatus(requestId, newStatus) {
 
   return { success: true, data: request };
 }
-
 /**
  * 4. UPDATE MECHANIC LOCATION
  */

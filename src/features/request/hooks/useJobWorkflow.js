@@ -10,7 +10,6 @@ export function useJobWorkflow() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  // Ambil pekerjaan aktif saat pertama kali dimuat
   const fetchActiveJob = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -28,7 +27,6 @@ export function useJobWorkflow() {
     fetchActiveJob();
   }, [fetchActiveJob]);
 
-  // 1. Terima Pekerjaan Darurat
   const handleAcceptJob = async (requestId) => {
     setIsSubmitting(true);
     setError(null);
@@ -46,24 +44,47 @@ export function useJobWorkflow() {
     }
   };
 
-  // 2. Transisi Status Pekerjaan (ON_THE_WAY -> ARRIVED -> COMPLETED)
-  const handleUpdateStatus = async (newStatus) => {
-    if (!activeJob || isSubmitting) return;
+  // Transisi Status Pekerjaan Fleksibel (Mendukung 2 atau 3 parameter)
+  const handleUpdateStatus = async (arg1, arg2, arg3) => {
+    if (!activeJob || isSubmitting)
+      return { success: false, error: "Pekerjaan tidak aktif" };
 
     setIsSubmitting(true);
     setError(null);
 
-    const res = await updateRequestStatus(activeJob.id, newStatus);
+    let targetStatus;
+    let additionalData = {};
+
+    // Normalisasi parameter pintar
+    const validStatuses = ["ON_THE_WAY", "ARRIVED", "COMPLETED", "CANCELLED"];
+
+    if (validStatuses.includes(arg1)) {
+      // Format: handleUpdateStatus("COMPLETED", { totalFee: 150000 })
+      targetStatus = arg1;
+      additionalData = arg2 || {};
+    } else if (validStatuses.includes(arg2)) {
+      // Format: handleUpdateStatus(jobId, "COMPLETED", { totalFee: 150000 })
+      targetStatus = arg2;
+      additionalData = arg3 || {};
+    } else {
+      setIsSubmitting(false);
+      return { success: false, error: "Status pekerjaan tidak valid." };
+    }
+
+    const res = await updateRequestStatus(
+      activeJob.id,
+      targetStatus,
+      additionalData,
+    );
 
     if (res.success) {
-      // Jika COMPLETED / CANCELLED, kosongkan activeJob
-      if (["COMPLETED", "CANCELLED"].includes(newStatus)) {
+      if (["COMPLETED", "CANCELLED"].includes(targetStatus)) {
         setActiveJob(null);
       } else {
         setActiveJob(res.data);
       }
       setIsSubmitting(false);
-      return { success: true };
+      return { success: true, data: res.data };
     } else {
       setError(res.error);
       setIsSubmitting(false);

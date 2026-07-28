@@ -47,7 +47,8 @@ export default function DashHeader({
 
   const getStatusBadgeStyle = () => {
     if (isBusy) return "bg-amber-500/20 text-amber-400 border-amber-400/30";
-    if (isOnline) return "bg-emerald-500/20 text-emerald-400 border-emerald-400/30";
+    if (isOnline)
+      return "bg-emerald-500/20 text-emerald-400 border-emerald-400/30";
     return "bg-slate-500/20 text-slate-400 border-slate-400/30";
   };
 
@@ -62,13 +63,13 @@ export default function DashHeader({
       {/* GREETING TOP BAR */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-3">
-        <Avatar size="lg">
-          {/* Opsional: Tambahkan AvatarImage jika nanti ada URL foto profil */}
-          {/* <AvatarImage src={avatarUrl} alt={mechanicName} /> */}
-          <AvatarFallback className="bg-secondary/10 text-muted border border-primary/20 font-bold text-base">
-            {mechanicName.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+          <Avatar size="lg">
+            {/* Opsional: Tambahkan AvatarImage jika nanti ada URL foto profil */}
+            {/* <AvatarImage src={avatarUrl} alt={mechanicName} /> */}
+            <AvatarFallback className="bg-secondary/10 text-muted border border-primary/20 font-bold text-base">
+              {mechanicName.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
           <div>
             <div className="flex items-center gap-1.5">
               <h1 className="text-lg md:text-xl font-extrabold text-muted tracking-tight">
@@ -108,7 +109,9 @@ export default function DashHeader({
             variant="outline"
             className={`text-[11px] font-semibold border ${getStatusBadgeStyle()}`}
           >
-            <span className={`size-2 rounded-full mr-1.5 ${getStatusDotStyle()}`} />
+            <span
+              className={`size-2 rounded-full mr-1.5 ${getStatusDotStyle()}`}
+            />
             {getStatusText()}
           </Badge>
         </div>
@@ -120,7 +123,7 @@ export default function DashHeader({
               {showBalance ? formatRupiah(todayRevenue) : "Rp ••••••••"}
             </div>
             <p className="text-[11px] text-primary-foreground/75 mt-1 flex items-center gap-1">
-              <Sparkles className="size-3 text-secondary" /> Akumulasi estimasi pendapatan hari ini
+              Akumulasi estimasi pendapatan hari ini
             </p>
           </div>
         </div>
@@ -133,9 +136,11 @@ export default function DashHeader({
             disabled={isToggling || isBusy}
             className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all disabled:opacity-50 group"
           >
-            <div className={`size-10 rounded-2xl flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 ${
-              isOnline ? "bg-red-500 text-white" : "bg-emerald-500 text-white"
-            }`}>
+            <div
+              className={`size-10 rounded-2xl flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 ${
+                isOnline ? "bg-red-500 text-white" : "bg-emerald-500 text-white"
+              }`}
+            >
               {isToggling ? (
                 <Loader2 className="size-5 animate-spin" />
               ) : (
@@ -148,9 +153,7 @@ export default function DashHeader({
           </button>
 
           {/* Action 2: Tarik Saldo */}
-          <button
-            className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all group"
-          >
+          <button className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all group">
             <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
               <Wallet className="size-5" />
             </div>
@@ -160,9 +163,7 @@ export default function DashHeader({
           </button>
 
           {/* Action 3: Panggilan Aktif */}
-          <button
-            className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all group"
-          >
+          <button className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all group">
             <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
               <Wrench className="size-5" />
             </div>
@@ -178,7 +179,9 @@ export default function DashHeader({
             className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all disabled:opacity-50 group"
           >
             <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
-              <RefreshCw className={`size-5 ${isRefreshing ? "animate-spin" : ""}`} />
+              <RefreshCw
+                className={`size-5 ${isRefreshing ? "animate-spin" : ""}`}
+              />
             </div>
             <span className="text-[11px] font-medium text-primary-foreground/90 text-center leading-tight">
               Update

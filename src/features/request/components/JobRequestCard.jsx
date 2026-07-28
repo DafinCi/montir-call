@@ -9,6 +9,7 @@ import {
   ChevronRight,
   CheckCircle2,
   Loader2,
+  Phone,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,14 +21,32 @@ export default function JobRequestCard({
   onAccept,
   isAccepting = false,
 }) {
-  const isEmergency = job.priority === "emergency";
+  const isEmergency =
+    job.priority === "emergency" || job.ai_analysis?.urgency === "CRITICAL";
+  const customerName =
+    job.customer_name || job.user_name || job.customerName || "Pelanggan";
+  const vehicleModel =
+    job.vehicle_model || job.vehicle_type || job.vehicleModel || "Kendaraan";
+  const problemDesc =
+    job.problem_description || job.description || job.problemDescription || "-";
+
+  // Membaca nomor WA dengan fallback yang sama seperti ActiveJobs
+  const customerPhone =
+    job.customer_phone || job.phone || job.customerPhone || "";
+
+  // Membaca Alamat dengan fallback yang sama seperti ActiveJobs
+  const locationText =
+    job.location_address ||
+    job.address ||
+    job.location_title ||
+    job.locationAddress ||
+    "Lokasi pelanggan";
 
   return (
-    <Card className="group relative overflow-hidden border border-border bg-card hover:border-secondary/40 transition-all shadow-xs">
-      {/* Accent Indicator Bar */}
+    <Card className="group relative overflow-hidden border border-slate-200 bg-white hover:border-slate-300 transition-all shadow-xs">
       <div
         className={`absolute top-0 left-0 bottom-0 w-1 ${
-          isEmergency ? "bg-destructive" : "bg-secondary"
+          isEmergency ? "bg-red-500" : "bg-blue-500"
         }`}
       />
 
@@ -37,16 +56,17 @@ export default function JobRequestCard({
           <div className="flex items-start justify-between gap-2">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-mono font-medium text-muted-foreground">
+                <span className="text-xs font-mono font-medium text-slate-400">
                   #{typeof job.id === "string" ? job.id.slice(0, 8) : job.id}
                 </span>
-                <span className="text-xs text-muted-foreground">•</span>
-                <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                  <Clock className="size-3" /> {job.createdAt}
+                <span className="text-xs text-slate-300">•</span>
+                <span className="text-xs font-medium text-slate-500 flex items-center gap-1">
+                  <Clock className="size-3" />{" "}
+                  {job.createdAt || job.created_at || "Baru saja"}
                 </span>
               </div>
-              <h3 className="text-base font-semibold text-card-foreground mt-0.5">
-                {job.customerName}
+              <h3 className="text-base font-semibold text-slate-900 mt-0.5">
+                {customerName}
               </h3>
             </div>
 
@@ -60,7 +80,7 @@ export default function JobRequestCard({
             ) : (
               <Badge
                 variant="secondary"
-                className="text-[11px] font-medium bg-secondary/15 text-secondary-foreground border-secondary/20"
+                className="text-[11px] font-medium bg-blue-50 text-blue-700 border-blue-200"
               >
                 Terjadwal
               </Badge>
@@ -68,37 +88,47 @@ export default function JobRequestCard({
           </div>
 
           {/* Vehicle & Problem Info */}
-          <div className="p-3 rounded-lg bg-muted/20 border border-border/50 text-xs space-y-1.5">
-            <div className="flex items-center gap-2 font-medium text-card-foreground">
-              <Car className="size-3.5 text-secondary shrink-0" />
-              <span>
-                {job.vehicleModel} ({job.licensePlate})
-              </span>
+          <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 text-xs space-y-1.5">
+            <div className="flex items-center gap-2 font-medium text-slate-900">
+              <Car className="size-3.5 text-blue-600 shrink-0" />
+              <span>{vehicleModel}</span>
             </div>
-            <p className="text-muted-foreground line-clamp-2 pl-5">
-              &rdquo;{job.problemDescription}&rdquo;
+            <p className="text-slate-600 line-clamp-2 pl-5.5">
+              &rdquo;{problemDesc}&rdquo;
             </p>
           </div>
 
-          {/* Location & Distance */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
-            <div className="flex items-center gap-1.5 truncate max-w-[70%]">
-              <MapPin className="size-3.5 text-muted-foreground shrink-0" />
-              <span className="truncate">{job.locationAddress}</span>
+          {/* Location & Phone Info */}
+          <div className="flex items-center justify-between text-xs text-slate-500 pt-1 gap-2">
+            <div
+              className="flex items-center gap-1.5 truncate max-w-[65%]"
+              title={locationText}
+            >
+              <MapPin className="size-3.5 text-red-500 shrink-0" />
+              <span className="truncate font-medium text-slate-700">
+                {locationText}
+              </span>
             </div>
-            <div className="font-semibold text-card-foreground shrink-0 bg-background px-2 py-0.5 rounded border border-border text-[11px]">
-              {job.distanceKm} km ({job.estimatedTime})
-            </div>
+            {customerPhone ? (
+              <div className="flex items-center gap-1 font-mono text-[11px] bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-slate-700 shrink-0">
+                <Phone className="size-3 text-emerald-600" />
+                {customerPhone}
+              </div>
+            ) : (
+              <span className="text-[10px] text-slate-400 italic">
+                No Telp (-)
+              </span>
+            )}
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between gap-2 pt-2 border-t border-border/60 mt-1">
+          <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 mt-1">
             <Button
               type="button"
               variant="ghost"
               size="sm"
               onClick={() => onSelect(job)}
-              className="text-xs text-muted-foreground hover:text-card-foreground h-8 px-2 gap-1"
+              className="text-xs text-slate-600 hover:text-slate-900 h-8 px-2 gap-1"
             >
               Detail Lengkap <ChevronRight className="size-3.5" />
             </Button>
@@ -108,7 +138,7 @@ export default function JobRequestCard({
               size="sm"
               disabled={isAccepting}
               onClick={() => onAccept(job.id)}
-              className="text-xs h-8 px-3 font-semibold gap-1.5 shadow-xs"
+              className="text-xs h-8 px-3 font-semibold gap-1.5 bg-slate-900 text-white hover:bg-slate-800 shadow-xs"
             >
               {isAccepting ? (
                 <>

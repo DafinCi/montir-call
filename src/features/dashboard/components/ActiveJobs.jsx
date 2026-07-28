@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Wrench,
   MapPin,
@@ -12,6 +12,8 @@ import {
   CheckCircle2,
   Loader2,
   Clock,
+  DollarSign,
+  X,
 } from "lucide-react";
 import {
   Card,
@@ -24,7 +26,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
-  // Helper membuat Link Google Maps Navigasi
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    jobId: null,
+  });
+  const [totalFee, setTotalFee] = useState("");
+
   const getGoogleMapsUrl = (job) => {
     const lat = job.latitude || job.location_lat || job.lat;
     const lng = job.longitude || job.location_lng || job.lng;
@@ -34,10 +41,11 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
     if (lat && lng) {
       return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
     }
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      address,
+    )}`;
   };
 
-  // Helper format WhatsApp
   const getWhatsAppUrl = (phone) => {
     if (!phone) return "#";
     let cleanNumber = phone.replace(/[^0-9]/g, "");
@@ -47,7 +55,6 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
     return `https://wa.me/${cleanNumber}`;
   };
 
-  // Helper Badge Status dengan Kontras Jelas
   const getStatusBadge = (status) => {
     switch (status) {
       case "ACCEPTED":
@@ -86,246 +93,339 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
     }
   };
 
+  // Eksekusi Submit Pembayaran (ASYNC & DENGAN ERROR HANDLING)
+  const handleCompleteJob = async () => {
+    const feeNum = Number(totalFee);
+    if (!totalFee || isNaN(feeNum) || feeNum <= 0) {
+      alert("Masukkan nominal biaya perbaikan yang valid!");
+      return;
+    }
+
+    // Kirim secara async ke handler parent
+    const res = await onUpdateStatus(paymentModal.jobId, "COMPLETED", {
+      totalFee: feeNum,
+    });
+
+    // Hanya tutup modal jika proses berhasil
+    if (res?.success !== false) {
+      setPaymentModal({ isOpen: false, jobId: null });
+      setTotalFee("");
+    } else {
+      alert(res?.error || "Gagal menyelesaikan pekerjaan. Silakan coba lagi.");
+    }
+  };
+
   return (
-    <Card className="bg-card text-card-foreground border-border shadow-xs">
-      <CardHeader className="pb-4 border-b border-border">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="font-bold text-xl sm:text-2xl text-card-foreground flex items-center gap-2">
-              <Wrench className="size-5 text-secondary" /> Panggilan Servis
-              Aktif
-            </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground mt-0.5">
-              Kelola pekerjaan yang sedang Anda tangani secara real-time.
-            </CardDescription>
+    <>
+      <Card className="bg-card text-card-foreground border-border shadow-xs">
+        <CardHeader className="pb-4 border-b border-border">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="font-bold text-xl sm:text-2xl text-card-foreground flex items-center gap-2">
+                <Wrench className="size-5 text-secondary" /> Panggilan Servis
+                Aktif
+              </CardTitle>
+              <CardDescription className="text-xs text-muted-foreground mt-0.5">
+                Kelola pekerjaan yang sedang Anda tangani secara real-time.
+              </CardDescription>
+            </div>
+            <Badge
+              variant="secondary"
+              className="font-semibold text-secondary-foreground bg-secondary/15 border border-secondary/30"
+            >
+              {jobs.length} Aktif
+            </Badge>
           </div>
-          <Badge
-            variant="secondary"
-            className="font-semibold text-secondary-foreground bg-secondary/15 border border-secondary/30"
-          >
-            {jobs.length} Aktif
-          </Badge>
-        </div>
-      </CardHeader>
+        </CardHeader>
 
-      <CardContent className="p-4 space-y-4">
-        {jobs.length === 0 ? (
-          <div className="text-center py-10 border border-dashed border-border rounded-xl bg-background/50">
-            <Wrench className="size-8 mx-auto mb-2 text-muted-foreground opacity-60" />
-            <p className="text-xs font-semibold text-card-foreground">
-              Tidak ada panggilan servis aktif saat ini.
-            </p>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Ambil pesanan baru di menu Permintaan Masuk.
-            </p>
-          </div>
-        ) : (
-          jobs.map((job) => {
-            const ai = job.ai_analysis;
-            const customerPhone = job.customer_phone || job.phone || "";
-            const addressText =
-              job.location_address ||
-              job.address ||
-              job.location_title ||
-              "Lokasi pelanggan";
-            const vehicleText = `${
-              job.vehicle_model || job.vehicle_type || "Kendaraan"
-            } ${job.license_plate ? `(${job.license_plate})` : ""}`;
+        <CardContent className="p-4 space-y-4">
+          {jobs.length === 0 ? (
+            <div className="text-center py-10 border border-dashed border-border rounded-xl bg-background/50">
+              <Wrench className="size-8 mx-auto mb-2 text-muted-foreground opacity-60" />
+              <p className="text-xs font-semibold text-card-foreground">
+                Tidak ada panggilan servis aktif saat ini.
+              </p>
+              <p className="text-[11px] text-muted-foreground mt-1">
+                Ambil pesanan baru di menu Permintaan Masuk.
+              </p>
+            </div>
+          ) : (
+            jobs.map((job) => {
+              const ai = job.ai_analysis;
+              const customerPhone = job.customer_phone || job.phone || "";
+              const addressText =
+                job.location_address ||
+                job.address ||
+                job.location_title ||
+                "Lokasi pelanggan";
+              const vehicleText = `${
+                job.vehicle_model || job.vehicle_type || "Kendaraan"
+              } ${job.license_plate ? `(${job.license_plate})` : ""}`;
 
-            return (
-              <div
-                key={job.id}
-                className="p-4 rounded-xl border border-border bg-background hover:border-secondary/50 transition-all space-y-3.5 shadow-2xs"
-              >
-                {/* Header Card Status */}
-                <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2.5">
-                  <div className="flex items-center gap-2">
-                    <Car className="size-4 text-secondary shrink-0" />
-                    <span className="text-xs font-bold text-card-foreground truncate">
-                      {vehicleText}
-                    </span>
-                  </div>
-                  {getStatusBadge(job.status)}
-                </div>
-
-                {/* Pelanggan & Masalah */}
-                <div className="space-y-1.5">
-                  <p className="text-sm font-bold text-card-foreground">
-                    {job.customer_name || job.user_name || "Pelanggan"}
-                  </p>
-                  <p className="text-xs text-destructive font-medium leading-relaxed bg-destructive/10 p-2.5 rounded-lg border border-destructive/20">
-                    🛠️ &rdquo;
-                    {job.problem_description ||
-                      job.description ||
-                      "Tidak ada rincian keluhan"}
-                    &rdquo;
-                  </p>
-                </div>
-
-                {/* AI PRE-ASSESSMENT (JIKA ADA) */}
-                {ai && (
-                  <div className="p-3 rounded-lg bg-accent/40 border border-border text-xs space-y-1.5">
-                    <div className="flex items-center justify-between font-semibold">
-                      <span className="flex items-center gap-1.5 text-secondary">
-                        🤖 AI Pre-Assessment
-                      </span>
-                      <span
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                          ai.urgency === "HIGH" || ai.urgency === "CRITICAL"
-                            ? "bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30"
-                            : "bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30"
-                        }`}
-                      >
-                        Urgency: {ai.urgency}
+              return (
+                <div
+                  key={job.id}
+                  className="p-4 rounded-xl border border-border bg-background hover:border-secondary/50 transition-all space-y-3.5 shadow-2xs"
+                >
+                  <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <Car className="size-4 text-secondary shrink-0" />
+                      <span className="text-xs font-bold text-card-foreground truncate">
+                        {vehicleText}
                       </span>
                     </div>
-
-                    {ai.recommended_tools?.length > 0 && (
-                      <p className="text-[11px] text-muted-foreground">
-                        🧰{" "}
-                        <strong className="text-card-foreground">
-                          Alat Wajib:
-                        </strong>{" "}
-                        {ai.recommended_tools.join(", ")}
-                      </p>
-                    )}
-
-                    {ai.safety_warning && (
-                      <p className="text-[11px] text-amber-700 dark:text-amber-400 flex items-center gap-1 font-semibold">
-                        <AlertTriangle className="size-3 shrink-0" />{" "}
-                        {ai.safety_warning}
-                      </p>
-                    )}
+                    {getStatusBadge(job.status)}
                   </div>
-                )}
 
-                {/* Info Alamat & Kontak */}
-                <div className="flex items-start justify-between text-xs text-muted-foreground pt-1 gap-2">
-                  <div className="flex items-start gap-1.5 truncate max-w-[70%]">
-                    <MapPin className="size-3.5 shrink-0 text-secondary mt-0.5" />
-                    <span className="truncate text-card-foreground/90 font-medium">
-                      {addressText}
-                    </span>
+                  <div className="space-y-1.5">
+                    <p className="text-sm font-bold text-card-foreground">
+                      {job.customer_name || job.user_name || "Pelanggan"}
+                    </p>
+                    <p className="text-xs text-destructive font-medium leading-relaxed bg-destructive/10 p-2.5 rounded-lg border border-destructive/20">
+                      🛠️ &rdquo;
+                      {job.problem_description ||
+                        job.description ||
+                        "Tidak ada rincian keluhan"}
+                      &rdquo;
+                    </p>
                   </div>
-                  {customerPhone && (
-                    <span className="font-mono font-bold text-card-foreground shrink-0 text-[11px]">
-                      {customerPhone}
-                    </span>
+
+                  {ai && (
+                    <div className="p-3 rounded-lg bg-accent/40 border border-border text-xs space-y-1.5">
+                      <div className="flex items-center justify-between font-semibold">
+                        <span className="flex items-center gap-1.5 text-secondary">
+                          🤖 AI Pre-Assessment
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                            ai.urgency === "HIGH" || ai.urgency === "CRITICAL"
+                              ? "bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30"
+                              : "bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30"
+                          }`}
+                        >
+                          Urgency: {ai.urgency}
+                        </span>
+                      </div>
+
+                      {ai.recommended_tools?.length > 0 && (
+                        <p className="text-[11px] text-muted-foreground">
+                          🧰{" "}
+                          <strong className="text-card-foreground">
+                            Alat Wajib:
+                          </strong>{" "}
+                          {ai.recommended_tools.join(", ")}
+                        </p>
+                      )}
+
+                      {ai.safety_warning && (
+                        <p className="text-[11px] text-amber-700 dark:text-amber-400 flex items-center gap-1 font-semibold">
+                          <AlertTriangle className="size-3 shrink-0" />{" "}
+                          {ai.safety_warning}
+                        </p>
+                      )}
+                    </div>
                   )}
-                </div>
 
-                {/* BARIS AKSI TERPADU */}
-                <div className="flex flex-wrap items-center justify-between pt-3 border-t border-border/60 gap-2">
-                  {/* Grup Tombol Komunikasi & Navigasi */}
-                  <div className="flex items-center gap-1.5">
-                    {/* Maps */}
-                    <a
-                      href={getGoogleMapsUrl(job)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        type="button"
-                        size="xs"
-                        variant="secondary"
-                        className="gap-1 text-[11px] font-semibold bg-secondary/20 hover:bg-secondary/30 text-secondary-foreground border border-secondary/30"
-                      >
-                        <Navigation className="size-3" /> Peta
-                      </Button>
-                    </a>
-
-                    {/* WhatsApp */}
+                  <div className="flex items-start justify-between text-xs text-muted-foreground pt-1 gap-2">
+                    <div className="flex items-start gap-1.5 truncate max-w-[70%]">
+                      <MapPin className="size-3.5 shrink-0 text-secondary mt-0.5" />
+                      <span className="truncate text-card-foreground/90 font-medium">
+                        {addressText}
+                      </span>
+                    </div>
                     {customerPhone && (
+                      <span className="font-mono font-bold text-card-foreground shrink-0 text-[11px]">
+                        {customerPhone}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between pt-3 border-t border-border/60 gap-2">
+                    <div className="flex items-center gap-1.5">
                       <a
-                        href={getWhatsAppUrl(customerPhone)}
+                        href={getGoogleMapsUrl(job)}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         <Button
                           type="button"
                           size="xs"
-                          variant="outline"
-                          className="gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20"
+                          variant="secondary"
+                          className="gap-1 text-[11px] font-semibold bg-secondary/20 hover:bg-secondary/30 text-secondary-foreground border border-secondary/30"
                         >
-                          <MessageSquare className="size-3" /> WA
+                          <Navigation className="size-3" /> Peta
                         </Button>
                       </a>
-                    )}
 
-                    {/* Telepon Direct */}
-                    {customerPhone && (
-                      <a href={`tel:${customerPhone}`}>
+                      {customerPhone && (
+                        <a
+                          href={getWhatsAppUrl(customerPhone)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            type="button"
+                            size="xs"
+                            variant="outline"
+                            className="gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20"
+                          >
+                            <MessageSquare className="size-3" /> WA
+                          </Button>
+                        </a>
+                      )}
+
+                      {customerPhone && (
+                        <a href={`tel:${customerPhone}`}>
+                          <Button
+                            type="button"
+                            size="xs"
+                            variant="outline"
+                            className="gap-1 text-[11px] font-semibold text-card-foreground bg-card hover:bg-accent"
+                          >
+                            <Phone className="size-3" /> Telp
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+
+                    <div>
+                      {job.status === "ACCEPTED" && (
                         <Button
                           type="button"
                           size="xs"
-                          variant="outline"
-                          className="gap-1 text-[11px] font-semibold text-card-foreground bg-card hover:bg-accent"
+                          disabled={isUpdating}
+                          onClick={() => onUpdateStatus(job.id, "ON_THE_WAY")}
+                          className="gap-1.5 font-bold text-[11px] bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-2xs"
                         >
-                          <Phone className="size-3" /> Telp
+                          {isUpdating ? (
+                            <Loader2 className="size-3 animate-spin" />
+                          ) : (
+                            <Navigation className="size-3" />
+                          )}
+                          Menuju Lokasi
                         </Button>
-                      </a>
-                    )}
-                  </div>
+                      )}
 
-                  {/* Tombol Eksekusi Status */}
-                  <div>
-                    {job.status === "ACCEPTED" && (
-                      <Button
-                        type="button"
-                        size="xs"
-                        disabled={isUpdating}
-                        onClick={() => onUpdateStatus(job.id, "ON_THE_WAY")}
-                        className="gap-1.5 font-bold text-[11px] bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-2xs"
-                      >
-                        {isUpdating ? (
-                          <Loader2 className="size-3 animate-spin" />
-                        ) : (
-                          <Navigation className="size-3" />
-                        )}
-                        Menuju Lokasi
-                      </Button>
-                    )}
+                      {job.status === "ON_THE_WAY" && (
+                        <Button
+                          type="button"
+                          size="xs"
+                          disabled={isUpdating}
+                          onClick={() => onUpdateStatus(job.id, "ARRIVED")}
+                          className="gap-1.5 font-bold text-[11px] bg-blue-600 hover:bg-blue-700 text-white shadow-2xs"
+                        >
+                          {isUpdating ? (
+                            <Loader2 className="size-3 animate-spin" />
+                          ) : (
+                            <MapPin className="size-3" />
+                          )}
+                          Sampai di Lokasi
+                        </Button>
+                      )}
 
-                    {job.status === "ON_THE_WAY" && (
-                      <Button
-                        type="button"
-                        size="xs"
-                        disabled={isUpdating}
-                        onClick={() => onUpdateStatus(job.id, "ARRIVED")}
-                        className="gap-1.5 font-bold text-[11px] bg-blue-600 hover:bg-blue-700 text-white shadow-2xs"
-                      >
-                        {isUpdating ? (
-                          <Loader2 className="size-3 animate-spin" />
-                        ) : (
-                          <MapPin className="size-3" />
-                        )}
-                        Sampai di Lokasi
-                      </Button>
-                    )}
-
-                    {job.status === "ARRIVED" && (
-                      <Button
-                        type="button"
-                        size="xs"
-                        disabled={isUpdating}
-                        onClick={() => onUpdateStatus(job.id, "COMPLETED")}
-                        className="gap-1.5 font-bold text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs"
-                      >
-                        {isUpdating ? (
-                          <Loader2 className="size-3 animate-spin" />
-                        ) : (
-                          <CheckCircle2 className="size-3" />
-                        )}
-                        Selesaikan Pekerjaan
-                      </Button>
-                    )}
+                      {job.status === "ARRIVED" && (
+                        <Button
+                          type="button"
+                          size="xs"
+                          disabled={isUpdating}
+                          onClick={() =>
+                            setPaymentModal({ isOpen: true, jobId: job.id })
+                          }
+                          className="gap-1.5 font-bold text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs"
+                        >
+                          {isUpdating ? (
+                            <Loader2 className="size-3 animate-spin" />
+                          ) : (
+                            <CheckCircle2 className="size-3" />
+                          )}
+                          Selesaikan Pekerjaan
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
+              );
+            })
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Modal Input Tagihan */}
+      {paymentModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-150">
+          <div className="bg-card w-full max-w-sm rounded-xl border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-4 border-b border-border flex justify-between items-center bg-muted/30">
+              <h3 className="font-bold text-card-foreground flex items-center gap-2 text-sm sm:text-base">
+                <DollarSign className="size-4 text-emerald-500" />
+                Input Tagihan Servis
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setPaymentModal({ isOpen: false, jobId: null });
+                  setTotalFee("");
+                }}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+
+            <div className="p-4 space-y-4">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Masukkan total nominal biaya perbaikan (termasuk biaya jasa
+                &amp; sparepart) sebelum memproses penyelesaian pekerjaan ini.
+              </p>
+
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-semibold text-card-foreground">
+                  Total Biaya (Rp)
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-muted-foreground text-sm font-bold">
+                      Rp
+                    </span>
+                  </div>
+                  <input
+                    type="number"
+                    value={totalFee}
+                    onChange={(e) => setTotalFee(e.target.value)}
+                    placeholder="150000"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm font-semibold ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    autoFocus
+                  />
+                </div>
               </div>
-            );
-          })
-        )}
-      </CardContent>
-    </Card>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-border/60">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setPaymentModal({ isOpen: false, jobId: null });
+                    setTotalFee("");
+                  }}
+                  className="text-xs font-semibold"
+                >
+                  Batal
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={handleCompleteJob}
+                  disabled={!totalFee || isUpdating}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs gap-1.5"
+                >
+                  {isUpdating && <Loader2 className="size-3.5 animate-spin" />}
+                  Simpan &amp; Selesaikan
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
