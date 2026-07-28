@@ -32,19 +32,80 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
   });
   const [totalFee, setTotalFee] = useState("");
 
-  const getGoogleMapsUrl = (job) => {
-    const lat = job.latitude || job.location_lat || job.lat;
-    const lng = job.longitude || job.location_lng || job.lng;
-    const address =
-      job.location_address || job.address || job.location_title || "";
+// 1. Helper Universal untuk mengurai koordinat GPS dari Supabase (WKB Hex, WKT, GeoJSON, atau Plain Object)
+function extractCoordinates(job) {
+  if (!job) return null;
 
-    if (lat && lng) {
-      return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  // A. Cek jika koordinat sudah berbentuk angka langsung
+  let lat = job.latitude || job.location_lat || job.lat;
+  let lng = job.longitude || job.location_lng || job.lng;
+  if (lat && lng) return { lat, lng };
+
+  const location = job.customer_location || job.customerLocation || job.location;
+  if (!location) return null;
+
+  // B. Jika data lokasi berbentuk String
+  if (typeof location === "string") {
+    // b1. Format Teks WKT/EWKT (contoh: "POINT(106.827 -6.175)" atau "SRID=4326;POINT(...)")
+    const match = location.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/i);
+    if (match) {
+      return { lng: match[1], lat: match[2] };
     }
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      address,
-    )}`;
-  };
+
+    // b2. Format PostGIS EWKB Hexadecimal (Bawaan default Supabase `select('*')`)
+    if (/^[0-9a-fA-F]+$/.test(location) && location.length >= 42) {
+      try {
+        const bytes = new Uint8Array(
+          location.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+        );
+        const view = new DataView(bytes.buffer);
+        const isLittleEndian = bytes[0] === 1;
+        const type = view.getUint32(1, isLittleEndian);
+        const hasSrid = (type & 0x20000000) !== 0;
+        const offset = hasSrid ? 9 : 5;
+
+        const hexLng = view.getFloat64(offset, isLittleEndian);
+        const hexLat = view.getFloat64(offset + 8, isLittleEndian);
+
+        if (!isNaN(hexLat) && !isNaN(hexLng)) {
+          return { lat: hexLat, lng: hexLng };
+        }
+      } catch (e) {
+        console.error("Gagal mendekode WKB Hex PostGIS:", e);
+      }
+    }
+  }
+
+  // C. Jika data lokasi berbentuk Object / GeoJSON
+  if (typeof location === "object") {
+    if (Array.isArray(location.coordinates) && location.coordinates.length >= 2) {
+      return { lng: location.coordinates[0], lat: location.coordinates[1] };
+    }
+    if (location.lat && location.lng) {
+      return { lat: location.lat, lng: location.lng };
+    }
+  }
+
+  return null;
+}
+
+// 2. Helper URL Google Maps Utama
+function getGoogleMapsUrl(job) {
+  const coords = extractCoordinates(job);
+
+  // Jika koordinat berhasil dibaca -> Buka Mode Navigasi Driving + Trafik Realtime
+  if (coords && coords.lat && coords.lng) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lng}&travelmode=driving`;
+  }
+
+  // Fallback: Jika koordinat benar-benar tidak ditemukan, gunakan pencarian alamat teks
+  const address = getAddressText(job);
+  if (address) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  }
+
+  return null;
+}
 
   const getWhatsAppUrl = (phone) => {
     if (!phone) return "#";
@@ -270,19 +331,6 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                             className="gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20"
                           >
                             <MessageSquare className="size-3" /> WA
-                          </Button>
-                        </a>
-                      )}
-
-                      {customerPhone && (
-                        <a href={`tel:${customerPhone}`}>
-                          <Button
-                            type="button"
-                            size="xs"
-                            variant="outline"
-                            className="gap-1 text-[11px] font-semibold text-card-foreground bg-card hover:bg-accent"
-                          >
-                            <Phone className="size-3" /> Telp
                           </Button>
                         </a>
                       )}
