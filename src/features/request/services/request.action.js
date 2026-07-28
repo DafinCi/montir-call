@@ -47,6 +47,7 @@ export async function getPendingRequests() {
 
   // Format data DB agar sesuai dengan kebutuhan UI Component
   const formattedData = (data || []).map((item) => ({
+    ...item,
     id: item.id,
     customerName: item.customer_name || item.user_name || "Pelanggan",
     createdAt: formatRelativeTime(item.created_at),

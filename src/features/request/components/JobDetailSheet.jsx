@@ -45,28 +45,25 @@ function getGoogleMapsUrl(job) {
   const lng = job.longitude || job.location_lng || job.lng;
 
   if (lat && lng) {
-    return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
   }
 
   // Cek jika berbentuk PostGIS String "POINT(lng lat)"
-  const location =
-    job.customer_location || job.customerLocation || job.location;
+const location = job.customer_location || job.customerLocation || job.location;
   if (typeof location === "string") {
     const match = location.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/i);
     if (match) {
-      return `https://www.google.com/maps/search/?api=1&query=${match[2]},${match[1]}`;
+      const longitude = match[1];
+      const latitude = match[2];
+      // URL Navigasi Rute Langsung dengan Info Trafik Realtime
+      return `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving`;
     }
   }
 
-  // Cek jika berbentuk GeoJSON Object
-  if (typeof location === "object" && location?.coordinates) {
-    return `https://www.google.com/maps/search/?api=1&query=${location.coordinates[1]},${location.coordinates[0]}`;
-  }
-
-  // Fallback ke pencarian Alamat Teks (Sama seperti ActiveJobs)
+  // 3. Fallback pencarian teks alamat
   const address = getAddressText(job);
   if (address) {
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}&travelmode=driving`;
   }
 
   return null;

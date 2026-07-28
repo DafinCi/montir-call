@@ -15,7 +15,7 @@ export default function JobFilterBar({
 }) {
   const tabs = [
     { id: "all", label: "Semua Permintaan" },
-    { id: "emergency", label: "Darurat 🚨" },
+    { id: "emergency", label: "Darurat " },
     { id: "scheduled", label: "Terjadwal" },
   ];
 
