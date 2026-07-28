@@ -21,7 +21,7 @@ export async function fetchDashboardData() {
       .eq("id", user.id)
       .maybeSingle();
 
-    // SELF-HEALING: Jika baris montir tidak ditemukan di tabel mechanics, buat otomatis dari user metadata
+    // SELF-HEALING: Jika baris montir tidak ditemukan di tabel mechanics, buat otomatis
     if (!mechanic) {
       const fallbackName =
         user.user_metadata?.name ||
@@ -54,59 +54,63 @@ export async function fetchDashboardData() {
       .in("status", ["ACCEPTED", "ON_THE_WAY", "ARRIVED"])
       .order("created_at", { ascending: false });
 
-    // 3. Waktu Penanda
+    // 3. Waktu Penanda (Batas Rentang Waktu)
     const now = new Date();
+
     const startOfDay = new Date(
       now.getFullYear(),
       now.getMonth(),
-      now.getDate(),
-    ).toISOString();
+      now.getDate()
+    );
 
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
+    const startOfWeek = new Date(startOfDay);
+    startOfWeek.setDate(startOfDay.getDate() - startOfDay.getDay());
 
-    const startOfMonth = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      1,
-    ).toISOString();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    // 4. Pekerjaan Selesai
+    // 4. Pekerjaan Selesai (Diperbaiki: Tambahkan updated_at ke select)
     const { data: completedJobs } = await supabase
       .from("service_requests")
-      .select("id, created_at")
+      .select("id, created_at, updated_at, total_fee")
       .eq("assigned_mechanic_id", user.id)
       .eq("status", "COMPLETED");
 
-    const jobs = completedJobs || [];
+    // Pre-processing data pesanan selesai
+    const processedJobs = (completedJobs || []).map((j) => ({
+      ...j,
+      fee: Number(j.total_fee || 0),
+      // Gunakan updated_at (waktu selesai), fallback ke created_at
+      completedAt: new Date(j.updated_at || j.created_at),
+    }));
 
-    const todayRevenue = jobs
-      .filter((j) => new Date(j.created_at) >= new Date(startOfDay))
-      .reduce((acc, curr) => acc + Number(curr.total_fee || 0), 0);
+    // --- KALKULASI PENDAPATAN & STATISTIK (Menggunakan processedJobs) ---
+    
+    // Total Akumulasi Seluruh Waktu
+    const totalRevenue = processedJobs.reduce((acc, j) => acc + j.fee, 0);
 
-    const weeklyRevenue = jobs
-      .filter((j) => new Date(j.created_at) >= startOfWeek)
-      .reduce((acc, curr) => acc + Number(curr.total_fee || 0), 0);
+    // Hari Ini
+    const todayJobs = processedJobs.filter(
+      (j) => j.completedAt >= startOfDay
+    );
+    const todayRevenue = todayJobs.reduce((acc, j) => acc + j.fee, 0);
+    const totalJobsToday = todayJobs.length;
 
-    const monthlyRevenue = jobs
-      .filter((j) => new Date(j.created_at) >= new Date(startOfMonth))
-      .reduce((acc, curr) => acc + Number(curr.total_fee || 0), 0);
+    // Mingguan & Bulanan
+    const weeklyRevenue = processedJobs
+      .filter((j) => j.completedAt >= startOfWeek)
+      .reduce((acc, j) => acc + j.fee, 0);
 
-    const totalJobsToday = jobs.filter(
-      (j) => new Date(j.created_at) >= new Date(startOfDay),
-    ).length;
+    const monthlyRevenue = processedJobs
+      .filter((j) => j.completedAt >= startOfMonth)
+      .reduce((acc, j) => acc + j.fee, 0);
 
-    // 5. Grafik Keuangan
+    // 5. Grafik Keuangan (7 Hari Terakhir)
     const daysLabel = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
     const financialChart = Array.from({ length: 7 }).map((_, i) => {
-      const d = new Date();
+      const d = new Date(startOfDay);
       d.setDate(d.getDate() - (6 - i));
-      const dayStart = new Date(
-        d.getFullYear(),
-        d.getMonth(),
-        d.getDate(),
-      ).toISOString();
+
+      const dayStart = new Date(d.getFullYear(), d.getMonth(), d.getDate());
       const dayEnd = new Date(
         d.getFullYear(),
         d.getMonth(),
@@ -114,11 +118,12 @@ export async function fetchDashboardData() {
         23,
         59,
         59,
-      ).toISOString();
+        999
+      );
 
-      const amount = jobs
-        .filter((j) => j.created_at >= dayStart && j.created_at <= dayEnd)
-        .reduce((acc, curr) => acc + Number(curr.total_fee || 0), 0);
+      const amount = processedJobs
+        .filter((j) => j.completedAt >= dayStart && j.completedAt <= dayEnd)
+        .reduce((acc, j) => acc + j.fee, 0);
 
       return {
         day: daysLabel[d.getDay()],
@@ -126,7 +131,7 @@ export async function fetchDashboardData() {
       };
     });
 
-    // 6. Notifikasi
+    // 6. Notifikasi / Aktivitas Terbaru
     const { data: recentActivities } = await supabase
       .from("notifications")
       .select("*")
@@ -141,13 +146,15 @@ export async function fetchDashboardData() {
         mechanicStatus: mechanic?.status || "OFFLINE",
         activeJobs: activeJobs || [],
         stats: {
+          totalRevenue,
           todayRevenue,
           totalJobsToday,
           activeJobsCount: activeJobs?.length || 0,
-          rating: mechanic?.rating || 5.0,
+          rating: Number(mechanic?.rating) || 5.0,
           totalReviews: 0,
         },
         financialSummary: {
+          total: totalRevenue,
           daily: todayRevenue,
           weekly: weeklyRevenue,
           monthly: monthlyRevenue,
