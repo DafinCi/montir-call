@@ -12,13 +12,19 @@ export default function ProfileForm({ formData, onChange }) {
       {/* Informasi Pribadi */}
       <div className="space-y-4">
         <div className="border-b pb-2">
-          <h2 className="text-base font-semibold text-card-foreground">Informasi Kontak & Diri</h2>
-          <p className="text-xs text-muted-foreground">Data dasar untuk keperluan komunikasi dengan pelanggan.</p>
+          <h2 className="text-base font-semibold text-card-foreground">
+            Informasi Kontak & Diri
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Data dasar untuk keperluan komunikasi dengan pelanggan.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <Label htmlFor="name" className="text-xs font-medium">Nama Lengkap</Label>
+            <Label htmlFor="name" className="text-xs font-medium">
+              Nama Lengkap
+            </Label>
             <div className="relative">
               <User className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
               <Input
@@ -33,7 +39,9 @@ export default function ProfileForm({ formData, onChange }) {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="phone" className="text-xs font-medium">Nomor WhatsApp / HP</Label>
+            <Label htmlFor="phone" className="text-xs font-medium">
+              Nomor WhatsApp / HP
+            </Label>
             <div className="relative">
               <Phone className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
               <Input
@@ -48,7 +56,9 @@ export default function ProfileForm({ formData, onChange }) {
           </div>
 
           <div className="space-y-1.5 sm:col-span-2">
-            <Label htmlFor="email" className="text-xs font-medium">Alamat Email</Label>
+            <Label htmlFor="email" className="text-xs font-medium">
+              Alamat Email
+            </Label>
             <div className="relative">
               <Mail className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
               <Input
@@ -68,13 +78,19 @@ export default function ProfileForm({ formData, onChange }) {
       {/* Informasi Operasional & Rekening */}
       <div className="space-y-4 pt-2">
         <div className="border-b pb-2">
-          <h2 className="text-base font-semibold text-card-foreground">Area Layanan & Rekening</h2>
-          <p className="text-xs text-muted-foreground">Lokasi bengkel acuan dan tujuan pencairan hasil servis.</p>
+          <h2 className="text-base font-semibold text-card-foreground">
+            Area Layanan & Rekening
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Lokasi bengkel acuan dan tujuan pencairan hasil servis.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <Label htmlFor="workshop" className="text-xs font-medium">Nama Bengkel / Pangkalan</Label>
+            <Label htmlFor="workshop" className="text-xs font-medium">
+              Nama Bengkel / Pangkalan
+            </Label>
             <div className="relative">
               <Building2 className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
               <Input
@@ -89,7 +105,9 @@ export default function ProfileForm({ formData, onChange }) {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="bankAccount" className="text-xs font-medium">Rekening Bank (Pencairan)</Label>
+            <Label htmlFor="bankAccount" className="text-xs font-medium">
+              Rekening Bank (Pencairan)
+            </Label>
             <div className="relative">
               <Wallet className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
               <Input
@@ -98,13 +116,15 @@ export default function ProfileForm({ formData, onChange }) {
                 value={formData.bankAccount}
                 onChange={onChange}
                 className="pl-9 text-xs"
-                placeholder="BCA - 1234567890 a.n Dafin"
+                placeholder="BCA - 1234567890 a.n ..."
               />
             </div>
           </div>
 
           <div className="space-y-1.5 sm:col-span-2">
-            <Label htmlFor="address" className="text-xs font-medium">Alamat Utama / Titik Pangkalan</Label>
+            <Label htmlFor="address" className="text-xs font-medium">
+              Alamat Utama / Titik Pangkalan
+            </Label>
             <div className="relative">
               <MapPin className="absolute left-3 top-3 size-4 text-muted-foreground" />
               <Textarea
