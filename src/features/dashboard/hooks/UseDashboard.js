@@ -47,15 +47,21 @@ export const useDashboard = () => {
     setIsToggling(false);
   };
 
-  // Update Status Pekerjaan
-  const handleUpdateJobStatus = async (requestId, newStatus) => {
-    setIsUpdatingJob(true);
-    const res = await updateRequestStatus(requestId, newStatus);
-    if (res.success) {
-      await loadDashboard();
-    }
-    setIsUpdatingJob(false);
-  };
+// Update Status Pekerjaan
+const handleUpdateJobStatus = async (requestId, newStatus, extraData = {}) => {
+  setIsUpdatingJob(true);
+
+  // Teruskan extraData (yang berisi totalFee) ke server action
+  const res = await updateRequestStatus(requestId, newStatus, extraData);
+
+  if (res.success) {
+    // Reload dashboard untuk memperbarui Saldo, FinancialChart, FinancialSummary, & RecentActivities
+    await loadDashboard();
+  }
+
+  setIsUpdatingJob(false);
+  return res;
+};
 
   return {
     data,

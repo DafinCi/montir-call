@@ -9,6 +9,8 @@ import { revalidatePath } from "next/cache";
 function formatRelativeTime(dateString) {
   if (!dateString) return "Baru saja";
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "Baru saja";
+
   const now = new Date();
   const diffInMinutes = Math.floor((now - date) / (1000 * 60));
 
@@ -41,14 +43,16 @@ export async function getPendingRequests() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error fetching pending requests:", error);
+    console.error("❌ Error fetching pending requests:", error);
     return { success: false, error: error.message, data: [] };
   }
 
   // Format data DB agar sesuai dengan kebutuhan UI Component
   const formattedData = (data || []).map((item) => ({
+    ...item,
     id: item.id,
     customerName: item.customer_name || item.user_name || "Pelanggan",
+    customerPhone: item.customer_phone || item.phone || "", // Ditambahkan agar tombol WA bekerja
     createdAt: formatRelativeTime(item.created_at),
     priority: item.priority || (item.is_emergency ? "emergency" : "scheduled"),
     vehicleModel:
@@ -59,6 +63,7 @@ export async function getPendingRequests() {
       item.description ||
       "Tidak ada rincian keluhan.",
     aiAnalysis: item.ai_analysis || null,
+    customerLocation: item.customer_location,
     symptoms: Array.isArray(item.symptoms)
       ? item.symptoms
       : typeof item.symptoms === "string"
@@ -76,7 +81,7 @@ export async function getPendingRequests() {
 }
 
 /**
- * 2. ACCEPT REQUEST (Anti Race Condition)
+ * 2. ACCEPT REQUEST (Anti Race Condition + Auto Notification)
  */
 export async function acceptRequest(requestId) {
   const supabase = await createClient();
@@ -90,15 +95,16 @@ export async function acceptRequest(requestId) {
     return { success: false, error: "Anda harus login terlebih dahulu." };
   }
 
-  // Atomic Update Query
+  // Atomic Update Query Mencegah Race Condition
   const { data: request, error: updateErr } = await supabase
     .from("service_requests")
     .update({
       status: "ACCEPTED",
       assigned_mechanic_id: user.id,
+      updated_at: new Date().toISOString(),
     })
     .eq("id", requestId)
-    .eq("status", "PENDING") // Mencegah Race Condition!
+    .eq("status", "PENDING")
     .select()
     .single();
 
@@ -113,6 +119,16 @@ export async function acceptRequest(requestId) {
   // Ubah status montir menjadi BUSY
   await supabase.from("mechanics").update({ status: "BUSY" }).eq("id", user.id);
 
+  // Buat notifikasi riwayat aktivitas
+  await supabase.from("notifications").insert([
+    {
+      mechanic_id: user.id,
+      title: "Pekerjaan Diterima 🚗",
+      message: `Anda mengambil pesanan perbaikan dari ${request.customer_name || "Pelanggan"}.`,
+      created_at: new Date().toISOString(),
+    },
+  ]);
+
   revalidatePath("/dashboard");
   revalidatePath("/request");
 
@@ -124,7 +140,7 @@ export async function acceptRequest(requestId) {
 }
 
 /**
- * 3. UPDATE REQUEST STATUS & PAYMENT
+ * 3. UPDATE REQUEST STATUS & PAYMENT (Auto Income & Notification Integration)
  */
 export async function updateRequestStatus(
   requestId,
@@ -148,15 +164,16 @@ export async function updateRequestStatus(
   }
 
   // Siapkan payload update
-  const updatePayload = { status: newStatus };
+  const updatePayload = {
+    status: newStatus,
+    updated_at: new Date().toISOString(),
+  };
 
-  // Jika status COMPLETED, ekstrak & bersihkan nominal biaya secara fleksibel
+  // Jika status COMPLETED, olah nominal biaya
   if (newStatus === "COMPLETED") {
-    // Ambil nilai baik dari totalFee maupun total_fee
     const rawFee = additionalData?.totalFee ?? additionalData?.total_fee;
 
     if (rawFee !== undefined && rawFee !== null && rawFee !== "") {
-      // Bersihkan string dari titik/karakter non-angka (contoh: "150.000" -> 150000)
       const numericFee =
         typeof rawFee === "string"
           ? Number(rawFee.replace(/[^0-9]/g, ""))
@@ -181,6 +198,7 @@ export async function updateRequestStatus(
     return { success: false, error: "Gagal memperbarui status pekerjaan." };
   }
 
+  // Jika Selesai atau Dibatalkan, kembalikan status montir ke AVAILABLE
   if (newStatus === "COMPLETED" || newStatus === "CANCELLED") {
     await supabase
       .from("mechanics")
@@ -188,11 +206,51 @@ export async function updateRequestStatus(
       .eq("id", user.id);
   }
 
+  // CATAT AKTIVITAS KE TABEL NOTIFIKASI
+  try {
+    let notifTitle = "";
+    let notifMessage = "";
+
+    if (newStatus === "ON_THE_WAY") {
+      notifTitle = "Dalam Perjalanan 🧭";
+      notifMessage = `Menuju ke lokasi ${request.customer_name || "Pelanggan"}.`;
+    } else if (newStatus === "ARRIVED") {
+      notifTitle = "Sampai di Lokasi 📍";
+      notifMessage = `Tiba di lokasi perbaikan (${request.vehicle_model || "Kendaraan"}).`;
+    } else if (newStatus === "COMPLETED") {
+      const formattedFee = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }).format(updatePayload.total_fee || 0);
+
+      notifTitle = "Pembayaran Diterima 💰";
+      notifMessage = `Servis selesai! Tagihan ${formattedFee} berhasil masuk ke saldo pendapatan.`;
+    } else if (newStatus === "CANCELLED") {
+      notifTitle = "Pekerjaan Dibatalkan ❌";
+      notifMessage = `Pesanan dari ${request.customer_name || "Pelanggan"} telah dibatalkan.`;
+    }
+
+    if (notifTitle) {
+      await supabase.from("notifications").insert([
+        {
+          mechanic_id: user.id,
+          title: notifTitle,
+          message: notifMessage,
+          created_at: new Date().toISOString(),
+        },
+      ]);
+    }
+  } catch (notifErr) {
+    console.error("⚠️ Gagal membuat notifikasi:", notifErr);
+  }
+
   revalidatePath("/dashboard");
   revalidatePath("/request");
 
   return { success: true, data: request };
 }
+
 /**
  * 4. UPDATE MECHANIC LOCATION
  */

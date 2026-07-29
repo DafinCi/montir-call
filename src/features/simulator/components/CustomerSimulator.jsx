@@ -63,55 +63,75 @@ export default function CustomerSimulator() {
   }, [requestData?.id, supabase]);
 
   // Fungsi Ambil Lokasi Presisi Browser (GPS)
-  const handleGetLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Browser Anda tidak mendukung Geolocation");
-      return;
-    }
+// 1. Ambil lokasi presisi + Konversi Alamat Otomatis (Nominatim OSM)
+const handleGetLocation = () => {
+  if (!navigator.geolocation) {
+    alert("Browser Anda tidak mendukung Geolocation");
+    return;
+  }
 
-    setIsLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
+  setIsLocating(true);
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+
+      try {
+        // Ambil teks nama jalan/alamat dari koordinat GPS (Gratis)
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        );
+        const data = await res.json();
+        const addressText = data.display_name || `Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`;
+
+        setLocation({
+          lat: latitude,
+          lng: longitude,
+          address: addressText,
+        });
+      } catch (err) {
         setLocation({
           lat: latitude,
           lng: longitude,
           address: `Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)} (GPS Aktif)`,
         });
+      } finally {
         setIsLocating(false);
-      },
-      (error) => {
-        console.error("Gagal mengambil GPS:", error.message);
-        alert("Gagal mengakses GPS. Menggunakan lokasi default.");
-        setIsLocating(false);
-      },
-      { enableHighAccuracy: true, timeout: 10000 },
-    );
+      }
+    },
+    (error) => {
+      console.error("Gagal mengambil GPS:", error.message);
+      alert("Gagal mengakses GPS. Menggunakan lokasi default.");
+      setIsLocating(false);
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+};
+
+// 2. Submit data ke Server Action
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  const formData = {
+    customer_name: e.target.name.value,
+    customer_phone: e.target.phone.value,
+    vehicle_type: "Mobil",
+    vehicle_model: e.target.vehicle.value,
+    problem_description: e.target.problem.value,
+    latitude: location.lat,
+    longitude: location.lng,
+    address: location.address,
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const res = await createSimulatedRequest(formData);
+  if (res.success) {
+    setRequestData(res.data);
+  } else {
+    alert("Gagal membuat pesanan simulasi: " + res.error);
+  }
 
-    const formData = {
-      customer_name: e.target.name.value,
-      customer_phone: e.target.phone.value,
-      vehicle_type: "Mobil",
-      vehicle_model: e.target.vehicle.value,
-      problem_description: e.target.problem.value,
-      latitude: location.lat,
-      longitude: location.lng,
-    };
-
-    const res = await createSimulatedRequest(formData);
-    if (res.success) {
-      setRequestData(res.data);
-    } else {
-      alert("Gagal membuat pesanan simulasi: " + res.error);
-    }
-
-    setIsSubmitting(false);
-  };
+  setIsSubmitting(false);
+};
 
   const resetSimulator = () => {
     setRequestData(null);
