@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Wrench, Inbox } from "lucide-react";
 import { toast } from "sonner";
@@ -48,7 +48,6 @@ export default function RequestsView() {
           table: "service_requests",
         },
         () => {
-          // Setiap ada kiriman baru / status berubah, reload feed secara otomatis
           loadRequests();
         },
       )
@@ -74,33 +73,56 @@ export default function RequestsView() {
       if (selectedJob?.id === jobId) {
         setSelectedJob(null);
       }
-      // Redirect ke halaman dashboard setelah berhasil ambil order
       router.push("/dashboard");
     } else {
       toast.error(res.error);
-      loadRequests(); // Refresh jika keduluan montir lain
+      loadRequests();
     }
     setAcceptingId(null);
   };
 
-  // Logic Penyaringan Feed
-  const filteredRequests = requests.filter((job) => {
-    const query = searchQuery.toLowerCase();
-    const matchesSearch =
-      job.customerName?.toLowerCase().includes(query) ||
-      job.licensePlate?.toLowerCase().includes(query) ||
-      job.locationAddress?.toLowerCase().includes(query) ||
-      job.vehicleModel?.toLowerCase().includes(query);
+  // 1. Kalkulasi Hitungan Jumlah (Counts) per Tab Filter
+  const counts = useMemo(() => {
+    const emergency = requests.filter(
+      (j) => j.priority === "emergency" || j.isEmergency
+    ).length;
+    const scheduled = requests.filter(
+      (j) => j.priority === "scheduled" && !j.isEmergency
+    ).length;
 
-    if (activeTab === "emergency") {
-      return matchesSearch && job.priority === "emergency";
-    }
-    if (activeTab === "scheduled") {
-      return matchesSearch && job.priority === "scheduled";
-    }
+    return {
+      all: requests.length,
+      emergency,
+      scheduled,
+    };
+  }, [requests]);
 
-    return matchesSearch;
-  });
+  // 2. Logika Penyaringan Feed (Search & Active Tab)
+  const filteredRequests = useMemo(() => {
+    return requests.filter((job) => {
+      const query = searchQuery.trim().toLowerCase();
+
+      // Safe Null/Undefined Search Matching
+      const matchesSearch =
+        !query ||
+        String(job.customerName || "").toLowerCase().includes(query) ||
+        String(job.licensePlate || "").toLowerCase().includes(query) ||
+        String(job.locationAddress || "").toLowerCase().includes(query) ||
+        String(job.vehicleModel || "").toLowerCase().includes(query) ||
+        String(job.problemDescription || "").toLowerCase().includes(query);
+
+      const isEmergency = job.priority === "emergency" || job.isEmergency;
+
+      if (activeTab === "emergency") {
+        return matchesSearch && isEmergency;
+      }
+      if (activeTab === "scheduled") {
+        return matchesSearch && !isEmergency;
+      }
+
+      return matchesSearch;
+    });
+  }, [requests, searchQuery, activeTab]);
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6">
@@ -108,7 +130,7 @@ export default function RequestsView() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/60 pb-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-card-foreground flex items-center gap-2">
-            <Wrench className="size-10 text-secondary" /> Permintaan Masuk
+            <Wrench className="size-8 text-secondary" /> Permintaan Masuk
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
             Daftar panggilan servis darurat dan perbaikan terjadwal di sekitar
@@ -125,6 +147,7 @@ export default function RequestsView() {
         onTabChange={setActiveTab}
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
+        counts={counts}
       />
 
       {/* Content Feed */}

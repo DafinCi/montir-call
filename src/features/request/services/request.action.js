@@ -48,34 +48,48 @@ export async function getPendingRequests() {
   }
 
   // Format data DB agar sesuai dengan kebutuhan UI Component
-  const formattedData = (data || []).map((item) => ({
-    ...item,
-    id: item.id,
-    customerName: item.customer_name || item.user_name || "Pelanggan",
-    customerPhone: item.customer_phone || item.phone || "", // Ditambahkan agar tombol WA bekerja
-    createdAt: formatRelativeTime(item.created_at),
-    priority: item.priority || (item.is_emergency ? "emergency" : "scheduled"),
-    vehicleModel:
-      item.vehicle_model || item.vehicle_type || "Kendaraan Pelanggan",
-    licensePlate: item.license_plate || item.vehicle_plate || "-",
-    problemDescription:
-      item.problem_description ||
-      item.description ||
-      "Tidak ada rincian keluhan.",
-    aiAnalysis: item.ai_analysis || null,
-    customerLocation: item.customer_location,
-    symptoms: Array.isArray(item.symptoms)
-      ? item.symptoms
-      : typeof item.symptoms === "string"
-        ? JSON.parse(item.symptoms || "[]")
-        : [],
-    locationTitle: item.location_title || item.place_name || "Lokasi Pelanggan",
-    locationAddress:
-      item.location_address || item.address || "Alamat lokasi tidak tersedia",
-    distanceKm: item.distance_km ? String(item.distance_km) : "2.5",
-    estimatedTime: item.estimated_time || "10 min",
-    customerNote: item.customer_note || item.notes || "",
-  }));
+  const formattedData = (data || []).map((item) => {
+    // Normalisasi Flag Emergency secara komprehensif
+    const isEmergency =
+      item.is_emergency === true ||
+      item.isEmergency === true ||
+      String(item.priority || "").toLowerCase() === "emergency" ||
+      String(item.priority || "").toLowerCase() === "critical" ||
+      String(item.ai_analysis?.urgency || "").toUpperCase() === "CRITICAL" ||
+      String(item.service_type || "").toLowerCase() === "emergency";
+
+    const normalizedPriority = isEmergency ? "emergency" : "scheduled";
+
+    return {
+      ...item,
+      id: item.id,
+      customerName: item.customer_name || item.user_name || "Pelanggan",
+      customerPhone: item.customer_phone || item.phone || "",
+      createdAt: formatRelativeTime(item.created_at),
+      priority: normalizedPriority,
+      isEmergency: isEmergency,
+      vehicleModel:
+        item.vehicle_model || item.vehicle_type || "Kendaraan Pelanggan",
+      licensePlate: item.license_plate || item.vehicle_plate || "-",
+      problemDescription:
+        item.problem_description ||
+        item.description ||
+        "Tidak ada rincian keluhan.",
+      aiAnalysis: item.ai_analysis || null,
+      customerLocation: item.customer_location,
+      symptoms: Array.isArray(item.symptoms)
+        ? item.symptoms
+        : typeof item.symptoms === "string"
+          ? JSON.parse(item.symptoms || "[]")
+          : [],
+      locationTitle: item.location_title || item.place_name || "Lokasi Pelanggan",
+      locationAddress:
+        item.location_address || item.address || "Alamat lokasi tidak tersedia",
+      distanceKm: item.distance_km ? String(item.distance_km) : "2.5",
+      estimatedTime: item.estimated_time || "10 min",
+      customerNote: item.customer_note || item.notes || "",
+    };
+  });
 
   return { success: true, data: formattedData };
 }
