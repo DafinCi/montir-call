@@ -60,7 +60,7 @@ export async function fetchDashboardData() {
     const startOfDay = new Date(
       now.getFullYear(),
       now.getMonth(),
-      now.getDate()
+      now.getDate(),
     );
 
     const startOfWeek = new Date(startOfDay);
@@ -84,14 +84,12 @@ export async function fetchDashboardData() {
     }));
 
     // --- KALKULASI PENDAPATAN & STATISTIK (Menggunakan processedJobs) ---
-    
+
     // Total Akumulasi Seluruh Waktu
     const totalRevenue = processedJobs.reduce((acc, j) => acc + j.fee, 0);
 
     // Hari Ini
-    const todayJobs = processedJobs.filter(
-      (j) => j.completedAt >= startOfDay
-    );
+    const todayJobs = processedJobs.filter((j) => j.completedAt >= startOfDay);
     const todayRevenue = todayJobs.reduce((acc, j) => acc + j.fee, 0);
     const totalJobsToday = todayJobs.length;
 
@@ -118,7 +116,7 @@ export async function fetchDashboardData() {
         23,
         59,
         59,
-        999
+        999,
       );
 
       const amount = processedJobs
