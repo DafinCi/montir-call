@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   Wrench,
   MapPin,
-  Phone,
   Navigation,
   Car,
   AlertTriangle,
@@ -259,7 +258,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                     <div className="p-3 rounded-lg bg-accent/40 border border-border text-xs space-y-1.5">
                       <div className="flex items-center justify-between font-semibold">
                         <span className="flex items-center gap-1.5 text-secondary">
-                          🤖 AI Pre-Assessment
+                          AI Pre-Assessment
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
@@ -316,7 +315,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                           type="button"
                           size="xs"
                           variant="secondary"
-                          className="gap-1 text-[11px] font-semibold bg-secondary/20 hover:bg-secondary/30 text-secondary-foreground border border-secondary/30"
+                          className="gap-1 text-[11px] font-semibold bg-secondary/20 hover:bg-secondary/30 text-secondary border border-secondary/30"
                         >
                           <Navigation className="size-3" /> Peta
                         </Button>
@@ -347,7 +346,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                           size="xs"
                           disabled={isUpdating}
                           onClick={() => onUpdateStatus(job.id, "ON_THE_WAY")}
-                          className="gap-1.5 font-bold text-[11px] bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-2xs"
+                          className="gap-1.5 font-bold text-[11px] bg-secondary text-primary hover:bg-secondary/90 shadow-2xs"
                         >
                           {isUpdating ? (
                             <Loader2 className="size-3 animate-spin" />

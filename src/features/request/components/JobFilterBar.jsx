@@ -34,7 +34,7 @@ export default function JobFilterBar({
                 onClick={() => onTabChange(tab.id)}
                 className={`flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? "bg-secondary/15 text-secondary-foreground font-semibold border border-secondary/30 shadow-2xs"
+                    ? "bg-secondary/15 text-primary-foreground font-semibold border border-secondary/30 shadow-2xs"
                     : "text-muted-foreground hover:text-card-foreground hover:bg-muted/40"
                 }`}
               >
