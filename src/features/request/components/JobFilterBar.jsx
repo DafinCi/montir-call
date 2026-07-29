@@ -22,7 +22,6 @@ export default function JobFilterBar({
 
   return (
     <div>
-
       {/* Filter Tabs dengan Badge Count */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1.5 border-b border-border/60 pb-2 overflow-x-auto no-scrollbar">
@@ -43,8 +42,8 @@ export default function JobFilterBar({
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
                     isActive
-                      ? "bg-secondary text-secondary-foreground"
-                      : "bg-muted text-muted-foreground"
+                      ? "bg-secondary text-primary"
+                      : "bg-muted text-primary"
                   }`}
                 >
                   {tab.count}
@@ -53,8 +52,8 @@ export default function JobFilterBar({
             );
           })}
         </div>
-      
-              {/* Action Controls */}
+
+        {/* Action Controls */}
         <div className="flex items-center gap-2 shrink-0">
           <Button
             variant="outline"

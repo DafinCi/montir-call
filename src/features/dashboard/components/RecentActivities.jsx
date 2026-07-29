@@ -51,7 +51,7 @@ export default function RecentActivities({ activities = [] }) {
                 <React.Fragment key={item.id || index}>
                   <div className="flex items-start justify-between text-xs gap-2">
                     <div className="space-y-0.5">
-                      <p className="font-medium text-foreground">
+                      <p className="font-medium text-emerald-600/80">
                         {item.title || "Notifikasi"}
                       </p>
                       <p className="text-muted-foreground text-[11px]">
