@@ -60,7 +60,7 @@ export default function QuickAction() {
               key={i}
               variant="outline"
               onClick={act.onClick}
-              className="h-auto flex-col py-3 px-2 gap-1.5 text-xs font-medium hover:border-primary/40 hover:bg-muted/50 transition-all"
+              className="h-auto flex-col py-3 px-2 gap-1.5 text-xs font-medium transition-all"
             >
               <Icon className={`size-4 ${act.color}`} />
               {act.label}

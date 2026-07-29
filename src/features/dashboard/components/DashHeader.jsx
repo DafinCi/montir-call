@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Power,
   RefreshCw,
@@ -24,6 +25,8 @@ export default function DashHeader({
   isRefreshing = false,
   todayRevenue = 0,
 }) {
+  const router = useRouter();
+
   const [showBalance, setShowBalance] = useState(true);
 
   // Sesuaikan dengan status database ("AVAILABLE", "BUSY", "OFFLINE")
@@ -155,7 +158,10 @@ export default function DashHeader({
           </button>
 
           {/* Action 2: Tarik Saldo (UI Only untuk saat ini) */}
-          <button className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group">
+          <button 
+            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group"
+            onClick={ () => router.push("/dashboard/payment")}
+            >
             <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
               <Wallet className="size-5" />
             </div>
@@ -165,7 +171,10 @@ export default function DashHeader({
           </button>
 
           {/* Action 3: Panggilan Aktif (Bisa diarahkan ke tab list nanti) */}
-          <button className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group">
+          <button 
+            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group"
+            onClick={ () => router.push("/dashboard/service")}
+            >
             <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
               <Wrench className="size-5" />
             </div>
