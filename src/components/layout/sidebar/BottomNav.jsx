@@ -6,6 +6,12 @@ import { getMenus } from "../menu";
 
 export default function BottomNav({ pendingCount = 0 }) {
   const pathname = usePathname();
+
+  // Sembunyikan BottomNav secara penuh jika sedang di halaman QnA
+  if (pathname === "/qna" || pathname.includes("qna")) {
+    return null;
+  }
+
   const menus = getMenus(pendingCount);
 
   const centerMenu = menus.find(
@@ -56,12 +62,10 @@ export default function BottomNav({ pendingCount = 0 }) {
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border shadow-lg px-2 py-1.5 flex items-center justify-between">
-      {/* KELOMPOK MENU KIRI (misal: Job Request) */}
       <div className="flex flex-1 justify-around items-center">
         {leftMenus.map(renderRegularMenu)}
       </div>
 
-      {/* TOMBOL LINGKARAN TENGAH (Dashboard) */}
       {centerMenu && (() => {
         const Icon = centerMenu.icon;
         const isActive = pathname === centerMenu.href;
@@ -94,7 +98,6 @@ export default function BottomNav({ pendingCount = 0 }) {
         );
       })()}
 
-      {/* KELOMPOK MENU KANAN (misal: Profile) */}
       <div className="flex flex-1 justify-around items-center">
         {rightMenus.map(renderRegularMenu)}
       </div>

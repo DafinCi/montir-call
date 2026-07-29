@@ -71,7 +71,6 @@ export default function AppNavbar({ user, pendingCount = 0 }) {
         </div>
       </div>
 
-      {/* KANAN: Dropdown Profile & Logout khusus layar HP (md:hidden) */}
       <div className="flex items-center md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -100,7 +99,7 @@ export default function AppNavbar({ user, pendingCount = 0 }) {
             align="end"
             className="w-56 rounded-xl p-1.5 shadow-lg border-border bg-popover text-popover-foreground"
           >
-            {/* Info Montir */}
+            {/* data motir */}
             <DropdownMenuLabel className="font-normal p-2">
               <div className="flex flex-col space-y-1">
                 <p className="text-xs font-semibold leading-none text-muted-foreground truncate">
@@ -114,7 +113,7 @@ export default function AppNavbar({ user, pendingCount = 0 }) {
 
             <DropdownMenuSeparator />
 
-            {/* Tombol Logout */}
+            {/* Logout */}
             <DropdownMenuItem
               onClick={handleLogout}
               disabled={isPending}
