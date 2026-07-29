@@ -19,20 +19,19 @@ export default function ChatCard({ message }) {
     }
   };
 
-  // Helper sederhana untuk merender format teks AI (Bold, Line breaks, dan List)
+  // Helper sederhana untuk merender format teks AI 
   const renderFormattedText = (text) => {
     if (!text) return null;
 
-    // Bagi berdasarkan baris
     const lines = text.split("\n");
 
     return lines.map((line, lineIdx) => {
-      // Deteksi bullet points (- atau *)
+      // Deteksi bullet points 
       const isBullet =
         line.trim().startsWith("- ") || line.trim().startsWith("* ");
       const cleanLine = isBullet ? line.trim().substring(2) : line;
 
-      // Parsing format bold (**teks**)
+      // Parsing format bold
       const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
       const parsedParts = parts.map((part, partIdx) => {
         if (part.startsWith("**") && part.endsWith("**")) {
@@ -53,7 +52,6 @@ export default function ChatCard({ message }) {
         );
       }
 
-      // Baris kosong sebagai spacing
       if (!line.trim()) {
         return <div key={lineIdx} className="h-2" />;
       }

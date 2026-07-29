@@ -20,7 +20,7 @@ export async function askMechanicAI(history = [], newMessage) {
   const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
-    console.error("❌ GROQ_API_KEY tidak ditemukan di environment variables!");
+    console.error("GROQ_API_KEY tidak ditemukan di environment variables!");
     return {
       success: false,
       error: "Konfigurasi GROQ_API_KEY belum terpasang di server.",
@@ -29,8 +29,7 @@ export async function askMechanicAI(history = [], newMessage) {
 
   try {
     const groq = new Groq({ apiKey });
-
-    // Format riwayat chat sesuai standar Groq / OpenAI API
+    // Format riwayat chat sesuai standar OpenAI API
     const messages = [
       { role: "system", content: MECHANIC_SYSTEM_INSTRUCTION },
       ...history.map((msg) => ({
@@ -43,7 +42,6 @@ export async function askMechanicAI(history = [], newMessage) {
       { role: "user", content: newMessage },
     ];
 
-    // Menggunakan Llama 3.3 70B Versatile yang sangat pintar & cepat
     const chatCompletion = await groq.chat.completions.create({
       messages: messages,
       model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
@@ -58,7 +56,7 @@ export async function askMechanicAI(history = [], newMessage) {
       data: answerText,
     };
   } catch (error) {
-    console.error("❌ Groq QnA Error:", error);
+    console.error("Groq QnA Error:", error);
     return {
       success: false,
       error: error.message || "Gagal mendapatkan respon dari AI Montir.",

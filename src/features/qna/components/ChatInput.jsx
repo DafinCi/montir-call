@@ -26,14 +26,13 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
     onSendMessage(input.trim());
     setInput("");
 
-    // Reset tinggi textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
   };
 
   const handleKeyDown = (e) => {
-    // Submit saat tekan Enter (tanpa Shift)
+    // Submit saat tekan Enter 
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
