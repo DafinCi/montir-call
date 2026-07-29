@@ -30,7 +30,7 @@ export const FinancialChart = ({ data = [] }) => {
                   key={idx}
                   className="flex-1 flex flex-col items-center gap-2 h-full justify-end group"
                 >
-                  <span className="text-[10px] font-medium text-muted-foreground group-hover:text-primary transition-colors">
+                  <span className="text-[10px] font-medium text-muted-foreground transition-colors">
                     {item.amount >= 1000
                       ? `${(item.amount / 1000).toFixed(0)}k`
                       : item.amount}
@@ -39,7 +39,7 @@ export const FinancialChart = ({ data = [] }) => {
                     style={{ height: `${heightPercent}%` }}
                     className={`w-full rounded-t-md transition-all duration-300 ${
                       item.amount > 0
-                        ? "bg-primary hover:bg-primary/80"
+                        ? "bg-primary-foreground hover:bg-primary-foreground/80"
                         : "bg-muted hover:bg-muted/80"
                     }`}
                   />
