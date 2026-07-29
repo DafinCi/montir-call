@@ -54,7 +54,7 @@ export default function DashStats({ stats = {} }) {
   ];
 
   return (
-    <Card className="bg-card text-card-foreground border-border shadow-xs rounded-2xl overflow-hidden">
+    <Card className="bg-card text-card-foreground border-border shadow-xs rounded-sm overflow-hidden">
       <CardContent className="p-4 sm:p-5 space-y-4">
         {/* Title Bar */}
         <div className="flex items-center justify-between border-b border-border/60 pb-3">

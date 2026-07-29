@@ -155,13 +155,13 @@ export default function CustomerSimulator() {
       return (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col h-full space-y-3.5 p-4 text-slate-900 bg-white text-xs"
+          className="flex flex-col h-full space-y-3.5 p-4 text-muted bg-secondary/5 text-xs"
         >
           <div className="text-center mb-1">
             <h3 className="font-bold text-base tracking-tight text-slate-900">
               Customer App
             </h3>
-            <p className="text-[11px] font-medium text-slate-500">
+            <p className="text-[11px] font-medium text-muted-foreground">
               Panggil montir darurat sekarang
             </p>
           </div>
@@ -169,30 +169,30 @@ export default function CustomerSimulator() {
           <div className="space-y-3 flex-1 overflow-y-auto pr-1">
             {/* Input Nama */}
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 uppercase tracking-wide text-[10px]">
+              <label className="font-bold text-muted-foreground uppercase tracking-wide text-[10px]">
                 Nama Anda
               </label>
               <Input
                 name="name"
                 placeholder="Budi Santoso"
                 required
-                className="h-8 text-xs bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400"
+                className="h-8 text-xs bg-card border-slate-300 text-muted placeholder:text-foreground"
               />
             </div>
 
             {/* Input WA */}
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 uppercase tracking-wide text-[10px]">
+              <label className="font-bold text-foreground uppercase tracking-wide text-[10px]">
                 Nomor WhatsApp
               </label>
               <div className="relative">
-                <Phone className="size-3.5 absolute left-2.5 top-2.5 text-slate-400" />
+                <Phone className="size-3.5 absolute left-2.5 top-2.5 text-foreground" />
                 <Input
                   name="phone"
                   type="tel"
                   placeholder="081234567890"
                   required
-                  className="h-8 text-xs pl-8 bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400"
+                  className="h-8 text-xs pl-8 bg-card border-slate-300 text-muted placeholder:text-foreground"
                 />
               </div>
             </div>
@@ -206,7 +206,7 @@ export default function CustomerSimulator() {
                 name="vehicle"
                 placeholder="Honda Brio 2020"
                 required
-                className="h-8 text-xs bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400"
+                className="h-8 text-xs bg-card border-slate-300 text-muted placeholder:text-foreground"
               />
             </div>
 
@@ -216,7 +216,7 @@ export default function CustomerSimulator() {
                 Lokasi Anda
               </label>
               <div className="flex gap-1.5">
-                <div className="flex-1 truncate bg-slate-100 border border-slate-200 rounded-md px-2.5 py-1.5 text-[11px] text-slate-600 flex items-center gap-1">
+                <div className="flex-1 truncate bg-card border-slate-200 rounded-md px-2.5 py-1.5 text-[11px] text-slate-600 flex items-center gap-1">
                   <MapPin className="size-3 text-red-500 shrink-0" />
                   <span className="truncate">{location.address}</span>
                 </div>
@@ -226,7 +226,7 @@ export default function CustomerSimulator() {
                   size="sm"
                   onClick={handleGetLocation}
                   disabled={isLocating}
-                  className="h-8 px-2 text-[10px] gap-1 shrink-0 bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
+                  className="h-8 px-2 text-[10px] gap-1 shrink-0 bg-card border-blue-200 text-secondary hover:bg-secondary/20"
                 >
                   {isLocating ? (
                     <Loader2 className="size-3 animate-spin" />
@@ -247,7 +247,7 @@ export default function CustomerSimulator() {
                 name="problem"
                 placeholder="Mesin mati saat jalan..."
                 required
-                className="text-xs bg-slate-50 border-slate-300 resize-none text-slate-900 placeholder:text-slate-400 min-h-[70px]"
+                className="text-xs bg-card border-slate-300 text-muted placeholder:text-foreground min-h-[70px]"
                 rows={3}
               />
             </div>
@@ -256,7 +256,7 @@ export default function CustomerSimulator() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full text-white font-semibold shadow-md py-5 rounded-xl border-none bg-blue-600 hover:bg-blue-700 text-xs shrink-0"
+            className="w-full font-semibold shadow-md py-5 rounded-sm border-none text-xs shrink-0"
           >
             {isSubmitting ? (
               <Loader2 className="size-4 animate-spin text-white" />
@@ -275,8 +275,8 @@ export default function CustomerSimulator() {
         <div className="flex flex-col items-center justify-center h-full p-6 text-center space-y-5 text-slate-900 bg-white">
           <div className="relative flex items-center justify-center">
             <div className="absolute size-28 bg-blue-500/20 rounded-full animate-ping"></div>
-            <div className="absolute size-20 bg-blue-500/40 rounded-full animate-pulse"></div>
-            <MapPin className="size-12 text-blue-600 z-10" />
+            <div className="absolute size-20 bg-secondary/40 rounded-full animate-pulse"></div>
+            <MapPin className="size-12 text-secondary z-10" />
           </div>
           <div>
             <h3 className="font-bold text-xl text-slate-900">
@@ -339,19 +339,19 @@ export default function CustomerSimulator() {
             </p>
           </div>
 
-          <div className="w-full bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-xs text-left">
+          <div className="w-full bg-slate-50 p-4 rounded-sm border border-slate-200 shadow-xs text-left">
             <p className="text-[10px] text-slate-500 mb-1 font-semibold uppercase tracking-wider">
               Total Biaya
             </p>
             <p className="text-xl font-bold flex items-center gap-2 text-slate-900">
-              <CreditCard className="size-5 text-emerald-600" />
+              <CreditCard className="size-5 text-secondary" />
               {formatRupiah(total_fee)}
             </p>
           </div>
 
           <Button
             onClick={resetSimulator}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-5 rounded-xl text-xs shadow-md border-none"
+            className="w-full font-semibold py-5 rounded-sm text-xs shadow-md border-none"
           >
             Selesai &amp; Tutup
           </Button>
@@ -382,7 +382,7 @@ export default function CustomerSimulator() {
         className={`size-14 rounded-full shadow-2xl transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 ${
           isOpen
             ? "bg-slate-800 hover:bg-slate-900"
-            : "bg-blue-600 hover:bg-blue-700"
+            : "bg-secondary"
         }`}
       >
         {isOpen ? (

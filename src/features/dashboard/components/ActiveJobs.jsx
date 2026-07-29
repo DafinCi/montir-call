@@ -204,7 +204,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
 
         <CardContent className="p-4 space-y-4">
           {jobs.length === 0 ? (
-            <div className="text-center py-10 border border-dashed border-border rounded-xl bg-background/50">
+            <div className="text-center py-10 border border-dashed border-border rounded-sm bg-background/50">
               <Wrench className="size-8 mx-auto mb-2 text-muted-foreground opacity-60" />
               <p className="text-xs font-semibold text-card-foreground">
                 Tidak ada panggilan servis aktif saat ini.
@@ -229,7 +229,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
               return (
                 <div
                   key={job.id}
-                  className="p-4 rounded-xl border border-border bg-background hover:border-secondary/50 transition-all space-y-3.5 shadow-2xs"
+                  className="p-4 rounded-sm border border-border bg-background hover:border-secondary/50 transition-all space-y-3.5 shadow-2xs"
                 >
                   <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2.5">
                     <div className="flex items-center gap-2">
@@ -282,7 +282,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                       )}
 
                       {ai.safety_warning && (
-                        <p className="text-[11px] text-amber-700 dark:text-amber-400 flex items-center gap-1 font-semibold">
+                        <p className="text-[11px] text-amber-700 flex items-center gap-1 font-semibold">
                           <AlertTriangle className="size-3 shrink-0" />{" "}
                           {ai.safety_warning}
                         </p>
@@ -314,8 +314,8 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                         <Button
                           type="button"
                           size="xs"
-                          variant="secondary"
-                          className="gap-1 text-[11px] font-semibold bg-secondary/20 hover:bg-secondary/30 text-secondary border border-secondary/30"
+                          variant="outline"
+                          className="gap-1 text-[11px] font-semibold bg-secondary/10 hover:bg-secondary/30 text-secondary border border-secondary/30"
                         >
                           <Navigation className="size-3" /> Peta
                         </Button>
@@ -331,7 +331,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                             type="button"
                             size="xs"
                             variant="outline"
-                            className="gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20"
+                            className="gap-1 text-[11px] font-semibold text-secondary border-secondary/30 bg-secondary/10 hover:bg-secondary/30"
                           >
                             <MessageSquare className="size-3" /> WA
                           </Button>
@@ -346,7 +346,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                           size="xs"
                           disabled={isUpdating}
                           onClick={() => onUpdateStatus(job.id, "ON_THE_WAY")}
-                          className="gap-1.5 font-bold text-[11px] bg-secondary text-primary hover:bg-secondary/90 shadow-2xs"
+                          className="gap-1.5 font-bold text-[11px] text-primary  shadow-2xs"
                         >
                           {isUpdating ? (
                             <Loader2 className="size-3 animate-spin" />
@@ -363,7 +363,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                           size="xs"
                           disabled={isUpdating}
                           onClick={() => onUpdateStatus(job.id, "ARRIVED")}
-                          className="gap-1.5 font-bold text-[11px] bg-blue-600 hover:bg-blue-700 text-white shadow-2xs"
+                          className="gap-1.5 font-bold text-[11px] text-primary shadow-2xs"
                         >
                           {isUpdating ? (
                             <Loader2 className="size-3 animate-spin" />
@@ -382,7 +382,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                           onClick={() =>
                             setPaymentModal({ isOpen: true, jobId: job.id })
                           }
-                          className="gap-1.5 font-bold text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs"
+                          className="gap-1.5 font-bold text-[11px] text-primary shadow-2xs"
                         >
                           {isUpdating ? (
                             <Loader2 className="size-3 animate-spin" />
@@ -404,10 +404,10 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
       {/* Modal Input Tagihan */}
       {paymentModal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-150">
-          <div className="bg-card w-full max-w-sm rounded-xl border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-card w-full max-w-sm rounded-sm border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="p-4 border-b border-border flex justify-between items-center bg-muted/30">
               <h3 className="font-bold text-card-foreground flex items-center gap-2 text-sm sm:text-base">
-                <DollarSign className="size-4 text-emerald-500" />
+                <DollarSign className="size-4 text-secondary" />
                 Input Tagihan Servis
               </h3>
               <button
@@ -467,7 +467,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                   size="sm"
                   onClick={handleCompleteJob}
                   disabled={!totalFee || isUpdating}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs gap-1.5"
+                  className=" font-bold text-xs gap-1.5"
                 >
                   {isUpdating && <Loader2 className="size-3.5 animate-spin" />}
                   Simpan &amp; Selesaikan

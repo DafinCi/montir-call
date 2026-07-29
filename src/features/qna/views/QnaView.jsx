@@ -116,7 +116,7 @@ export default function QnaView() {
             <Button
               variant="ghost"
               size="icon"
-              className="size-9 rounded-xl text-muted-foreground shrink-0 hover:-translate-x-2"
+              className="size-9 rounded-sm text-muted-foreground shrink-0 hover:-translate-x-2"
               title="Kembali ke Dashboard"
             >
               <ArrowLeft className="size-5" />
@@ -150,7 +150,7 @@ export default function QnaView() {
             variant="ghost"
             size="icon"
             onClick={handleResetChat}
-            className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-colors"
+            className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-sm transition-colors"
             title="Bersihkan obrolan"
           >
             <Trash2 className="size-4.5" />
@@ -166,7 +166,7 @@ export default function QnaView() {
 
         {/* Indikator AI Sedang Mengetik */}
         {isLoading && (
-          <div className="flex items-center gap-2 text-xs text-muted-foreground my-3 p-3 bg-muted/40 rounded-2xl w-fit animate-pulse border border-border/50">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground my-3 p-3 bg-muted/40 rounded-sm w-fit animate-pulse border border-border/50">
             <Sparkles className="size-4 text-secondary animate-spin" />
             <span>Asisten AI sedang menganalisis masalah teknis...</span>
           </div>
@@ -174,7 +174,7 @@ export default function QnaView() {
 
         {/* Pesan Error */}
         {errorText && (
-          <div className="flex items-center gap-2 text-xs text-red-600 bg-red-500/10 border border-red-500/20 p-3 rounded-2xl my-2">
+          <div className="flex items-center gap-2 text-xs text-red-600 bg-red-500/10 border border-red-500/20 p-3 rounded-sm my-2">
             <AlertCircle className="size-4 shrink-0" />
             <span>{errorText}</span>
           </div>

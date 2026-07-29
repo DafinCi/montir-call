@@ -8,9 +8,9 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
+  Separator,
+  ScrollArea
+} from "@/components/ui";
 
 export default function RecentActivities({ activities = [] }) {
   const formatTime = (dateString) => {
@@ -51,7 +51,7 @@ export default function RecentActivities({ activities = [] }) {
                 <React.Fragment key={item.id || index}>
                   <div className="flex items-start justify-between text-xs gap-2">
                     <div className="space-y-0.5">
-                      <p className="font-medium text-emerald-600/80">
+                      <p className="font-medium text-secondary/80">
                         {item.title || "Notifikasi"}
                       </p>
                       <p className="text-muted-foreground text-[11px]">
