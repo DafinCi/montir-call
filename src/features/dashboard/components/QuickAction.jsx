@@ -38,7 +38,7 @@ export default function QuickAction() {
       label: "Bantuan",
       icon: HelpCircle,
       color: "text-secondary",
-      onClick: () => router.push("/dashboard/support"),
+      onClick: () => router.push("/qna"),
     },
   ];
 
