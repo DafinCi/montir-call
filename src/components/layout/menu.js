@@ -10,7 +10,7 @@ export const getMenus = (pendingCount = 0) => [
     title: "Job Request",
     href: "/request",
     icon: CarFront,
-    badge: pendingCount, // Angka dinamis dari database
+    badge: pendingCount,
   },
   {
     title: "Profile",

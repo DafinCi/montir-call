@@ -33,7 +33,7 @@ export default function SidebarItem({
         collapsed && "justify-center px-0"
       )}
     >
-      {/* Active Indicator Bar */}
+      {/* Active Indicator */}
       {active && !collapsed && (
         <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-primary" />
       )}
@@ -71,7 +71,7 @@ export default function SidebarItem({
     </Link>
   );
 
-  // Jika collapsed, bungkus dengan Tooltip
+  // if collapsed, bungkus dgn Tooltip
   if (collapsed) {
     return (
       <TooltipProvider delayDuration={100}>

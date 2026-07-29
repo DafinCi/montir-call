@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 import SidebarItem from "./SidebarItem";
 import SidebarFooter from "./SidebarFooter";
 import { getMenus } from "../menu";
@@ -79,7 +80,7 @@ export default function AppSidebar({ user, pendingCount = 0 }) {
         </nav>
       </div>
 
-      {/* Footer Profile */}
+      {/* Footer */}
       <SidebarFooter collapsed={collapsed} user={user} />
     </aside>
   );

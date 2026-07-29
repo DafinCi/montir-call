@@ -4,8 +4,6 @@ import { useMemo, useState, useEffect, useTransition } from "react";
 import { usePathname } from "next/navigation";
 import { LogOut, Loader2, ShieldCheck } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +11,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Avatar, 
+  AvatarFallback, 
+  AvatarImage,
+  Button
+} from "@/components/ui";
 
 import { logoutMechanic } from "@/features/auth/services/auth.action";
 import MobileSidebar from "../sidebar/BottomNav";
