@@ -48,7 +48,7 @@ export default async function AppLayout({ children }) {
         <AppNavbar user={userData} pendingCount={pendingCount || 0} />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto ">{children}</main>
       </div>
 
       <CustomerSimulator />

@@ -37,7 +37,7 @@ export default function ChatCard({ message }) {
       const parsedParts = parts.map((part, partIdx) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
-            <strong key={partIdx} className="font-bold text-foreground">
+            <strong key={partIdx} className="font-bold text-secondary">
               {part.slice(2, -2)}
             </strong>
           );
@@ -77,7 +77,7 @@ export default function ChatCard({ message }) {
         className={`size-8 shrink-0 shadow-xs ${
           isUser
             ? "bg-primary text-primary-foreground"
-            : "bg-blue-600 dark:bg-blue-500 text-white"
+            : "bg-secondary text-primary"
         }`}
       >
         <AvatarFallback className="bg-transparent text-current flex items-center justify-center">
@@ -100,7 +100,7 @@ export default function ChatCard({ message }) {
         {/* Label Pengirim (Khusus AI) */}
         {!isUser && (
           <div className="flex items-center justify-between gap-2 border-b border-border/50 pb-1.5 mb-2">
-            <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1">
+            <span className="text-[11px] font-bold text-secondary flex items-center gap-1">
               <Sparkles className="size-3" />
               Asisten Montir Pro
             </span>
@@ -110,7 +110,7 @@ export default function ChatCard({ message }) {
               title="Salin jawaban"
             >
               {copied ? (
-                <Check className="size-3.5 text-green-500" />
+                <Check className="size-3.5 text-secondary" />
               ) : (
                 <Copy className="size-3.5" />
               )}

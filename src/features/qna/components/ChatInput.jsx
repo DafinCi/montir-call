@@ -8,14 +8,6 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
   const [input, setInput] = useState("");
   const textareaRef = useRef(null);
 
-  // Rekomendasi Pertanyaan Cepat khas Bengkel
-  const quickPrompts = [
-    "Cek kode error DTC P0300",
-    "Penyebab mesin Vario brebet saat panas?",
-    "Berapa torsi baut cylinder head umum?",
-    "Langkah cek sistem pengisian aki drop",
-  ];
-
   // Auto-resize tinggi textarea sesuai jumlah baris teks
   useEffect(() => {
     if (textareaRef.current) {
@@ -55,23 +47,6 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
 
   return (
     <div className="space-y-2 w-full max-w-4xl mx-auto pt-2">
-      {/* Quick Prompts Horizontal Scrollable */}
-      {!isLoading && (
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-          <span className="text-[10px] font-semibold text-muted-foreground shrink-0 flex items-center gap-1 pr-1">
-            <Sparkles className="size-3 text-amber-500" /> Cepat:
-          </span>
-          {quickPrompts.map((prompt, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleQuickPromptClick(prompt)}
-              className="shrink-0 bg-secondary/80 hover:bg-secondary text-secondary-foreground text-[11px] px-2.5 py-1 rounded-full border border-border/50 transition-all active:scale-95 whitespace-nowrap"
-            >
-              {prompt}
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* Input Box Form */}
       <form
@@ -83,13 +58,14 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Tanyakan masalah teknis, kode DTC, torsi baut..."
+          placeholder="Ask to automotive engineer .. "
           disabled={isLoading}
           rows={1}
-          className="w-full resize-none bg-transparent px-2 py-1.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-50 max-h-32 leading-relaxed"
+          className="w-full resize-none bg-transparent px-2 py-1.5 text-xs sm:text-sm text-muted-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-50 max-h-32 leading-relaxed"
         />
 
         <Button
+          variant="outline"
           type="submit"
           size="icon"
           disabled={!input.trim() || isLoading}
