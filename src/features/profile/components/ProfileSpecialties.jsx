@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Check, Sliders } from "lucide-react";
+import { Check } from "lucide-react";
 
 const ALL_SKILLS = [
   "Servis Ringan / Ganti Oli",
@@ -16,12 +15,19 @@ const ALL_SKILLS = [
   "Servis Karburator",
 ];
 
-export default function ProfileSpecialties({ selectedSkills = [], onToggleSkill, radius, onRadiusChange }) {
+export default function ProfileSpecialties({
+  selectedSkills = [],
+  onToggleSkill,
+}) {
   return (
     <div className="space-y-5">
       <div className="border-b pb-2">
-        <h2 className="text-base font-semibold text-card-foreground">Keahlian & Layanan</h2>
-        <p className="text-xs text-muted-foreground">Pilih spesialisasi perbaikan yang dapat Anda tangani.</p>
+        <h2 className="text-base font-semibold text-card-foreground">
+          Keahlian & Layanan
+        </h2>
+        <p className="text-xs text-muted-foreground">
+          Pilih spesialisasi perbaikan yang dapat Anda tangani.
+        </p>
       </div>
 
       {/* Skills Chips */}
@@ -46,29 +52,6 @@ export default function ProfileSpecialties({ selectedSkills = [], onToggleSkill,
               </button>
             );
           })}
-        </div>
-      </div>
-
-      {/* Radius Layanan */}
-      <div className="space-y-2 pt-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="radius" className="text-xs font-medium">Radius Jangkauan Panggilan</Label>
-          <span className="text-xs font-bold text-secondary">{radius} KM</span>
-        </div>
-        <input
-          id="radius"
-          type="range"
-          min="2"
-          max="35"
-          step="1"
-          value={radius}
-          onChange={(e) => onRadiusChange(Number(e.target.value))}
-          className="w-full accent-emerald-600 cursor-pointer"
-        />
-        <div className="flex justify-between text-[10px] text-muted-foreground">
-          <span>2 KM (Lokal)</span>
-          <span>15 KM (Standar)</span>
-          <span>35 KM (Maksimal)</span>
         </div>
       </div>
     </div>
