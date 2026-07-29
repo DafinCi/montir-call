@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Wrench, User, Copy, Check, Sparkles } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui";
 
 export default function ChatCard({ message }) {
   const [copied, setCopied] = useState(false);

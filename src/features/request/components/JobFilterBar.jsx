@@ -1,13 +1,10 @@
 "use client";
 
 import React from "react";
-import { Search, RefreshCw, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui";
 
 export default function JobFilterBar({
-  searchQuery,
-  onSearchChange,
   activeTab,
   onTabChange,
   onRefresh,

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { SendHorizontal, Loader2, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { SendHorizontal, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui";
 
 export default function ChatInput({ onSendMessage, isLoading = false }) {
   const [input, setInput] = useState("");
@@ -47,7 +47,6 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
 
   return (
     <div className="space-y-2 w-full max-w-4xl mx-auto pt-2">
-
       {/* Input Box Form */}
       <form
         onSubmit={handleSubmit}

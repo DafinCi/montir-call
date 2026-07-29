@@ -2,9 +2,9 @@
 
 import React from "react";
 import { User, Phone, Mail, MapPin, Building2, Wallet } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui";
+import { Label } from "@/components/ui";
+import { Textarea } from "@/components/ui";
 
 export default function ProfileForm({ formData, onChange }) {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Wrench, Trash2, Sparkles, Bot, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Trash2, Sparkles, Bot, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui";
 import ChatCard from "../components/ChatCard";
 import ChatInput from "../components/ChatInput";
 import { sendMechanicQuery } from "../actions/qna.action";

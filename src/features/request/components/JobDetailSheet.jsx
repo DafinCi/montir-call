@@ -19,7 +19,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -48,7 +48,8 @@ function extractCoordinates(job) {
   let lng = job.longitude || job.location_lng || job.lng;
   if (lat && lng) return { lat, lng };
 
-  const location = job.customer_location || job.customerLocation || job.location;
+  const location =
+    job.customer_location || job.customerLocation || job.location;
   if (!location) return null;
 
   // B. Jika data lokasi berbentuk String
@@ -63,7 +64,7 @@ function extractCoordinates(job) {
     if (/^[0-9a-fA-F]+$/.test(location) && location.length >= 42) {
       try {
         const bytes = new Uint8Array(
-          location.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+          location.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
         );
         const view = new DataView(bytes.buffer);
         const isLittleEndian = bytes[0] === 1;
@@ -85,7 +86,10 @@ function extractCoordinates(job) {
 
   // C. Jika data lokasi berbentuk Object / GeoJSON
   if (typeof location === "object") {
-    if (Array.isArray(location.coordinates) && location.coordinates.length >= 2) {
+    if (
+      Array.isArray(location.coordinates) &&
+      location.coordinates.length >= 2
+    ) {
       return { lng: location.coordinates[0], lat: location.coordinates[1] };
     }
     if (location.lat && location.lng) {

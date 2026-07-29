@@ -11,9 +11,9 @@ import {
   Loader2,
   Phone,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui";
+import { Badge } from "@/components/ui";
+import { Button } from "@/components/ui";
 
 export default function JobRequestCard({
   job,
