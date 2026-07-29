@@ -10,15 +10,13 @@ import {
   ShieldCheck,
   Wallet,
   Wrench,
-  ChevronRight,
-  Sparkles,
 } from "lucide-react";
-import { Button } from "@/components/ui";
-import { Badge } from "@/components/ui";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function DashHeader({
   mechanicName = "Montir",
+  avatarUrl = null, // Tambahkan ini untuk persiapan foto profil
   status = "OFFLINE",
   onToggleOnline,
   isToggling = false,
@@ -28,6 +26,7 @@ export default function DashHeader({
 }) {
   const [showBalance, setShowBalance] = useState(true);
 
+  // Sesuaikan dengan status database ("AVAILABLE", "BUSY", "OFFLINE")
   const isOnline = status === "AVAILABLE";
   const isBusy = status === "BUSY";
 
@@ -42,7 +41,7 @@ export default function DashHeader({
   const getStatusText = () => {
     if (isBusy) return "Sedang Melayani";
     if (isOnline) return "Siap Menerima Job";
-    return "istirahat / Off";
+    return "Istirahat / Off";
   };
 
   const getStatusBadgeStyle = () => {
@@ -63,19 +62,18 @@ export default function DashHeader({
       {/* GREETING TOP BAR */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-3">
-          <Avatar size="lg">
-            {/* Opsional: Tambahkan AvatarImage jika nanti ada URL foto profil */}
-            {/* <AvatarImage src={avatarUrl} alt={mechanicName} /> */}
-            <AvatarFallback className="bg-secondary/10 text-muted border border-primary/20 font-bold text-base">
+          <Avatar className="size-12 shadow-sm border-2 border-primary-foreground">
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={mechanicName} />}
+            <AvatarFallback className="bg-primary-foreground/10 text-primary-foreground font-bold text-lg">
               {mechanicName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div>
             <div className="flex items-center gap-1.5">
-              <h1 className="text-lg md:text-xl font-extrabold text-muted tracking-tight">
+              <h1 className="text-lg md:text-xl font-extrabold text-primary-foreground tracking-tight line-clamp-1">
                 Halo, {mechanicName}!
               </h1>
-              <ShieldCheck className="size-4 text-blue-500" />
+              <ShieldCheck className="size-4.5 text-blue-500 shrink-0" />
             </div>
             <p className="text-xs text-muted-foreground font-medium">
               Montir Terverifikasi
@@ -85,10 +83,10 @@ export default function DashHeader({
       </div>
 
       {/* DANA MAIN BLUE HEADER CARD */}
-      <div className="relative overflow-hidden rounded-3xl bg-primary text-primary-foreground p-5 md:p-6 shadow-md border border-primary/20 space-y-5">
-        {/* Decorative Background Pattern (Khas DANA) */}
-        <div className="absolute -right-10 -bottom-10 size-44 rounded-full bg-white/5 blur-2xl pointer-events-none" />
-        <div className="absolute top-0 right-1/4 w-32 h-32 bg-secondary/10 rounded-full blur-xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl bg-primary text-primary-foreground p-5 md:p-6 shadow-lg border border-primary/20 space-y-5">
+        {/* Decorative Background Pattern */}
+        <div className="absolute -right-10 -bottom-10 size-44 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none" />
 
         {/* Header Card Top Section */}
         <div className="flex items-center justify-between relative z-10">
@@ -98,16 +96,16 @@ export default function DashHeader({
             </span>
             <button
               onClick={() => setShowBalance(!showBalance)}
-              className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+              className="text-primary-foreground/70 hover:text-primary-foreground transition-colors p-1"
               title={showBalance ? "Sembunyikan Saldo" : "Tampilkan Saldo"}
             >
-              {showBalance ? <Eye size={15} /> : <EyeOff size={15} />}
+              {showBalance ? <Eye size={16} /> : <EyeOff size={16} />}
             </button>
           </div>
 
           <Badge
             variant="outline"
-            className={`text-[11px] font-semibold border ${getStatusBadgeStyle()}`}
+            className={`text-[11px] font-semibold border px-2.5 py-0.5 rounded-full ${getStatusBadgeStyle()}`}
           >
             <span
               className={`size-2 rounded-full mr-1.5 ${getStatusDotStyle()}`}
@@ -119,26 +117,30 @@ export default function DashHeader({
         {/* Main Balance Display */}
         <div className="relative z-10 flex items-baseline justify-between">
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            <div className="text-3xl md:text-4xl font-extrabold tracking-tight transition-all duration-300">
               {showBalance ? formatRupiah(todayRevenue) : "Rp ••••••••"}
             </div>
             <p className="text-[11px] text-primary-foreground/75 mt-1 flex items-center gap-1">
-              Akumulasi estimasi pendapatan hari ini
+              Akumulasi pendapatan selesai hari ini
             </p>
           </div>
         </div>
 
         {/* DANA QUICK ACTION BAR (4 Tombol Aksi Khas DANA) */}
-        <div className="pt-2 border-t border-primary-foreground/15 grid grid-cols-4 gap-2 relative z-10">
+        <div className="pt-4 border-t border-primary-foreground/15 grid grid-cols-4 gap-2 relative z-10">
           {/* Action 1: Toggle Status */}
           <button
             onClick={onToggleOnline}
             disabled={isToggling || isBusy}
-            className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all disabled:opacity-50 group"
+            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <div
-              className={`size-10 rounded-2xl flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 ${
-                isOnline ? "bg-red-500 text-white" : "bg-emerald-500 text-white"
+              className={`size-11 rounded-2xl flex items-center justify-center shadow-sm transition-transform group-hover:scale-105 group-active:scale-95 ${
+                isBusy
+                  ? "bg-amber-500 text-white"
+                  : isOnline
+                    ? "bg-red-500 text-white"
+                    : "bg-emerald-500 text-white"
               }`}
             >
               {isToggling ? (
@@ -152,9 +154,9 @@ export default function DashHeader({
             </span>
           </button>
 
-          {/* Action 2: Tarik Saldo */}
-          <button className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all group">
-            <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+          {/* Action 2: Tarik Saldo (UI Only untuk saat ini) */}
+          <button className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group">
+            <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
               <Wallet className="size-5" />
             </div>
             <span className="text-[11px] font-medium text-primary-foreground/90 text-center leading-tight">
@@ -162,9 +164,9 @@ export default function DashHeader({
             </span>
           </button>
 
-          {/* Action 3: Panggilan Aktif */}
-          <button className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all group">
-            <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+          {/* Action 3: Panggilan Aktif (Bisa diarahkan ke tab list nanti) */}
+          <button className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group">
+            <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
               <Wrench className="size-5" />
             </div>
             <span className="text-[11px] font-medium text-primary-foreground/90 text-center leading-tight">
@@ -176,9 +178,9 @@ export default function DashHeader({
           <button
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="flex flex-col items-center gap-1.5 p-2 rounded-xl hover:bg-white/10 transition-all disabled:opacity-50 group"
+            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all disabled:opacity-50 group"
           >
-            <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+            <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
               <RefreshCw
                 className={`size-5 ${isRefreshing ? "animate-spin" : ""}`}
               />

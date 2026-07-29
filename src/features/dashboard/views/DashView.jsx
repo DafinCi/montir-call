@@ -32,6 +32,7 @@ export default function DashboardView() {
       <DashHeader
         mechanicName={data?.mechanicName}
         status={data?.mechanicStatus}
+        todayRevenue={data.stats.todayRevenue}
         onToggleOnline={handleToggleOnline}
         isToggling={isToggling}
         onRefresh={refreshDashboard}

@@ -7,11 +7,21 @@ import {
   Star,
   TrendingUp,
   ArrowUpRight,
+  Wallet, // Tambahkan icon Wallet dari lucide-react
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function DashStats({ stats = {} }) {
   const statItems = [
+    {
+      title: "Pendapatan Hari Ini",
+      value: `Rp ${(stats.todayRevenue || 0).toLocaleString("id-ID")}`,
+      subtext: "Total pemasukan",
+      icon: Wallet,
+      color: "text-green-600 dark:text-green-400",
+      bgColor: "bg-green-500/10",
+      borderColor: "border-green-500/20",
+    },
     {
       title: "Pekerjaan Selesai",
       value: `${stats.totalJobsToday || 0} Servis`,
@@ -33,7 +43,9 @@ export default function DashStats({ stats = {} }) {
     {
       title: "Rating Montir",
       value: `${stats.rating ? Number(stats.rating).toFixed(1) : "5.0"} / 5.0`,
-      subtext: stats.totalReviews ? `${stats.totalReviews} ulasan` : "Evaluasi pelanggan",
+      subtext: stats.totalReviews
+        ? `${stats.totalReviews} ulasan`
+        : "Evaluasi pelanggan",
       icon: Star,
       color: "text-amber-600 dark:text-amber-400",
       bgColor: "bg-amber-500/10",
@@ -57,26 +69,28 @@ export default function DashStats({ stats = {} }) {
           </span>
         </div>
 
-        {/* 3 Grid Card Metrics Gaya DANA */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {/* Update grid menjadi 4 kolom atau 2x2 di layar kecil */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {statItems.map((item, index) => {
             const Icon = item.icon;
             return (
               <div
                 key={index}
-                className="p-3.5 rounded-2xl border border-border bg-background hover:bg-accent/40 transition-all flex items-center gap-3.5 shadow-2xs"
+                className="p-3.5 rounded-2xl border border-border bg-background hover:bg-accent/40 transition-all flex flex-col sm:flex-row items-start sm:items-center gap-3.5 shadow-2xs"
               >
                 {/* DANA Icon Box */}
-                <div className={`size-11 shrink-0 rounded-2xl ${item.bgColor} border ${item.borderColor} flex items-center justify-center ${item.color}`}>
+                <div
+                  className={`size-11 shrink-0 rounded-2xl ${item.bgColor} border ${item.borderColor} flex items-center justify-center ${item.color} mb-2 sm:mb-0`}
+                >
                   <Icon className="size-5" />
                 </div>
 
                 {/* Content */}
-                <div className="space-y-0.5 min-w-0">
+                <div className="space-y-0.5 min-w-0 w-full">
                   <p className="text-[11px] font-medium text-muted-foreground truncate">
                     {item.title}
                   </p>
-                  <p className="text-base font-extrabold text-card-foreground tracking-tight truncate">
+                  <p className="text-sm sm:text-base font-extrabold text-card-foreground tracking-tight truncate">
                     {item.value}
                   </p>
                   <p className="text-[10px] text-muted-foreground/80 truncate">
