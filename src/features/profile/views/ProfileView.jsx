@@ -138,7 +138,7 @@ export default function ProfileView({ initialData }) {
           </Card>
         </div>
 
-        <div className="flex items-center justify-between p-4 rounded-sm border bg-card text-card-foreground shadow-xs">
+        <div className="flex items-center justify-between p-4 rounded-sm border bg-card text-card-foreground shadow-xs mb-15 sm:mb-0">
           <p className="text-xs text-muted-foreground hidden sm:block">
             Pastikan seluruh nomor kontak dan area layanan sudah tepat.
           </p>
