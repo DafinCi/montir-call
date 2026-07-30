@@ -7,7 +7,6 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 export function DashboardSkeleton() {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6">
-      {/* 1. HEADER SKELETON */}
       <div className="p-4 rounded-2xl border bg-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-2">
           <Skeleton className="h-6 w-48" />
@@ -16,7 +15,6 @@ export function DashboardSkeleton() {
         <Skeleton className="h-10 w-36 rounded-lg" />
       </div>
 
-      {/* 2. STATS CARDS SKELETON (4 Cards Grid) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <Card key={i} className="shadow-xs">
@@ -31,9 +29,7 @@ export function DashboardSkeleton() {
         ))}
       </div>
 
-      {/* 3. MAIN CONTENT GRID SKELETON */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* LEFT COLUMN: ACTIVE JOBS SKELETON (8 Cols) */}
         <div className="lg:col-span-8 space-y-6">
           <Card className="shadow-xs">
             <CardHeader className="pb-4 border-b">
@@ -67,7 +63,6 @@ export function DashboardSkeleton() {
           </Card>
         </div>
 
-        {/* RIGHT COLUMN: QUICK ACTIONS & RECENT ACTIVITIES SKELETON (4 Cols) */}
         <div className="lg:col-span-4 space-y-6">
           {/* Quick Actions Skeleton */}
           <Card className="shadow-xs">
@@ -80,7 +75,6 @@ export function DashboardSkeleton() {
             </CardContent>
           </Card>
 
-          {/* Recent Activities Skeleton */}
           <Card className="shadow-xs">
             <CardHeader className="pb-3 border-b">
               <Skeleton className="h-5 w-36" />

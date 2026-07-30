@@ -79,11 +79,8 @@ export async function fetchDashboardData() {
     const processedJobs = (completedJobs || []).map((j) => ({
       ...j,
       fee: Number(j.total_fee || 0),
-      // Gunakan updated_at (waktu selesai), fallback ke created_at
       completedAt: new Date(j.updated_at || j.created_at),
     }));
-
-    // --- KALKULASI PENDAPATAN & STATISTIK (Menggunakan processedJobs) ---
 
     // Total Akumulasi Seluruh Waktu
     const totalRevenue = processedJobs.reduce((acc, j) => acc + j.fee, 0);

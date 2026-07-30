@@ -28,7 +28,6 @@ export default function DashboardView() {
 
   return (
     <div className="p-4 md:p-14 lg:p-8 max-w-7xl mx-auto space-y-6">
-      {/* HEADER */}
       <DashHeader
         mechanicName={data?.mechanicName}
         status={data?.mechanicStatus}
@@ -38,12 +37,9 @@ export default function DashboardView() {
         onRefresh={refreshDashboard}
       />
 
-      {/* STATS CARDS */}
       <DashStats stats={data?.stats} />
 
-      {/* MAIN CONTENT GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* LEFT COLUMN: ACTIVE JOBS & FINANCIAL SECTION (8 Cols) */}
         <div className="lg:col-span-8 space-y-6">
           <ActiveJobs
             jobs={data?.activeJobs || []}
@@ -51,7 +47,6 @@ export default function DashboardView() {
             isUpdating={isUpdatingJob}
           />
 
-          {/* FINANCIAL SECTION GRID */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             <div className="md:col-span-7">
               <FinancialChart data={data?.financialChart || []} />
@@ -62,7 +57,6 @@ export default function DashboardView() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: QUICK ACTIONS & RECENT ACTIVITIES (4 Cols) */}
         <div className="lg:col-span-4 space-y-6">
           <QuickAction />
           <RecentActivities activities={data?.recentActivities || []} />

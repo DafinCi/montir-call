@@ -30,7 +30,9 @@ export default function NotFound() {
             </span>
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed pt-1">
-            Halaman atau fitur yang Anda tuju sedang kami pengembangan. insyallah bila Allah berkehendak maka akan kami menghadirkan pengalaman yang lebih baik dari saat ini untuk Anda!
+            Halaman atau fitur yang Anda tuju sedang kami pengembangan.
+            insyallah bila Allah berkehendak maka akan kami menghadirkan
+            pengalaman yang lebih baik dari saat ini untuk Anda!
           </p>
         </div>
 

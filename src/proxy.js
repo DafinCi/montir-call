@@ -38,21 +38,18 @@ export async function proxy(request) {
 
   const pathname = request.nextUrl.pathname;
 
-  // 1. Kasus Rute Root (/): Lempar sesuai status autentikasi
   if (pathname === "/") {
     const url = request.nextUrl.clone();
     url.pathname = user ? "/dashboard" : "/login";
     return NextResponse.redirect(url);
   }
 
-  // 2. Kasus Belum Login: Mencoba masuk ke /dashboard -> Lempar ke /login
   if (!user && pathname.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  // 3. Kasus Sudah Login: Mencoba buka /login atau /register -> Lempar ke /dashboard
   if (user && (pathname === "/login" || pathname === "/register")) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";

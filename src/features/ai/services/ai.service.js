@@ -34,7 +34,7 @@ Keluhan Customer: "${problemDescription}"
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      model: "openai/gpt-oss-20b", // Menggunakan model standar Groq
+      model: "openai/gpt-oss-20b",
       response_format: { type: "json_object" },
       temperature: 0.2,
     });

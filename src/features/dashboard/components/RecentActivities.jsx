@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardContent,
   Separator,
-  ScrollArea
+  ScrollArea,
 } from "@/components/ui";
 
 export default function RecentActivities({ activities = [] }) {
