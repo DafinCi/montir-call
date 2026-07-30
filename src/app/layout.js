@@ -30,6 +30,32 @@ export const metadata = {
   formatDetection: {
     telephone: false,
   },
+
+  openGraph: {
+    title: "MontirGo | AI-Powered Roadside Assistance Platform",
+    description:
+      "Connect nearby mechanics with customers through real-time service requests, AI-powered issue analysis, and live location tracking.",
+    url: "https://montirgo.vercel.app",
+    siteName: "MontirGo",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "MontirGo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "MontirGo | AI-Powered Roadside Assistance Platform",
+    description:
+      "Connect nearby mechanics with customers through real-time service requests, AI-powered issue analysis, and live location tracking.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
