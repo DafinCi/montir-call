@@ -405,9 +405,9 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
       {paymentModal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-150">
           <div className="bg-card w-full max-w-sm rounded-sm border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="p-4 border-b border-border flex justify-between items-center bg-muted/30">
-              <h3 className="font-bold text-card-foreground flex items-center gap-2 text-sm sm:text-base">
-                <DollarSign className="size-4 text-secondary" />
+            <div className="p-4 border-b border-border flex justify-between items-center bg-secondary/10">
+              <h3 className="font-bold text-muted flex items-center gap-2 text-sm sm:text-base">
+                <DollarSign className="size-4 text-muted" />
                 Input Tagihan Servis
               </h3>
               <button
@@ -443,7 +443,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
                     value={totalFee}
                     onChange={(e) => setTotalFee(e.target.value)}
                     placeholder="150000"
-                    className="flex text-primary-foreground h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm font-semibold ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex text-primary-foreground h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-10 text-sm font-semibold ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     autoFocus
                   />
                 </div>
