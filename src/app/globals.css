@@ -46,7 +46,7 @@ body {
 
 :root {
   --background: oklch(94.999% 0.02651 152.577);
-  --foreground: oklch(94.442% 0.05268 147.779 / 0.408);
+  --foreground: oklch(0.446 0.03 256.802);
   --card: oklch(1 0 0);
   --card-foreground: oklch(20.195% 0.05691 147.505);
   --popover: oklch(1 0 0);
@@ -54,7 +54,7 @@ body {
   
   --primary: oklch(98.511% 0.00011 271.152);
   --primary-foreground: oklch(15.11% 0.04943 140.768);
-  --secondary: oklch(61.81% 0.20707 142.513);
+  --secondary: oklch(76.538% 0.2574 142.483);
   --secondary-foreground: oklch(78.272% 0.1854 144.779);
 
   --muted: oklch(0% 0 0);

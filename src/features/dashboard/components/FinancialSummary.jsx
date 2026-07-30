@@ -25,7 +25,7 @@ export const FinancialSummary = ({
           <span className="text-xs text-muted-foreground font-medium">
             Hari Ini
           </span>
-          <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
+          <span className="text-sm font-bold text-secondary">
             {formatRupiah(summary.daily)}
           </span>
         </div>
@@ -33,7 +33,7 @@ export const FinancialSummary = ({
           <span className="text-xs text-muted-foreground font-medium">
             Minggu Ini
           </span>
-          <span className="text-sm font-bold text-emerald-600/70">
+          <span className="text-sm font-bold text-secondary">
             {formatRupiah(summary.weekly)}
           </span>
         </div>
@@ -41,7 +41,7 @@ export const FinancialSummary = ({
           <span className="text-xs text-muted-foreground font-medium">
             Bulan Ini
           </span>
-          <span className="text-sm font-bold text-emerald-600/50">
+          <span className="text-sm font-bold text-secondary">
             {formatRupiah(summary.monthly)}
           </span>
         </div>

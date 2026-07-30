@@ -2,8 +2,7 @@
 
 import { useTransition } from "react";
 import { ChevronsUpDown, LogOut, ShieldCheck, Loader2 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +10,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Button,
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from "@/components/ui";
 import { logoutMechanic } from "@/features/auth/services/auth.action";
 
 export default function SidebarFooter({
@@ -51,7 +54,7 @@ export default function SidebarFooter({
               <div className="relative shrink-0">
                 <Avatar className="size-8 border border-white/20">
                   <AvatarImage src={user.avatar} />
-                  <AvatarFallback className="bg-secondary text-secondary-foreground font-semibold text-xs">
+                  <AvatarFallback className="bg-secondary text-primary font-semibold text-xs">
                     {user.name ? user.name.charAt(0).toUpperCase() : "M"}
                   </AvatarFallback>
                 </Avatar>

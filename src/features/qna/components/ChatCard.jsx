@@ -89,7 +89,7 @@ export default function ChatCard({ message }) {
 
       {/* Gelembung Pesan */}
       <div
-        className={`relative max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-3 text-xs sm:text-sm shadow-xs ${
+        className={`relative max-w-[85%] sm:max-w-[75%] rounded-sm px-4 py-3 text-xs sm:text-sm shadow-xs ${
           isUser
             ? "bg-primary text-primary-foreground rounded-tr-xs"
             : "bg-card border border-border text-card-foreground rounded-tl-xs space-y-1"

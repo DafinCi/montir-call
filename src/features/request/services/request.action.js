@@ -43,7 +43,7 @@ export async function getPendingRequests() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("❌ Error fetching pending requests:", error);
+    console.error("Error fetching pending requests:", error);
     return { success: false, error: error.message, data: [] };
   }
 
@@ -137,7 +137,7 @@ export async function acceptRequest(requestId) {
   await supabase.from("notifications").insert([
     {
       mechanic_id: user.id,
-      title: "Pekerjaan Diterima 🚗",
+      title: "Pekerjaan Diterima",
       message: `Anda mengambil pesanan perbaikan dari ${request.customer_name || "Pelanggan"}.`,
       created_at: new Date().toISOString(),
     },
@@ -208,7 +208,7 @@ export async function updateRequestStatus(
     .single();
 
   if (error || !request) {
-    console.error("❌ Error update status service_request:", error?.message);
+    console.error("Error update status service_request:", error?.message);
     return { success: false, error: "Gagal memperbarui status pekerjaan." };
   }
 
@@ -226,10 +226,10 @@ export async function updateRequestStatus(
     let notifMessage = "";
 
     if (newStatus === "ON_THE_WAY") {
-      notifTitle = "Dalam Perjalanan 🧭";
+      notifTitle = "Dalam Perjalanan ";
       notifMessage = `Menuju ke lokasi ${request.customer_name || "Pelanggan"}.`;
     } else if (newStatus === "ARRIVED") {
-      notifTitle = "Sampai di Lokasi 📍";
+      notifTitle = "Sampai di Lokasi";
       notifMessage = `Tiba di lokasi perbaikan (${request.vehicle_model || "Kendaraan"}).`;
     } else if (newStatus === "COMPLETED") {
       const formattedFee = new Intl.NumberFormat("id-ID", {
@@ -238,10 +238,10 @@ export async function updateRequestStatus(
         maximumFractionDigits: 0,
       }).format(updatePayload.total_fee || 0);
 
-      notifTitle = "Pembayaran Diterima 💰";
+      notifTitle = "Pembayaran Diterima ";
       notifMessage = `Servis selesai! Tagihan ${formattedFee} berhasil masuk ke saldo pendapatan.`;
     } else if (newStatus === "CANCELLED") {
-      notifTitle = "Pekerjaan Dibatalkan ❌";
+      notifTitle = "Pekerjaan Dibatalkan";
       notifMessage = `Pesanan dari ${request.customer_name || "Pelanggan"} telah dibatalkan.`;
     }
 
@@ -256,7 +256,7 @@ export async function updateRequestStatus(
       ]);
     }
   } catch (notifErr) {
-    console.error("⚠️ Gagal membuat notifikasi:", notifErr);
+    console.error("Gagal membuat notifikasi:", notifErr);
   }
 
   revalidatePath("/dashboard");

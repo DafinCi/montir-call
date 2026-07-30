@@ -99,7 +99,7 @@ export default function AppNavbar({ user, pendingCount = 0 }) {
 
           <DropdownMenuContent
             align="end"
-            className="w-56 rounded-xl p-1.5 shadow-lg border-border bg-popover text-popover-foreground"
+            className="w-56 rounded-sm p-1.5 shadow-lg border-border bg-popover text-popover-foreground"
           >
             {/* data motir */}
             <DropdownMenuLabel className="font-normal p-2">

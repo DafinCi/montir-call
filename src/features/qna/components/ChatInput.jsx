@@ -49,7 +49,7 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
       {/* Input Box Form */}
       <form
         onSubmit={handleSubmit}
-        className="relative flex items-end gap-2 bg-card border border-border rounded-2xl p-2 shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all"
+        className="relative flex items-end gap-2 bg-card border border-border rounded-sm p-2 shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all"
       >
         <textarea
           ref={textareaRef}
@@ -67,7 +67,7 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
           type="submit"
           size="icon"
           disabled={!input.trim() || isLoading}
-          className="size-9 shrink-0 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95 disabled:opacity-40"
+          className="size-9 shrink-0 rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95 disabled:opacity-40"
         >
           {isLoading ? (
             <Loader2 className="size-4 animate-spin" />

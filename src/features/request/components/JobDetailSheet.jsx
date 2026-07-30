@@ -259,7 +259,7 @@ export default function JobDetailSheet({
                 </Badge>
               </div>
 
-              <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/50 shadow-xs space-y-3">
+              <div className="p-4 rounded-sm border border-blue-200 bg-blue-50/50 shadow-xs space-y-3">
                 <div>
                   <p className="text-xs text-slate-500 font-medium mb-1">
                     Perkiraan Kerusakan
@@ -322,7 +322,7 @@ export default function JobDetailSheet({
             <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Alamat Lokasi
             </h4>
-            <div className="p-3 rounded-xl border bg-slate-50 text-xs font-medium text-slate-800">
+            <div className="p-3 rounded-sm border bg-slate-50 text-xs font-medium text-slate-800">
               {addressText}
             </div>
           </div>
@@ -332,7 +332,7 @@ export default function JobDetailSheet({
             <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Keluhan Pelanggan
             </h4>
-            <div className="p-3.5 rounded-xl border bg-slate-50 text-xs">
+            <div className="p-3.5 rounded-sm border bg-slate-50 text-xs">
               <p className="text-slate-800 leading-relaxed italic">
                 &rdquo;{problemDesc}&rdquo;
               </p>

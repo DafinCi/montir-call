@@ -39,8 +39,8 @@ export const FinancialChart = ({ data = [] }) => {
                     style={{ height: `${heightPercent}%` }}
                     className={`w-full rounded-t-md transition-all duration-300 ${
                       item.amount > 0
-                        ? "bg-primary-foreground hover:bg-primary-foreground/80"
-                        : "bg-muted hover:bg-muted/80"
+                        ? "bg-secondary hover:bg-secondary/50"
+                        : "bg-secondary hover:bg-secondary/50"
                     }`}
                   />
                   <span className="text-xs font-medium text-muted-foreground">

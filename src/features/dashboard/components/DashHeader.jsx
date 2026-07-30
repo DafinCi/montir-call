@@ -86,7 +86,7 @@ export default function DashHeader({
       </div>
 
       {/* DANA MAIN BLUE HEADER CARD */}
-      <div className="relative overflow-hidden rounded-3xl bg-primary text-primary-foreground p-5 md:p-6 shadow-lg border border-primary/20 space-y-5">
+      <div className="relative overflow-hidden rounded-sm bg-primary text-primary-foreground p-5 md:p-6 shadow-lg border border-primary/20 space-y-5">
         {/* Decorative Background Pattern */}
         <div className="absolute -right-10 -bottom-10 size-44 rounded-full bg-white/10 blur-2xl pointer-events-none" />
         <div className="absolute top-0 right-1/4 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none" />
@@ -131,11 +131,11 @@ export default function DashHeader({
 
         {/* DANA QUICK ACTION BAR (4 Tombol Aksi Khas DANA) */}
         <div className="pt-4 border-t border-primary-foreground/15 grid grid-cols-4 gap-2 relative z-10">
-          {/* Action 1: Toggle Status */}
+          {/* Toggle Status */}
           <button
             onClick={onToggleOnline}
             disabled={isToggling || isBusy}
-            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="flex flex-col items-center gap-2 p-1 rounded-2xl hover:bg-white/10 active:bg-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <div
               className={`size-11 rounded-2xl flex items-center justify-center shadow-sm transition-transform group-hover:scale-105 group-active:scale-95 ${
@@ -157,12 +157,12 @@ export default function DashHeader({
             </span>
           </button>
 
-          {/* Action 2: Tarik Saldo (UI Only untuk saat ini) */}
+          {/* Tarik Saldo */}
           <button 
-            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group"
+            className="flex flex-col items-center gap-2 p-1 rounded-2xl hover:bg-white/10 active:bg-white/20 transition-all group"
             onClick={ () => router.push("/dashboard/payment")}
             >
-            <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
+            <div className="size-11 rounded-2xl  bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
               <Wallet className="size-5" />
             </div>
             <span className="text-[11px] font-medium text-primary-foreground/90 text-center leading-tight">
@@ -170,9 +170,9 @@ export default function DashHeader({
             </span>
           </button>
 
-          {/* Action 3: Panggilan Aktif (Bisa diarahkan ke tab list nanti) */}
+          {/* Panggilan Aktif */}
           <button 
-            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all group"
+            className="flex flex-col items-center gap-2 p-1 rounded-2xl hover:bg-white/10 active:bg-white/20 transition-all group"
             onClick={ () => router.push("/dashboard/service")}
             >
             <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
@@ -183,13 +183,13 @@ export default function DashHeader({
             </span>
           </button>
 
-          {/* Action 4: Refresh */}
+          {/* Refresh */}
           <button
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="flex flex-col items-center gap-2 p-1 rounded-xl hover:bg-white/10 active:bg-white/20 transition-all disabled:opacity-50 group"
+            className="flex flex-col items-center gap-2 p-1 rounded-2xl hover:bg-white/10 active:bg-white/20 transition-all disabled:opacity-50 group"
           >
-            <div className="size-11 rounded-2xl bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
+            <div className="size-11 rounded-2xl  bg-white/20 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-sm group-hover:scale-105 group-active:scale-95 transition-transform">
               <RefreshCw
                 className={`size-5 ${isRefreshing ? "animate-spin" : ""}`}
               />
