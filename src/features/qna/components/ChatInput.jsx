@@ -8,7 +8,6 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
   const [input, setInput] = useState("");
   const textareaRef = useRef(null);
 
-  // Auto-resize tinggi textarea sesuai jumlah baris teks
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -32,21 +31,14 @@ export default function ChatInput({ onSendMessage, isLoading = false }) {
   };
 
   const handleKeyDown = (e) => {
-    // Submit saat tekan Enter 
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
   };
 
-  const handleQuickPromptClick = (prompt) => {
-    if (isLoading) return;
-    onSendMessage(prompt);
-  };
-
   return (
     <div className="space-y-2 w-full max-w-4xl mx-auto pt-2">
-      {/* Input Box Form */}
       <form
         onSubmit={handleSubmit}
         className="relative flex items-end gap-2 bg-card border border-border rounded-sm p-2 shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all"

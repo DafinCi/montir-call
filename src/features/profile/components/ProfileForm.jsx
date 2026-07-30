@@ -2,14 +2,11 @@
 
 import React from "react";
 import { User, Phone, Mail, MapPin, Building2, Wallet } from "lucide-react";
-import { Input } from "@/components/ui";
-import { Label } from "@/components/ui";
-import { Textarea } from "@/components/ui";
+import { Input, Label, Textarea } from "@/components/ui";
 
 export default function ProfileForm({ formData, onChange }) {
   return (
     <div className="space-y-6">
-      {/* Informasi Pribadi */}
       <div className="space-y-4">
         <div className="border-b pb-2">
           <h2 className="text-base font-semibold text-card-foreground">
@@ -75,7 +72,6 @@ export default function ProfileForm({ formData, onChange }) {
         </div>
       </div>
 
-      {/* Informasi Operasional & Rekening */}
       <div className="space-y-4 pt-2">
         <div className="border-b pb-2">
           <h2 className="text-base font-semibold text-card-foreground">

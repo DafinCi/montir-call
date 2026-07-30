@@ -3,7 +3,6 @@
 import { askMechanicAI } from "../services/ai.service";
 
 /**
- * Server Action untuk memproses pertanyaan montir
  * @param {Object} payload
  * @param {Array} payload.history
  * @param {string} payload.message

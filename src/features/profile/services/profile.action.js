@@ -3,13 +3,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-/**
- * 1. Mengambil data profil montir yang sedang login
- */
 export async function getProfile() {
   const supabase = await createClient();
 
-  // Ambil user auth
   const {
     data: { user },
     error: authErr,
@@ -19,7 +15,6 @@ export async function getProfile() {
     return { success: false, error: "Sesi anda telah berakhir." };
   }
 
-  // Ambil data montir dari tabel mechanics
   const { data: mechanic, error } = await supabase
     .from("mechanics")
     .select("*")
@@ -31,7 +26,6 @@ export async function getProfile() {
     return { success: false, error: "Gagal memuat profil." };
   }
 
-  // Jika data montir belum ada di database, kembalikan fallback dasar dari Auth
   const profileData = {
     id: user.id,
     name: mechanic?.name || user.user_metadata?.full_name || "",
@@ -50,9 +44,6 @@ export async function getProfile() {
   return { success: true, data: profileData };
 }
 
-/**
- * 2. Mengubah / Menyimpan data profil montir
- */
 export async function updateProfile(payload) {
   const supabase = await createClient();
 
@@ -77,7 +68,6 @@ export async function updateProfile(payload) {
     updated_at: new Date().toISOString(),
   };
 
-  // Upsert: update jika sudah ada, insert jika belum ada
   const { data, error } = await supabase
     .from("mechanics")
     .upsert(updateData)
@@ -93,9 +83,6 @@ export async function updateProfile(payload) {
   return { success: true, data };
 }
 
-/**
- * 3. Upload Foto Profil / Avatar ke Supabase Storage
- */
 export async function uploadAvatar(formData) {
   const supabase = await createClient();
 
@@ -116,7 +103,6 @@ export async function uploadAvatar(formData) {
   const fileExt = file.name.split(".").pop();
   const filePath = `${user.id}/avatar.${fileExt}`;
 
-  // Upload file ke bucket 'avatars'
   const { error: uploadErr } = await supabase.storage
     .from("avatars")
     .upload(filePath, file, { upsert: true });
@@ -126,12 +112,10 @@ export async function uploadAvatar(formData) {
     return { success: false, error: "Gagal mengunggah foto profil." };
   }
 
-  // Dapatkan URL publik dari file
   const {
     data: { publicUrl },
   } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
-  // Update URL avatar di tabel mechanics
   await supabase
     .from("mechanics")
     .update({ avatar_url: publicUrl })

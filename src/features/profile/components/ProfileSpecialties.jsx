@@ -30,7 +30,6 @@ export default function ProfileSpecialties({
         </p>
       </div>
 
-      {/* Skills Chips */}
       <div className="space-y-2">
         <Label className="text-xs font-medium">Spesialisasi Perbaikan</Label>
         <div className="flex flex-wrap gap-2 pt-1">

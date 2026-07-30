@@ -8,12 +8,9 @@ import { Badge } from "@/components/ui/badge";
 export default function ProfileHeader({ user }) {
   return (
     <div className="bg-card text-card-foreground shadow-xs overflow-hidden">
-      {/* Top Banner Accent */}
       <div className="h-28 bg-linear-to-r from-secondary/20 via-emerald-500/10 to-transparent border-b border-border/50" />
-
       <div className="px-6 pb-6 pt-0">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12">
-          {/* Avatar & Main Info */}
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 text-center sm:text-left">
             <div className="relative group">
               <Avatar className="size-24 sm:size-28 border-4 border-card shadow-md">
@@ -47,7 +44,6 @@ export default function ProfileHeader({ user }) {
             </div>
           </div>
 
-          {/* Quick Stat Pill */}
           <div className="flex items-center justify-center gap-4 py-2 px-4 rounded-sm bg-primary border text-xs">
             <div className="text-center sm:text-right">
               <div className="flex items-center justify-center sm:justify-end gap-1 font-bold text-card-foreground">

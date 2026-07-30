@@ -9,7 +9,6 @@ import ChatInput from "../components/ChatInput";
 import { sendMechanicQuery } from "../actions/qna.action";
 
 export default function QnaView() {
-  // Pesan Selamat Datang Awal dari AI
   const INITIAL_MESSAGE = {
     id: "welcome-msg",
     role: "assistant",
@@ -27,7 +26,6 @@ export default function QnaView() {
 
   const messagesEndRef = useRef(null);
 
-  // Auto Scroll ke bagian paling bawah
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -36,7 +34,6 @@ export default function QnaView() {
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Fungsi Kirim Pesan ke Backend Server Action
   const handleSendMessage = async (text) => {
     if (!text.trim() || isLoading) return;
 
@@ -108,10 +105,8 @@ export default function QnaView() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)] mx-auto">
-      {/* HEADER BAR QnA */}
       <div className="flex items-center justify-between p-3 sm:p-4 bg-card shadow-xs mb-3">
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* TOMBOL KEMBALI KE DASHBOARD */}
           <Link href="/dashboard">
             <Button
               variant="ghost"
@@ -123,7 +118,6 @@ export default function QnaView() {
             </Button>
           </Link>
 
-          {/* IKON AI */}
           <div className="size-10 rounded-sm bg-secondary/10 border border-secondary text-secondary flex items-center justify-center shadow-xs shrink-0">
             <Bot className="size-5" />
           </div>
@@ -135,7 +129,7 @@ export default function QnaView() {
               </h2>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-secondary border border-primary-foreground/20">
                 <span className="size-1.5 rounded-full bg-secondary animate-pulse" />
-                Gemini Flash
+                llama-3.3-70b-versatile
               </span>
             </div>
             <p className="text-[11px] text-muted-foreground font-medium">
@@ -144,7 +138,6 @@ export default function QnaView() {
           </div>
         </div>
 
-        {/* Tombol Hapus */}
         {messages.length > 1 && (
           <Button
             variant="ghost"
@@ -158,13 +151,11 @@ export default function QnaView() {
         )}
       </div>
 
-      {/* chat messege*/}
       <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 scrollbar-thin scrollbar-thumb-border">
         {messages.map((msg) => (
           <ChatCard key={msg.id} message={msg} />
         ))}
 
-        {/* Indikator AI Sedang Mengetik */}
         {isLoading && (
           <div className="flex items-center gap-2 text-xs text-muted-foreground my-3 p-3 bg-muted/40 rounded-sm w-fit animate-pulse border border-border/50">
             <Sparkles className="size-4 text-secondary animate-spin" />
@@ -172,7 +163,6 @@ export default function QnaView() {
           </div>
         )}
 
-        {/* Pesan Error */}
         {errorText && (
           <div className="flex items-center gap-2 text-xs text-red-600 bg-red-500/10 border border-red-500/20 p-3 rounded-sm my-2">
             <AlertCircle className="size-4 shrink-0" />
@@ -180,11 +170,9 @@ export default function QnaView() {
           </div>
         )}
 
-        {/* scroll otomatis */}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* chat input */}
       <div className="sticky bottom-0 pt-2 bg-background/80 backdrop-blur-md m-3 z-10">
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
       </div>

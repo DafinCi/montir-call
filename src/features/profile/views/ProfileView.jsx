@@ -19,7 +19,6 @@ export default function ProfileView({ initialData }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  // State Data Profil
   const [formData, setFormData] = useState(
     initialData || {
       name: "",
@@ -36,7 +35,6 @@ export default function ProfileView({ initialData }) {
   );
   const [radius, setRadius] = useState(initialData?.radius || 10);
 
-  // Fetch data jika initialData belum di-pass dari Server Component
   useEffect(() => {
     if (!initialData) {
       const fetchProfileData = async () => {
@@ -54,7 +52,6 @@ export default function ProfileView({ initialData }) {
     }
   }, [initialData]);
 
-  // Handler Input Form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -66,7 +63,6 @@ export default function ProfileView({ initialData }) {
     );
   };
 
-  // Handler Upload Avatar
   const handleAvatarChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -82,7 +78,6 @@ export default function ProfileView({ initialData }) {
     }
   };
 
-  // Handler Reset Form
   const handleReset = () => {
     if (initialData) {
       setFormData(initialData);
@@ -91,7 +86,6 @@ export default function ProfileView({ initialData }) {
     }
   };
 
-  // Handler Submit Update Profil
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -124,7 +118,6 @@ export default function ProfileView({ initialData }) {
         onSubmit={handleSubmit}
         className="p-4 md:p-8 max-w-5xl mx-auto space-y-6"
       >
-        {/* FORM CONTENT GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* LEFT COLUMN: Data Utama (7 Cols) */}
           <Card className="lg:col-span-7 shadow-xs">
@@ -133,7 +126,6 @@ export default function ProfileView({ initialData }) {
             </CardContent>
           </Card>
 
-          {/* RIGHT COLUMN: Keahlian & Preferensi (5 Cols) */}
           <Card className="lg:col-span-5 shadow-xs">
             <CardContent className="p-6">
               <ProfileSpecialties
@@ -146,7 +138,6 @@ export default function ProfileView({ initialData }) {
           </Card>
         </div>
 
-        {/* BOTTOM ACTION BAR */}
         <div className="flex items-center justify-between p-4 rounded-sm border bg-card text-card-foreground shadow-xs">
           <p className="text-xs text-muted-foreground hidden sm:block">
             Pastikan seluruh nomor kontak dan area layanan sudah tepat.

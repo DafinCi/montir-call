@@ -29,7 +29,6 @@ export async function askMechanicAI(history = [], newMessage) {
 
   try {
     const groq = new Groq({ apiKey });
-    // Format riwayat chat sesuai standar OpenAI API
     const messages = [
       { role: "system", content: MECHANIC_SYSTEM_INSTRUCTION },
       ...history.map((msg) => ({
@@ -44,7 +43,7 @@ export async function askMechanicAI(history = [], newMessage) {
 
     const chatCompletion = await groq.chat.completions.create({
       messages: messages,
-      model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+      model: "llama-3.3-70b-versatile",
       temperature: 0.4,
       max_tokens: 1000,
     });
