@@ -127,7 +127,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
             variant="outline"
             className="bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 text-[10px] font-semibold"
           >
-            <Clock className="size-3 mr-1" /> Pesanan Diterima
+             Pesanan Diterima
           </Badge>
         );
       case "ON_THE_WAY":
@@ -136,7 +136,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
             variant="outline"
             className="bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30 text-[10px] font-semibold animate-pulse"
           >
-            <Navigation className="size-3 mr-1" /> Dalam Perjalanan
+             Dalam Perjalanan
           </Badge>
         );
       case "ARRIVED":
@@ -145,7 +145,7 @@ export default function ActiveJobs({ jobs = [], onUpdateStatus, isUpdating }) {
             variant="outline"
             className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[10px] font-semibold"
           >
-            <MapPin className="size-3 mr-1" /> Sampai di Lokasi
+             Sampai di Lokasi
           </Badge>
         );
       default:

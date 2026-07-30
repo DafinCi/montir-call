@@ -3,6 +3,7 @@ import {
   CarFront,
   User,
   BotMessageSquare,
+  Activity,
 } from "lucide-react";
 
 export const getMenus = (pendingCount = 0) => [
@@ -27,4 +28,9 @@ export const getMenus = (pendingCount = 0) => [
     href: "/qna",
     icon: BotMessageSquare,
   },
+  {
+    title: "aktivitas",
+    href: "/aktivitas",
+    icon: Activity,
+  }
 ];
