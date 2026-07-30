@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect, useTransition } from "react";
 import { usePathname } from "next/navigation";
-import { LogOut, Loader2, ShieldCheck } from "lucide-react";
+import { LogOut, Loader2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -11,10 +11,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Avatar, 
-  AvatarFallback, 
+  Avatar,
+  AvatarFallback,
   AvatarImage,
-  Button
+  Button,
 } from "@/components/ui";
 
 import { logoutMechanic } from "@/features/auth/services/auth.action";
