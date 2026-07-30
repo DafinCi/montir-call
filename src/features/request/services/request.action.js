@@ -227,10 +227,8 @@ export async function updateRequestStatus(
 
     if (newStatus === "ON_THE_WAY") {
       notifTitle = "Dalam Perjalanan ";
-      notifMessage = `Menuju ke lokasi ${request.customer_name || "Pelanggan"}.`;
     } else if (newStatus === "ARRIVED") {
       notifTitle = "Sampai di Lokasi";
-      notifMessage = `Tiba di lokasi perbaikan (${request.vehicle_model || "Kendaraan"}).`;
     } else if (newStatus === "COMPLETED") {
       const formattedFee = new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -239,10 +237,8 @@ export async function updateRequestStatus(
       }).format(updatePayload.total_fee || 0);
 
       notifTitle = "Pembayaran Diterima ";
-      notifMessage = `Servis selesai! Tagihan ${formattedFee} berhasil masuk ke saldo pendapatan.`;
     } else if (newStatus === "CANCELLED") {
       notifTitle = "Pekerjaan Dibatalkan";
-      notifMessage = `Pesanan dari ${request.customer_name || "Pelanggan"} telah dibatalkan.`;
     }
 
     if (notifTitle) {

@@ -5,8 +5,6 @@ import { useDashboard } from "../hooks/UseDashboard";
 import DashHeader from "../components/DashHeader";
 import DashStats from "../components/DashStats";
 import ActiveJobs from "../components/ActiveJobs";
-import QuickAction from "../components/QuickAction";
-import RecentActivities from "../components/RecentActivities";
 import FinancialChart from "../components/FinancialChart";
 import FinancialSummary from "../components/FinancialSummary";
 import DashboardSkeleton from "../skeletons/DashboardSkeleton";
@@ -39,8 +37,8 @@ export default function DashboardView() {
 
       <DashStats stats={data?.stats} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-8 space-y-6">
+      <div className="gap-6">
+        <div className="space-y-6">
           <ActiveJobs
             jobs={data?.activeJobs || []}
             onUpdateStatus={handleUpdateJobStatus}
@@ -55,11 +53,6 @@ export default function DashboardView() {
               <FinancialSummary summary={data?.financialSummary} />
             </div>
           </div>
-        </div>
-
-        <div className="lg:col-span-4 space-y-6">
-          <QuickAction />
-          <RecentActivities activities={data?.recentActivities || []} />
         </div>
       </div>
     </div>
