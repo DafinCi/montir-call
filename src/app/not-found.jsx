@@ -2,64 +2,59 @@
 
 import React from "react";
 import Link from "next/link";
-import { Rocket, ArrowLeft, Sparkles, Wrench } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Wrench, ArrowLeft, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
-  return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-background text-foreground relative overflow-hidden">
-      {/* Background Glow Effect */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 sm:w-96 sm:h-96 bg-primary/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+  const router = useRouter();
 
-      <div className="max-w-md w-full text-center space-y-6">
-        {/* Icon Badge */}
-        <div className="inline-flex items-center justify-center p-4 bg-secondary/5 rounded-full border border-secondary/30 text-secondary mb-2 animate-bounce">
-          <Rocket className="size-15 sm:size-20" />
+  return (
+    <main className="min-h-dvh w-full bg-background flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-md bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-xs text-center space-y-6">
+        <div className="flex justify-center">
+          <div className="size-12 rounded-2xl bg-primary border border-border/80 flex items-center justify-center text-foreground">
+            <Wrench className="size-5" />
+          </div>
         </div>
 
-        {/* Text Heading */}
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-muted-foreground text-xs font-mono font-medium">
-            <Sparkles className="size-3.5 text-secondary" />
-            Fitur Dalam Pengembangan
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-primary text-muted-foreground border border-border/60">
+            <span className="size-1.5 rounded-full bg-muted-foreground/60" />
+            Dalam Tahap Pengembangan
           </div>
-          <h1 className="text-5xl sm:text-4xl font-extrabold tracking-tight text-muted">
-            Segera Hadir! <br />
-            <span className="text-muted-foreground font-semibold text-2xl sm:text-3xl">
-              (Coming Soon)
-            </span>
+
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight pt-1">
+            Fitur Segera Hadir
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed pt-1">
-            Halaman atau fitur yang Anda tuju sedang kami pengembangan.
-            insyallah bila Allah berkehendak maka akan kami menghadirkan
-            pengalaman yang lebih baik dari saat ini untuk Anda!
+
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
+            Halaman ini sedang kami persiapkan untuk melengkapi sistem
+            perbengkelan kamu. Mohon tunggu pembaruan mendatang.
           </p>
         </div>
 
-        {/* Action Button */}
-        <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div className="flex flex-col sm:flex-row items-center gap-2 pt-2">
           <Button
-            asChild
-            className="w-full sm:w-auto gap-2 font-semibold shadow-sm"
+            variant="outline"
+            onClick={() => router.back()}
+            className="w-full sm:w-1/2 h-10 text-xs font-medium gap-2 rounded-xl"
           >
-            <Link href="/dashboard">
-              <ArrowLeft className="size-4" />
-              Kembali ke Dashboard
-            </Link>
+            <ArrowLeft className="size-3.5" />
+            Kembali
           </Button>
 
           <Button
             asChild
-            variant="outline"
-            className="w-full sm:w-auto gap-2 text-xs"
+            className="w-full sm:w-1/2 h-10 text-xs font-medium gap-2 rounded-xl"
           >
-            <Link href="/request">
-              <Wrench className="size-3.5" />
-              Lihat Permintaan Masuk
+            <Link href="/dashboard">
+              <LayoutDashboard className="size-3.5" />
+              Dashboard
             </Link>
           </Button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
