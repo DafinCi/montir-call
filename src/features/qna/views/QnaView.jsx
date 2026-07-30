@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Trash2, Sparkles, Bot, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 import ChatCard from "../components/ChatCard";
 import ChatInput from "../components/ChatInput";
 import { sendMechanicQuery } from "../actions/qna.action";
