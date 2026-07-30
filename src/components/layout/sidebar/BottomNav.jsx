@@ -7,16 +7,13 @@ import { getMenus } from "../menu";
 export default function BottomNav({ pendingCount = 0 }) {
   const pathname = usePathname();
 
-  // Sembunyikan BottomNav secara penuh jika sedang di halaman QnA
   if (pathname === "/qna" || pathname.includes("qna")) {
     return null;
   }
 
   const menus = getMenus(pendingCount);
 
-  const centerMenu = menus.find(
-    (m) => m.href === "/dashboard" || m.isCenter
-  );
+  const centerMenu = menus.find((m) => m.href === "/dashboard" || m.isCenter);
 
   const otherMenus = menus.filter((m) => m !== centerMenu);
   const half = Math.ceil(otherMenus.length / 2);
@@ -66,37 +63,38 @@ export default function BottomNav({ pendingCount = 0 }) {
         {leftMenus.map(renderRegularMenu)}
       </div>
 
-      {centerMenu && (() => {
-        const Icon = centerMenu.icon;
-        const isActive = pathname === centerMenu.href;
+      {centerMenu &&
+        (() => {
+          const Icon = centerMenu.icon;
+          const isActive = pathname === centerMenu.href;
 
-        return (
-          <Link
-            key={centerMenu.href}
-            href={centerMenu.href}
-            className="relative flex flex-col items-center justify-center -mt-6 mx-2 z-10 shrink-0"
-          >
-            <div
-              className={`size-14 rounded-full flex flex-col items-center justify-center shadow-xl transition-all duration-200 ${
-                isActive
-                  ? "bg-secondary/90 text-primary ring-4 ring-primary/25 scale-130"
-                  : "bg-secondary/80 text-primary hover:bg-primary/90 scale-125"
-              }`}
+          return (
+            <Link
+              key={centerMenu.href}
+              href={centerMenu.href}
+              className="relative flex flex-col items-center justify-center -mt-6 mx-2 z-10 shrink-0"
             >
-              {Icon && <Icon className="size-5 mb-0.5" />}
-              <span className="text-[9px] font-bold tracking-tight leading-none text-center px-1">
-                {centerMenu.title || centerMenu.label || "Dashboard"}
-              </span>
-
-              {centerMenu.badge > 0 && (
-                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-background">
-                  {centerMenu.badge > 99 ? "99+" : centerMenu.badge}
+              <div
+                className={`size-14 rounded-full flex flex-col items-center justify-center shadow-xl transition-all duration-200 ${
+                  isActive
+                    ? "bg-secondary/90 text-primary ring-4 ring-primary/25 scale-130"
+                    : "bg-secondary/80 text-primary hover:bg-primary/90 scale-125"
+                }`}
+              >
+                {Icon && <Icon className="size-5 mb-0.5" />}
+                <span className="text-[9px] font-bold tracking-tight leading-none text-center px-1">
+                  {centerMenu.title || centerMenu.label || "Dashboard"}
                 </span>
-              )}
-            </div>
-          </Link>
-        );
-      })()}
+
+                {centerMenu.badge > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-background">
+                    {centerMenu.badge > 99 ? "99+" : centerMenu.badge}
+                  </span>
+                )}
+              </div>
+            </Link>
+          );
+        })()}
 
       <div className="flex flex-1 justify-around items-center">
         {rightMenus.map(renderRegularMenu)}

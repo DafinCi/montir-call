@@ -1,4 +1,9 @@
-import { LayoutDashboard, CarFront, MapPinned, Bell, User, CreditCard } from "lucide-react";
+import {
+  LayoutDashboard,
+  CarFront,
+  User,
+  BotMessageSquare,
+} from "lucide-react";
 
 export const getMenus = (pendingCount = 0) => [
   {
@@ -16,5 +21,10 @@ export const getMenus = (pendingCount = 0) => [
     title: "Profile",
     href: "/profile",
     icon: User,
+  },
+  {
+    title: "Tanya AI",
+    href: "/qna",
+    icon: BotMessageSquare,
   },
 ];
