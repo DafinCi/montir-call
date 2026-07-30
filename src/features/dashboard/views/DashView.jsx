@@ -37,7 +37,7 @@ export default function DashboardView() {
 
       <DashStats stats={data?.stats} />
 
-      <div className="gap-6">
+      <div className="gap-6 mb-15 sm:mb-0">
         <div className="space-y-6">
           <ActiveJobs
             jobs={data?.activeJobs || []}

@@ -154,7 +154,7 @@ export default function RequestsView() {
       {isLoading ? (
         <RequestsSkeleton />
       ) : filteredRequests.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-15 sm:mb-0">
           {filteredRequests.map((job) => (
             <JobRequestCard
               key={job.id}
