@@ -30,8 +30,8 @@ export default function BottomNav({ pendingCount = 0 }) {
         href={menu.href}
         className={`relative flex flex-1 flex-col items-center justify-center py-1 transition-all duration-200 ${
           isActive
-            ? "text-muted-foreground font-bold"
-            : "text-muted-foreground hover:text-foreground font-medium"
+            ? "text-primary font-bold"
+            : "text-primary hover:text-foreground font-medium"
         }`}
       >
         <div className="relative">
@@ -58,7 +58,7 @@ export default function BottomNav({ pendingCount = 0 }) {
   };
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border shadow-lg px-2 py-1.5 flex items-center justify-between">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-primary-foreground backdrop-blur-md border-t border-border shadow-lg px-2 py-1.5 flex items-center justify-between">
       <div className="flex flex-1 justify-around items-center">
         {leftMenus.map(renderRegularMenu)}
       </div>
@@ -75,7 +75,7 @@ export default function BottomNav({ pendingCount = 0 }) {
               className="relative flex flex-col items-center justify-center -mt-6 mx-2 z-10 shrink-0"
             >
               <div
-                className={`size-14 rounded-full flex flex-col items-center justify-center shadow-xl transition-all duration-200 ${
+                className={`size-14 rounded-full flex flex-col items-center justify-center transition-all duration-200 ${
                   isActive
                     ? "bg-secondary/90 text-primary ring-4 ring-primary/25 scale-130"
                     : "bg-secondary/80 text-primary hover:bg-primary/90 scale-125"
