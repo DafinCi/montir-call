@@ -11,9 +11,11 @@ import {
   ShieldCheck,
   Wallet,
   Wrench,
+  Settings,
+  Gauge,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+
+import { Avatar, AvatarImage, AvatarFallback, Badge } from "@/components/ui";
 
 export default function DashHeader({
   mechanicName = "Montir",
@@ -87,6 +89,12 @@ export default function DashHeader({
 
       {/* DANA MAIN BLUE HEADER CARD */}
       <div className="relative overflow-hidden rounded-sm bg-primary text-primary-foreground p-5 md:p-6 shadow-lg border border-primary/20 space-y-5">
+        {/* Siluet Ikon Lucide */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+          <Wrench className="absolute -top-3 -right-4 size-45 sm:size-52 lg:size-80 text-secondary/[0.1] -rotate-20" />
+          <Settings className="absolute top-2/3 -left-6 -translate-y-1/2 size-29 sm:size-56 text-secondary/[0.1] rotate-45" />
+          <Gauge className="hidden sm:block sm:absolute top-6 left-1/3 size-24 text-secondary/[0.1] rotate-12" />
+        </div>
         {/* Decorative Background Pattern */}
         <div className="absolute -right-10 -bottom-10 size-44 rounded-full bg-white/10 blur-2xl pointer-events-none" />
         <div className="absolute top-0 right-1/4 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none" />
